@@ -1,0 +1,65 @@
+PROJECT(SHELL)
+
+if(DBG)
+    add_definitions(-D_DEBUG=1) # CORE-17505
+endif()
+
+list(APPEND SOURCE
+    explorer11.cpp
+    navpane.cpp
+    icons.cpp
+    thispc.cpp
+    frame.h)
+
+list(APPEND SHELL_SOURCE
+    ../explorer/appbar.cpp
+    ../explorer/desktop.cpp
+    ../explorer/explorer.cpp
+    ../explorer/notifyiconscust.cpp
+    ../explorer/rshell.cpp
+    ../explorer/settings.cpp
+    ../explorer/shellservice.cpp
+    ../explorer/startbutton.cpp
+    ../explorer/startctxmnu.cpp
+    ../explorer/startmnu.cpp
+    ../explorer/startmnu2.cpp
+    ../explorer/startmnu11.cpp
+    ../explorer/startmnucust.cpp
+    ../explorer/startmnusite.cpp
+    ../explorer/startup.cpp
+    ../explorer/syspager.cpp
+    ../explorer/taskband.cpp
+    ../explorer/taskbarpin.cpp
+    ../explorer/taskswnd.cpp
+    ../explorer/tbsite.cpp
+    ../explorer/trayclock.cpp
+    ../explorer/traydeskbtn.cpp
+    ../explorer/trayflyouts.cpp
+    ../explorer/trayntfy.cpp
+    ../explorer/trayprop.cpp
+    ../explorer/traywnd.cpp
+    ../explorer/util.cpp)
+
+file(GLOB explorer11_rc_deps ${CMAKE_CURRENT_SOURCE_DIR}/../explorer/res/*.* ${CMAKE_CURRENT_SOURCE_DIR}/../explorer/res/ico/fluent/*.ico ${CMAKE_CURRENT_SOURCE_DIR}/../explorer/explorer.rc ${CMAKE_CURRENT_SOURCE_DIR}/../explorer/resource.h)
+add_rc_deps(explorer11.rc ${explorer11_rc_deps}
+    ${REACTOS_SOURCE_DIR}/media/graphics/start-button/default.png
+    ${REACTOS_SOURCE_DIR}/media/graphics/start-button/hover.png
+    ${REACTOS_SOURCE_DIR}/media/graphics/start-button/pressed.png
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/4.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/35.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/9.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/16.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/18.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/235.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/236.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/237.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/238.ico
+    ${REACTOS_SOURCE_DIR}/dll/win32/shell32/res/icons/downloads.ico)
+add_executable(explorer ${SOURCE} ${SHELL_SOURCE} explorer11.rc)
+target_compile_definitions(explorer PRIVATE EXPLORER11_BUILD)
+target_include_directories(explorer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../explorer)
+target_link_libraries(explorer uuid wine cpprt atl_classes)
+set_module_type(explorer win32gui UNICODE)
+add_importlibs(explorer msimg32 setupapi advapi32 gdi32 user32 comctl32 ole32 oleaut32 shell32 explorerframe shlwapi shdocvw version uxtheme winmm iphlpapi msvcrt kernel32 ntdll)
+add_pch(explorer frame.h "${SHELL_SOURCE}")
+add_cd_file(TARGET explorer DESTINATION reactos FOR all)

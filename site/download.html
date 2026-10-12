@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Download — LakoOS</title>
+<meta name="description" content="Download the LakoOS live ISO and run it in QEMU, VirtualBox or Hyper-V.">
+<meta property="og:title" content="Download — LakoOS">
+<meta property="og:image" content="assets/screens/start-win11.png">
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a>
+  <nav><a href="features.html" data-i18n="nav.features">Features</a><a href="download.html" aria-current="page" data-i18n="nav.download">Download</a><a href="docs.html" data-i18n="nav.docs">Docs</a><a href="compatibility.html" data-i18n="nav.compat">Compatibility</a><a href="about.html" data-i18n="nav.about">About</a></nav>
+  <span class="sp"></span>
+  <button class="icon-btn lang" id="lang" aria-label="Language">RU</button>
+  <button class="icon-btn" id="theme" aria-label="Theme">&#9790;</button>
+  <a class="btn primary sm" href="download.html" data-i18n="nav.get">Get LakoOS</a>
+</div></header>
+<main>
+<section class="phero"><span class="blob b1"></span><span class="blob b2"></span>
+<div class="wrap"><span class="eyebrow">Download</span><h1 class="ph">Get LakoOS</h1><p class="lead" style="margin-left:0">Pick an image and start it in a virtual machine. LakoOS is a development preview.</p></div></section>
+<section><div class="wrap">
+<div class="dl">
+<div class="dcard feat"><div class="ic">⬇</div><h3>Live ISO</h3><p>Boots directly to the desktop. Nothing is written to your disk.</p><div class="meta">LakoOS-amd64-livecd.iso · 64-bit</div><a class="btn primary" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-livecd.iso">Download ISO</a></div>
+<div class="dcard"><div class="ic">⛁</div><h3>Setup ISO</h3><p>Install to a virtual disk and keep your settings.</p><div class="meta">LakoOS-amd64-setup.iso · 64-bit</div><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/latest">Open releases</a></div>
+<div class="dcard"><div class="ic">⚙</div><h3>Build it yourself</h3><p>One command prepares everything from scratch.</p><div class="meta">Linux · macOS · Windows</div><a class="btn ghost" href="docs.html#build">Build instructions</a></div>
+</div></div></section>
+<section class="alt"><div class="wrap">
+<h2>Run it</h2>
+<div class="runs">
+<div class="card2"><h3>QEMU</h3><div class="codebox"><button class="copy">Copy</button><pre>qemu-system-x86_64 -m 2048 -smp 4 \
+  -cdrom LakoOS-amd64-livecd.iso -boot d \
+  -vga std -usb -device usb-tablet</pre></div><p class="muted">On Linux add <code>-enable-kvm</code> for speed.</p></div>
+<div class="card2"><h3>VirtualBox</h3><ol><li>New machine, type <b>Other</b>, version <b>Other/Unknown (64-bit)</b>.</li><li>2048 MB of memory, no hard disk needed for the live image.</li><li>Attach the ISO to the optical drive and start.</li></ol></div>
+<div class="card2"><h3>Hyper-V</h3><ol><li>New virtual machine, <b>Generation 1</b>.</li><li>2048 MB of memory, attach the ISO as a DVD drive.</li><li>Start and connect.</li></ol></div>
+</div></div></section>
+<section><div class="wrap">
+<h2>System requirements</h2>
+<div class="req"><div><b>CPU</b><span>64-bit x86, 2 cores</span></div><div><b>Memory</b><span>2 GB RAM</span></div><div><b>Storage</b><span>1 GB live · 8 GB install</span></div><div><b>Graphics</b><span>1024×768 VGA</span></div></div></div></section>
+</main>
+<footer><div class="wrap">
+  <div class="cols">
+    <div><a class="brand" href="index.html" style="margin-bottom:10px"><img src="assets/logo-mark.svg" alt="">LakoOS</a>A free NT operating system with a familiar desktop.</div>
+    <div><h4>Product</h4><a href="features.html">Features</a><a href="compatibility.html">Compatibility</a><a href="download.html">Download</a></div>
+    <div><h4>Learn</h4><a href="docs.html">Documentation</a><a href="docs.html#build">Build from source</a><a href="docs.html#settings">Settings</a></div>
+    <div><h4>Project</h4><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Issues</a><a href="about.html">About</a></div>
+  </div>
+  <div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft. Based on LiberNT and ReactOS.</div>
+</div></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

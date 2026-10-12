@@ -1,0 +1,192 @@
+<section class="hero">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  <div class="wrap center">
+    <span class="pill"><i></i><span data-i18n="hero.pill">Development preview</span></span>
+    <h1><span data-i18n="hero.t1">A free NT.</span><br><span class="grad" data-i18n="hero.t2">With a familiar desktop.</span></h1>
+    <p class="lead" data-i18n="hero.lead">LakoOS is a free operating system on the NT architecture: a centered Start menu, a modern File Explorer, the same folders and the same program names.</p>
+    <div class="cta">
+      <a class="btn primary" href="#download" data-i18n="hero.dl">Download LakoOS</a>
+      <a class="btn ghost" href="https://github.com/LakoMoor/LakoOS" data-i18n="hero.gh">View on GitHub</a>
+    </div>
+    <p class="fine" data-i18n="hero.fine">64-bit (amd64) · QEMU, VirtualBox, Hyper-V · free software under the GNU GPL</p>
+    <div class="device reveal">
+      <div class="bar"><i></i><i></i><i></i><span>LakoOS</span></div>
+      <img src="assets/screens/desktop.png" alt="The LakoOS desktop with a centered taskbar">
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="center">
+      <span class="eyebrow" data-i18n="f.eyebrow">What is inside</span>
+      <h2 data-i18n="f.title">Everything in its place</h2>
+      <p class="sub" data-i18n="f.sub">A familiar shell, familiar programs and the disk layout you expect.</p>
+    </div>
+    <div class="bento">
+      <div class="tile s4 hl reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <h3>Centered taskbar and modern Start</h3>
+        <p>Start and your running apps sit in the middle, with the notification area on the right. Pinned grid, recommendations and search in one panel.</p>
+      </div>
+      <div class="tile s2 reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <h3>File Explorer</h3>
+        <p>Ribbon, Quick access, This PC. It is <code>explorer.exe</code>.</p>
+      </div>
+      <div class="tile s2 reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></div>
+        <h3>Light and dark</h3>
+        <p>Fluent-style icons and colors that follow the system theme.</p>
+      </div>
+      <div class="tile s2 reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+        <h3>Same layout on disk</h3>
+        <p><code>Windows</code>, <code>Program Files</code>, <code>ProgramData</code>, <code>Users</code>.</p>
+      </div>
+      <div class="tile s2 reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></div>
+        <h3>Open source</h3>
+        <p>Built from the LiberNT and ReactOS code under the GNU GPL.</p>
+      </div>
+      <div class="tile s2 reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7M17.5 14v7"/></svg></div>
+        <h3>Two Start styles</h3>
+        <p>Centered grid, or the left-aligned list with tiles. Switch with one setting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="desktop" class="alt">
+  <div class="wrap">
+    <div class="center">
+      <span class="eyebrow" data-i18n="d.eyebrow">Desktop</span>
+      <h2 data-i18n="d.title">See how it looks</h2>
+      <p class="sub" data-i18n="d.sub">Flip through the screens: Start, File Explorer, Control Panel and the command line.</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-k="start11">Start</button>
+      <button class="tab" role="tab" data-k="start10">Start (list and tiles)</button>
+      <button class="tab" role="tab" data-k="explorer">File Explorer</button>
+      <button class="tab" role="tab" data-k="control">Control Panel</button>
+      <button class="tab" role="tab" data-k="cmd">Command Prompt</button>
+    </div>
+    <div class="tabpanel">
+      <div>
+        <h3 id="tabh"></h3>
+        <p id="tabp"></p>
+        <ul id="tabul"></ul>
+      </div>
+      <div class="shot"><img id="tabimg" src="assets/screens/start-win11.png" alt="LakoOS screenshot"></div>
+    </div>
+  </div>
+</section>
+
+<section id="names">
+  <div class="wrap">
+    <div class="two">
+      <div>
+        <span class="eyebrow" data-i18n="n.eyebrow">Structure</span>
+        <h2 data-i18n="n.title">The same folders. The same names.</h2>
+        <p class="sub" data-i18n="n.sub">Folders and executables are named as in Windows 11, so scripts, shortcuts and habits keep working.</p>
+        <table>
+          <tr><th>Program</th><th>File</th><th>Location</th></tr>
+          <tr><td>File Explorer</td><td><code>explorer.exe</code></td><td>Windows</td></tr>
+          <tr><td>Task Manager</td><td><code>taskmgr.exe</code></td><td>System32</td></tr>
+          <tr><td>Control Panel</td><td><code>control.exe</code></td><td>System32</td></tr>
+          <tr><td>Command Prompt</td><td><code>cmd.exe</code></td><td>System32</td></tr>
+          <tr><td>Registry Editor</td><td><code>regedit.exe</code></td><td>Windows</td></tr>
+          <tr><td>Console</td><td><code>mmc.exe</code></td><td>System32</td></tr>
+        </table>
+      </div>
+      <div class="tree reveal"><b>C:\</b>
+<s>├─</s> <em>Windows</em>
+<s>│  ├─</s> explorer.exe
+<s>│  ├─</s> regedit.exe
+<s>│  ├─</s> System32
+<s>│  │  ├─</s> cmd.exe
+<s>│  │  ├─</s> taskmgr.exe
+<s>│  │  ├─</s> control.exe
+<s>│  │  └─</s> mmc.exe
+<s>│  └─</s> SysWOW64
+<s>├─</s> <em>Program Files</em>
+<s>├─</s> <em>Program Files (x86)</em>
+<s>├─</s> <em>ProgramData</em>
+<s>└─</s> <em>Users</em>
+<s>   ├─</s> Default
+<s>   └─</s> Public</div>
+    </div>
+  </div>
+</section>
+
+<section id="download" class="alt">
+  <div class="wrap">
+    <div class="center">
+      <span class="eyebrow" data-i18n="dl.eyebrow">Download</span>
+      <h2 data-i18n="dl.title">Choose how to try it</h2>
+      <p class="sub" data-i18n="dl.sub">Everything is free. A virtual machine is the best way to start.</p>
+    </div>
+    <div class="dl">
+      <div class="dcard feat reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 19h16"/></svg></div>
+        <h3>Live ISO</h3>
+        <p>Boots straight to the desktop from a virtual DVD. Nothing is written to your disk.</p>
+        <div class="meta">LakoOS-amd64-livecd.iso · 64-bit</div>
+        <a class="btn primary" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-livecd.iso">Download ISO</a>
+      </div>
+      <div class="dcard reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg></div>
+        <h3>All releases</h3>
+        <p>Setup images, virtual disks and checksums for every version.</p>
+        <div class="meta">ISO · IMG · VHD</div>
+        <a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases">Open releases</a>
+      </div>
+      <div class="dcard reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4"/></svg></div>
+        <h3>Build from source</h3>
+        <p>The build environment sets itself up from scratch on Linux, macOS and Windows.</p>
+        <div class="meta">buildenv/build.sh · build.ps1</div>
+        <a class="btn ghost" href="#build">Show commands</a>
+      </div>
+    </div>
+
+    <div class="codebox" id="qemu"><button class="copy">Copy</button><pre>qemu-system-x86_64 -m 2048 -smp 4 \
+  -cdrom LakoOS-amd64-livecd.iso -boot d \
+  -vga std -usb -device usb-tablet</pre></div>
+    <div class="codebox" id="build"><button class="copy">Copy</button><pre id="buildcmd">git clone https://github.com/LakoMoor/LakoOS.git
+cd LakoOS
+./buildenv/build.sh</pre></div>
+
+    <h2 style="margin-top:64px;font-size:30px" data-i18n="rq.title">System requirements</h2>
+    <div class="req">
+      <div><b>CPU</b><span>64-bit x86, 2 cores</span></div>
+      <div><b>Memory</b><span>2 GB RAM</span></div>
+      <div><b>Storage</b><span>1 GB live · 8 GB install</span></div>
+      <div><b>Graphics</b><span>1024×768 VGA</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2 class="center" data-i18n="faq.title">Questions</h2>
+    <div class="faq" style="margin-top:36px">
+      <details><summary>Is LakoOS Windows?</summary><p>No. LakoOS is an independent, free operating system built on the NT architecture. It is not made by, affiliated with or endorsed by Microsoft. It follows the Windows folder layout and file names so people and programs feel at home.</p></details>
+      <details><summary>Will my Windows programs run?</summary><p>Many Win32 programs run and compatibility keeps improving. This is a development preview, so expect gaps, especially with the newest applications.</p></details>
+      <details><summary>Can I use it every day?</summary><p>Not yet. Try it in a virtual machine and report what breaks in GitHub Issues.</p></details>
+      <details><summary>How do I switch the Start style?</summary><p>Set <code>ShellStyle</code> to 10 or 11 under <code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced</code>, and <code>TaskbarAl</code> to 0 or 1 for taskbar alignment. It applies the next time you open Start.</p></details>
+      <details><summary>Where does the code come from?</summary><p>LakoOS is a fork of LiberNT, which is a fork of ReactOS. The original authors are credited in the repository and the GPL notices are kept.</p></details>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="band reveal">
+      <h2 data-i18n="band.t">Try LakoOS today</h2>
+      <p data-i18n="band.p">Download the image, start it in a virtual machine and tell us what you find.</p>
+      <a class="btn" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-livecd.iso">Download ISO</a>
+    </div>
+  </div>
+</section>

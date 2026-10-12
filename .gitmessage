@@ -1,0 +1,23 @@
+
+# Commit message example
+# ----------------------
+# [COMPONENT] A short but descriptive summary
+#
+# Problem: what goes wrong, as it was observed.
+#
+# Why: the rule, contract or invariant that makes it wrong.
+#
+# How: what the change does.
+# ----------------------
+# * [COMPONENT] should usually be the name of the CMake module, written
+#   in all caps. Use several tags, such as [NTOS:KE][HAL], only when
+#   one change needs them.
+# * Summary should be imperative (not past tense) and not end with a
+#   period.
+# * For a short feature commit, start the body with "feat:" instead of
+#   Problem/Why/How. Never put "feat:" in the summary.
+# * A wording, typo or formatting change may keep the summary only.
+# * For ABI and layout changes, name the evidence.
+# * There must be a newline between summary and description.
+# * The width of the description is arbitrary, but it is a good idea
+#   to wrap the text by 72 chars.

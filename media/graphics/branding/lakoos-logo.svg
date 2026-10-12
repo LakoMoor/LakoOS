@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 256" width="900" height="256" role="img" aria-label="LakoOS">
+  <rect x="28" y="28" width="96" height="96" fill="#7A5CFF"/>
+  <rect x="28" y="132" width="96" height="96" fill="#2F7BFF"/>
+  <rect x="132" y="132" width="96" height="96" fill="#14C4E0"/>
+  <text x="268" y="196" font-family="'Segoe UI Semibold','Segoe UI','Selawik','Inter','Helvetica Neue',Arial,sans-serif" font-size="140" font-weight="600" letter-spacing="-2" fill="#1B1B1F">LakoOS</text>
+</svg>

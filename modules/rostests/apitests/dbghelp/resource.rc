@@ -1,0 +1,4 @@
+#include "windef.h"
+
+msvc_uffs.dll RCDATA testdata/msvc_uffs.dll.compr
+msvc_uffs.pdb RCDATA testdata/msvc_uffs.pdb.compr

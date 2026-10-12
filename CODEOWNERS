@@ -1,0 +1,8 @@
+## Code owners of LakoOS
+
+## GitHub asks the owners listed here to review the pull requests that
+## change their paths. The last matching pattern takes precedence.
+## To take care of an area, add a line with its path and your GitHub
+## handle in a pull request.
+
+*                                       @LakoMoor
