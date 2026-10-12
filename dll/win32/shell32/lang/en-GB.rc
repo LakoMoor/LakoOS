@@ -783,7 +783,7 @@ BEGIN
 
     /* special folders */
     IDS_DESKTOP "Desktop"
-    IDS_MYCOMPUTER "My Computer"
+    IDS_MYCOMPUTER "This PC"
     IDS_RECYCLEBIN_FOLDER_NAME "Recycle Bin"
     IDS_CONTROLPANEL "Control Panel"
     IDS_ADMINISTRATIVETOOLS "Administrative Tools"
@@ -881,7 +881,7 @@ BEGIN
 
     /* Shell folder path default values. See also: dll/win32/userenv/lang */
     IDS_PROGRAMS "Start Menu\\Programs"
-    IDS_PERSONAL "My Documents"
+    IDS_PERSONAL "Documents"
     IDS_FAVORITES "Favorites"
     IDS_STARTUP "Start Menu\\Programs\\Startup"
     IDS_RECENT "Recent"
@@ -907,7 +907,7 @@ BEGIN
     IDS_COMMON_PICTURES "Documents\\My Pictures"
     IDS_COMMON_VIDEO "Documents\\My Videos"
     IDS_CDBURN_AREA "Local Settings\\Application Data\\Microsoft\\CD Burning"
-    IDS_NETWORKPLACE "My Network Places"
+    IDS_NETWORKPLACE "Network"
 
     IDS_NEWFOLDER "New Folder"
     IDS_NEWITEMFORMAT "New %s"

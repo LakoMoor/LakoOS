@@ -89,7 +89,7 @@ README_DESC=LakoOS Read-Me file
 
 CMD_TITLE=Command Prompt
 CMD_DESC=Open command prompt
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Launch Explorer
 RAPPS_TITLE=LakoOS Applications Manager
 RAPPS_TITLE_SHORT=Applications Manager
@@ -369,7 +369,7 @@ README_DESC=Lies-Mich Datei für LakoOS
 
 CMD_TITLE=Eingabeaufforderung
 CMD_DESC=Öffne Kommandozeilenfenster
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Starte Explorer
 RAPPS_TITLE=LakoOS Anwendungsmanager
 RAPPS_TITLE_SHORT=Anwendungsmanager
@@ -573,7 +573,7 @@ README_DESC=LakoOS'i Loe-mind fail
 
 CMD_TITLE=Käsurida
 CMD_DESC=Ava käsurida
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Ava sirvija
 RAPPS_TITLE=LakoOS'i Rakenduste Haldur
 RAPPS_TITLE_SHORT=Rakenduste Haldur
@@ -918,7 +918,7 @@ README_DESC=File Leggimi per LakoOS
 
 CMD_TITLE=Prompt dei comandi
 CMD_DESC=Apri la finestra dei comandi
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Avvia Explorer
 RAPPS_TITLE=LakoOS gestione applicazioni
 RAPPS_TITLE_SHORT=Gestione applicazioni
@@ -982,7 +982,7 @@ GAMES=ゲーム
 
 CMD_TITLE=コマンド プロンプト
 CMD_DESC=コマンド プロンプトを開きます
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=エクスプローラを起動します
 RAPPS_TITLE=LakoOS アプリ マネージャ
 RAPPS_TITLE_SHORT=アプリ マネージャ
@@ -1049,7 +1049,7 @@ README_DESC=LeesMij bestand voor LakoOS
 
 CMD_TITLE=Command Prompt
 CMD_DESC=Open command prompt
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Launch Explorer
 RAPPS_TITLE=LakoOS Applications Manager
 RAPPS_TITLE_SHORT=Applications Manager
@@ -1113,7 +1113,7 @@ GAMES=Spill
 
 CMD_TITLE=Command Prompt
 CMD_DESC=Åpne Kommandolinje
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Start Utforsker
 RAPPS_TITLE=LakoOS Applications Manager
 RAPPS_TITLE_SHORT=Applications Manager
@@ -1251,7 +1251,7 @@ README_DESC=Arquivo de informações para LakoOS
 
 CMD_TITLE=Command Prompt
 CMD_DESC=Abrir prompt de comando
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Iniciar Explorer
 RAPPS_TITLE=LakoOS Applications Manager
 RAPPS_TITLE_SHORT=Applications Manager
@@ -1385,7 +1385,7 @@ README_DESC=Fișier de informare LakoOS
 
 CMD_TITLE=Linie de comandă
 CMD_DESC=Efectuează funcții de tip text (linie de comandă)
-EXPLORER_TITLE=LakoOS Explorer
+EXPLORER_TITLE=File Explorer
 EXPLORER_DESC=Afișează fișierele și folderele de pe computer
 RAPPS_TITLE=Managerul de aplicații LakoOS
 RAPPS_TITLE_SHORT=Manager de aplicații

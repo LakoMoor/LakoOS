@@ -1,6 +1,6 @@
 #include "../explorer/explorer.rc"
 
-1 ICON "../explorer/res/ico/258.ico"
+1 ICON "../../../dll/win32/shell32/res/icons/4.ico"
 
 IDI_FOLDER_DOCUMENTS ICON "../../../dll/win32/shell32/res/icons/235.ico"
 IDI_FOLDER_DOWNLOADS ICON "../../../dll/win32/shell32/res/icons/downloads.ico"

@@ -154,6 +154,8 @@ set(dir_startmenu_comms         "${dir_startmenu_accessories}/Communications")
 set(dir_startmenu_entertainment "${dir_startmenu_accessories}/Entertainment")
 set(dir_startmenu_systemtools   "${dir_startmenu_accessories}/System Tools")
 set(dir_quicklaunch             "reactos/system32/config/systemprofile/AppData/Roaming/Microsoft/Internet Explorer/Quick Launch")
+set(dir_taskbarpin             "${dir_quicklaunch}/User Pinned/TaskBar")
+set(dir_taskbarpin_default     "Users/Default/AppData/Roaming/Microsoft/Internet Explorer/Quick Launch/User Pinned/TaskBar")
 
 cmdenvvar(envvar_systemdrive "SystemDrive" TRUE)
 cmdenvvar(envvar_archdir     "PROCESSOR_ARCHITECTURE:x86=I386" TRUE)
@@ -168,21 +170,21 @@ add_livecd_shortcut("Install LakoOS"
 add_livecd_shortcut("Read Me"
     "shell:windows\\readme.txt"
     ICON "${envvar_systemroot}\\system32\\shell32.dll" ICON_INDEX -152
-    DESTINATION "${dir_allusers_desktop}")
-add_livecd_shortcut("LakoOS Explorer"
-    "shell:windows\\explorer.exe" ICON_INDEX 1
+    DESTINATION "${dir_startmenu_programs}")
+add_livecd_shortcut("File Explorer"
+    "shell:windows\\explorer.exe" ICON_INDEX 0
     WORKDIR "${envvar_homedrive}${envvar_homepath}"
-    DESTINATION "${dir_startmenu_programs}" "${dir_quicklaunch}")
+    DESTINATION "${dir_startmenu_programs}" "${dir_quicklaunch}" "${dir_taskbarpin}" "${dir_taskbarpin_default}")
 add_livecd_shortcut("Command Prompt"
     "shell:system\\cmd.exe" ICON_INDEX 0
     WORKDIR "${envvar_homedrive}${envvar_homepath}"
-    DESTINATION "${dir_allusers_desktop}" "${dir_startmenu_accessories}" "${dir_quicklaunch}")
+    DESTINATION "${dir_startmenu_accessories}" "${dir_quicklaunch}" "${dir_taskbarpin}" "${dir_taskbarpin_default}")
 add_livecd_shortcut("Applications Manager"
     "shell:system\\rapps.exe" ICON_INDEX 0
-    DESTINATION "${dir_allusers_desktop}")
+    DESTINATION "${dir_startmenu_programs}")
 add_livecd_shortcut("Device Manager"
     "shell:system\\devmgmt.exe" ICON_INDEX 0
-    DESTINATION "${dir_allusers_desktop}" "${dir_startmenu_admintools}")
+    DESTINATION "${dir_startmenu_admintools}")
 add_livecd_shortcut("Event Viewer"
     "shell:system\\eventvwr.exe" ICON_INDEX 0
     DESTINATION "${dir_startmenu_admintools}")
@@ -233,13 +235,13 @@ add_livecd_shortcut("Registry Editor"
     DESTINATION "${dir_startmenu_systemtools}")
 add_livecd_shortcut("Task Manager"
     "shell:system\\taskmgr.exe" ICON_INDEX 0
-    DESTINATION "${dir_allusers_desktop}" "${dir_startmenu_systemtools}")
+    DESTINATION "${dir_startmenu_systemtools}")
 add_livecd_shortcut("DWM Settings"
     "shell:system\\dwmsettings.exe" ICON_INDEX 0
-    DESTINATION "${dir_allusers_desktop}" "${dir_startmenu_systemtools}")
+    DESTINATION "${dir_startmenu_systemtools}")
 add_livecd_shortcut("RosGet"
     "shell:system\\rosget.exe" ICON_INDEX 0 CMDLINE_ARGS "gui"
-    DESTINATION "${dir_allusers_desktop}" "${dir_startmenu_systemtools}")
+    DESTINATION "${dir_startmenu_systemtools}")
 add_livecd_shortcut("Calculator"
     "shell:system\\calc.exe" ICON_INDEX 0
     WORKDIR "${envvar_homedrive}${envvar_homepath}"
