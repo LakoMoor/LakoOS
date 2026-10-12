@@ -443,7 +443,7 @@ ThemeInitDrawContext(PDRAW_CONTEXT pcontext,
 
         if (SUCCEEDED(GetThemeColor(pcontext->theme, WP_CAPTION, FS_ACTIVE, TMT_FILLCOLORHINT, &fill)) &&
             (GetRValue(fill) * 299 + GetGValue(fill) * 587 + GetBValue(fill) * 114) / 1000 < 128)
-            pcontext->DarkMode = FALSE;
+            pcontext->DarkMode = TRUE;
     }
     pcontext->scrolltheme = GetNCScrollbarTheme(hWnd, pcontext->wi.dwStyle);
 
@@ -1126,6 +1126,20 @@ ThemeDwmDrawCaptionButton(HDC hDC, const RECT *prc, UINT Button, ULONG State, BO
         iState = Active ? BUTTON_HOT : BUTTON_INACTIVE_HOT;
     else
         iState = Active ? BUTTON_NORMAL : BUTTON_INACTIVE;
+
+    if (!Dark)
+    {
+        COLORREF fill;
+
+        hTheme = OpenThemeData(NULL, L"WINDOW");
+        if (hTheme)
+        {
+            if (SUCCEEDED(GetThemeColor(hTheme, WP_CAPTION, FS_ACTIVE, TMT_FILLCOLORHINT, &fill)) &&
+                (GetRValue(fill) * 299 + GetGValue(fill) * 587 + GetBValue(fill) * 114) / 1000 < 128)
+                Dark = TRUE;
+            CloseThemeData(hTheme);
+        }
+    }
 
     if (Dark)
     {

@@ -593,6 +593,23 @@ static void shape_cursor( struct console *console )
 }
 
 #ifdef __REACTOS__
+static INT read_window_alpha(void)
+{
+    DWORD value = 255, size = sizeof(value), type;
+    HKEY key;
+
+    if (RegOpenKeyExW( HKEY_CURRENT_USER, L"Console", 0, KEY_QUERY_VALUE, &key ) == ERROR_SUCCESS)
+    {
+        if (RegQueryValueExW( key, L"WindowAlpha", NULL, &type, (BYTE *)&value, &size ) != ERROR_SUCCESS ||
+            type != REG_DWORD)
+            value = 255;
+        RegCloseKey( key );
+    }
+    if (value < 31) value = 31;
+    if (value > 255) value = 255;
+    return (INT)value;
+}
+
 static void update_content_backdrop( struct console *console )
 {
     COLORREF fill;
@@ -600,7 +617,7 @@ static void update_content_backdrop( struct console *console )
     if (!console->win || !console->active) return;
     fill = console->active->color_map[(console->active->attr >> 4) & 0x0f];
     if (console->window->backdrop_set && console->window->backdrop == fill) return;
-    if (DwmSettingsSetContentBackdrop( console->win, fill, 128 ))
+    if (DwmSettingsSetContentBackdrop( console->win, fill, read_window_alpha() ))
     {
         console->window->backdrop = fill;
         console->window->backdrop_set = TRUE;
