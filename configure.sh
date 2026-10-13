@@ -16,38 +16,28 @@ ROSCONFIG_OVERRIDES=
 ROSCONFIG_OK=0
 ROSCONFIG_EXIT_SKIP_CONFIGURE=3
 
-# RosBE installation precedence:
-#   1. ROSBE_DOCKER_ACTIVE=1 (set by `rosbe enable` from the docker bootstrap):
-#      use the rosbe-builder container, paths at /opt/rosbe/*. The output
-#      dir gets a "-docker" suffix as a reminder that this build tree only
-#      works in an `rosbe enable`-d shell.
-#   2. ~/.local/opt/rosbe (the host-installed bootstrap):
-#      use local toolchain, validate -x as before.
-#   3. Neither: print install instructions and exit.
+# Toolchain lookup:
+#   1. $LAKOOS_TOOLCHAIN/llvm (set LAKOOS_TOOLCHAIN to use another location)
+#   2. ~/.local/opt/lakoos/llvm, built from source by buildenv/toolchain/build-toolchain.sh
+#   3. ~/.local/opt/rosbe/llvm, an older toolchain with the same layout
 ROSBE_OUTPUT_SUFFIX=""
-if [ "${ROSBE_DOCKER_ACTIVE:-0}" = "1" ]; then
-	ROSBE_ROOT="/opt/rosbe"
-	ROSBE_SKIP_HOST_CHECK=1
-	ROSBE_OUTPUT_SUFFIX="-docker"
+ROSBE_SKIP_HOST_CHECK=0
+if [ -n "${LAKOOS_TOOLCHAIN:-}" ] && [ -x "$LAKOOS_TOOLCHAIN/llvm/bin/clang" ]; then
+	ROSBE_ROOT="$LAKOOS_TOOLCHAIN"
+elif [ -x "$HOME/.local/opt/lakoos/llvm/bin/clang" ]; then
+	ROSBE_ROOT="$HOME/.local/opt/lakoos"
 elif [ -d "$HOME/.local/opt/rosbe/llvm" ] || [ -d "$HOME/.local/opt/rosbe/mingw-gcc" ]; then
 	ROSBE_ROOT="$HOME/.local/opt/rosbe"
-	ROSBE_SKIP_HOST_CHECK=0
 else
-	cat >&2 <<'NO_ROSBE'
-configure.sh: no RosBE installation found.
+	cat >&2 <<'NO_TOOLCHAIN'
+configure.sh: no compiler toolchain was found.
 
-Install one of:
+Build one from source with:
 
-  - Local RosBE (compiles run on the host):
-      curl -fsSL https://raw.githubusercontent.com/ahmedarif193/winget-rosbe/main/rosbe-unix-bootstrap.sh | sh
+  ./buildenv/build.sh --env-only
 
-  - Docker RosBE (compiles run in a rootless container):
-      curl -fsSL https://raw.githubusercontent.com/ahmedarif193/winget-rosbe/main/rosbe-linux-docker-bootstrap.sh | sh
-      # then open a new shell and:
-      rosbe enable
-
-Then re-run configure.sh.
-NO_ROSBE
+or run buildenv/toolchain/build-toolchain.sh directly. Then run configure.sh again.
+NO_TOOLCHAIN
 	exit 1
 fi
 ROSBE_LLVM_ROOT="$ROSBE_ROOT/llvm"
@@ -67,8 +57,8 @@ SKIP_FEEDS_UPDATE=0
 
 usage() {
 	echo "Usage: configure.sh [options]"
-	echo "  --clang              Use RosBE Clang/LLVM from ~/.local/opt/rosbe/llvm"
-	echo "  --gcc                Use GCC from ~/.local/opt/rosbe/mingw-gcc"
+	echo "  --clang              Use the Clang/LLVM toolchain (see buildenv/toolchain)"
+	echo "  --gcc                Use an installed MinGW GCC toolchain"
 	echo "  -a, --arch <arch>    Target architecture: amd64, i386, arm64, riscv64, ppc (default: amd64)"
 	echo "  -r, --release        Configure a Release build (default: Debug)"
 	echo "  makefiles            Use Unix Makefiles generator (default: Ninja)"
@@ -613,8 +603,8 @@ if [ "$USE_CLANG" -eq 1 ]; then
 	fi
 
 	if [ "$ROSBE_SKIP_HOST_CHECK" != "1" ]; then
-		[ -x "$ROSBE_LLVM_ROOT/bin/clang" ] || fail "missing RosBE LLVM toolchain at $ROSBE_LLVM_ROOT"
-		[ -x "$ROSBE_LLVM_ROOT/bin/clang++" ] || fail "missing RosBE LLVM clang++ at $ROSBE_LLVM_ROOT/bin"
+		[ -x "$ROSBE_LLVM_ROOT/bin/clang" ] || fail "missing LLVM toolchain at $ROSBE_LLVM_ROOT"
+		[ -x "$ROSBE_LLVM_ROOT/bin/clang++" ] || fail "missing LLVM clang++ at $ROSBE_LLVM_ROOT/bin"
 	fi
 
 	export REACTOS_CLANG_LLVM_MINGW_ROOT="$ROSBE_LLVM_ROOT"
@@ -629,8 +619,8 @@ else
 	GCC_TOOLCHAIN_ROOT="$ROSBE_GCC_ROOT/$GCC_TRIPLET"
 
 	if [ "$ROSBE_SKIP_HOST_CHECK" != "1" ]; then
-		[ -x "$GCC_TOOLCHAIN_ROOT/bin/$GCC_TRIPLET-gcc" ] || fail "missing RosBE GCC toolchain for $ARCH at $GCC_TOOLCHAIN_ROOT"
-		[ -x "$GCC_TOOLCHAIN_ROOT/bin/$GCC_TRIPLET-g++" ] || fail "missing RosBE GCC g++ for $ARCH at $GCC_TOOLCHAIN_ROOT/bin"
+		[ -x "$GCC_TOOLCHAIN_ROOT/bin/$GCC_TRIPLET-gcc" ] || fail "missing GCC toolchain for $ARCH at $GCC_TOOLCHAIN_ROOT"
+		[ -x "$GCC_TOOLCHAIN_ROOT/bin/$GCC_TRIPLET-g++" ] || fail "missing GCC g++ for $ARCH at $GCC_TOOLCHAIN_ROOT/bin"
 	fi
 
 	export PATH="$GCC_TOOLCHAIN_ROOT/bin:$PATH"
@@ -649,13 +639,10 @@ else
 	rm -f "$ROSCONFIG_OVERRIDES"
 fi
 
-echo "Configuring a new ReactOS build on:"
+echo "Configuring a new LakoOS build on:"
 uname -srm
 echo
-echo "RosBE root:    $ROSBE_ROOT"
-if [ "$ROSBE_SKIP_HOST_CHECK" = "1" ]; then
-	echo "RosBE mode:    container (${ROSBE_DOCKER_IMAGE:-rosbe-builder})"
-fi
+echo "Toolchain:     $ROSBE_ROOT"
 echo "Compiler:      $BUILD_ENVIRONMENT"
 echo "Architecture:  $ARCH"
 echo "Build type:    $BUILD_TYPE"

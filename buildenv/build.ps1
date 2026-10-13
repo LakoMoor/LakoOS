@@ -2,27 +2,13 @@ param(
     [string]$Arch = "amd64",
     [string]$Target = "livecd",
     [switch]$Release,
-    [switch]$EnvOnly,
-    [ValidateSet("wsl", "docker")][string]$Backend = "wsl"
+    [switch]$EnvOnly
 )
 
 $ErrorActionPreference = "Stop"
 $Repo = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 
 function Write-Step($Text) { Write-Host "`n==> $Text" -ForegroundColor Cyan }
-
-if ($Backend -eq "docker") {
-    if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-        throw "Docker was not found. Install Docker Desktop or use -Backend wsl."
-    }
-    Write-Step "Building the LakoOS build image"
-    docker build -t lakoos-buildenv (Join-Path $PSScriptRoot ".")
-    Write-Step "Building LakoOS"
-    $Extra = @()
-    if ($Release) { $Extra += "--release" }
-    docker run --rm -v "${Repo}:/src" -w /src lakoos-buildenv ./buildenv/build.sh --arch $Arch --target $Target @Extra
-    exit $LASTEXITCODE
-}
 
 if (-not (Get-Command wsl -ErrorAction SilentlyContinue)) {
     throw "WSL was not found. Run 'wsl --install -d Ubuntu' in an administrator terminal, restart, then run this script again."
@@ -38,13 +24,13 @@ if (-not $Distros) {
 Write-Step "Copying the source into the WSL file system"
 $Linux = (wsl wslpath -a "$Repo").Trim()
 $Work = '$HOME/lakoos'
-wsl bash -lc "mkdir -p $Work && rsync -a --delete --exclude 'output-*' '$Linux/' $Work/ 2>/dev/null || cp -a '$Linux/.' $Work/"
+wsl bash -lc "mkdir -p $Work && (command -v rsync >/dev/null && rsync -a --delete --exclude 'output-*' '$Linux/' $Work/ || cp -a '$Linux/.' $Work/)"
 
 $Flags = "--arch $Arch --target $Target"
 if ($Release) { $Flags += " --release" }
 if ($EnvOnly) { $Flags += " --env-only" }
 
-Write-Step "Running the build inside WSL"
+Write-Step "Building the toolchain and the system inside WSL"
 wsl bash -lc "cd $Work && ./buildenv/build.sh $Flags"
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

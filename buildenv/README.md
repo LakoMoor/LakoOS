@@ -1,6 +1,6 @@
 # LakoOS build environment
 
-This folder builds LakoOS from nothing. It installs the host tools, the compilers, configures the tree and produces the image.
+This folder builds LakoOS from nothing. It installs the host tools, **builds the compiler toolchain from source**, configures the tree and produces the image.
 
 ## Linux and macOS
 
@@ -10,34 +10,33 @@ This folder builds LakoOS from nothing. It installs the host tools, the compiler
 
 The result is `output-Clang-amd64-debug/livecd.iso`.
 
-Options:
-
 | Option | Meaning |
 |---|---|
-| `-a`, `--arch` | `amd64` (default), `i386`, `arm64` |
+| `-a`, `--arch` | `amd64` (default), `arm64` |
 | `-t`, `--target` | `livecd` (default), `bootcd`, `lakoosimg`, `lakoosvhd` |
 | `-r`, `--release` | Release build |
-| `--env-only` | Install the tools and stop |
+| `--env-only` | Install the tools, build the toolchain and stop |
 
 ## Windows
 
 ```powershell
-.\buildenv\build.ps1                 # WSL2, installs Ubuntu if needed
-.\buildenv\build.ps1 -Backend docker # Docker Desktop
+.\buildenv\build.ps1
 ```
 
-Images are copied to `dist\`.
+The script uses WSL2 and installs Ubuntu if it is missing. Images are copied to `dist\`.
 
-## Docker
+## The toolchain
 
-```sh
-docker build -t lakoos-buildenv buildenv
-docker run --rm -v "$PWD:/src" lakoos-buildenv
-```
+`toolchain/build-toolchain.sh` fetches the LLVM sources at a pinned revision and builds Clang, LLD and the binary tools for amd64, arm64, ARM, PowerPC and RISC-V. It installs them into `~/.local/opt/lakoos/llvm` together with the runtime sources the OS build needs. Nothing is downloaded as a prebuilt binary.
 
-## What gets installed
+| Variable | Meaning |
+|---|---|
+| `LAKOOS_TOOLCHAIN` | Install directory (default `~/.local/opt/lakoos`) |
+| `LLVM_REPO`, `LLVM_REV` | LLVM source repository and revision |
+| `JOBS` | Parallel jobs |
 
-- Host tools: git, curl, CMake, Ninja, flex, bison, Python 3, NASM, a native compiler. Installed with `apt`, `dnf`, `pacman`, `zypper`, `apk` or Homebrew when missing.
-- RosBE (LLVM and MinGW cross toolchains) into `~/.local/opt/rosbe`, with no administrator rights needed.
+The first run needs about 15 GB of disk and from 20 minutes to a few hours depending on the machine.
 
-The first full build takes a while and needs about 15 GB of disk.
+## Host tools
+
+git, CMake, Ninja, flex, bison, Python 3, NASM, xz and a native C/C++ compiler. They are installed with `apt`, `dnf`, `pacman`, `zypper`, `apk` or Homebrew when missing.

@@ -8,8 +8,6 @@ ARCH=amd64
 TARGET=livecd
 BUILD_TYPE=
 ENV_ONLY=0
-ROSBE_ROOT="${ROSBE_ROOT:-$HOME/.local/opt/rosbe}"
-ROSBE_BOOTSTRAP_URL="${ROSBE_BOOTSTRAP_URL:-https://raw.githubusercontent.com/ahmedarif193/winget-rosbe/main/rosbe-unix-bootstrap.sh}"
 
 usage() {
     cat <<EOF
@@ -24,8 +22,9 @@ Prepares a complete build environment from scratch and builds LakoOS.
   -h, --help            Show this help
 
 Environment:
-  ROSBE_ROOT            Toolchain install directory (default: ~/.local/opt/rosbe)
-  ROSBE_BOOTSTRAP_URL   Toolchain bootstrap script
+  LAKOOS_TOOLCHAIN      Toolchain install directory (default: ~/.local/opt/lakoos)
+  LLVM_REPO, LLVM_REV   LLVM source repository and revision to build
+  JOBS                  Parallel jobs for the toolchain build
 EOF
 }
 
@@ -56,7 +55,7 @@ install_packages() {
                 $SUDO apt-get update
                 $SUDO env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
                     build-essential git curl ca-certificates cmake ninja-build flex bison python3 \
-                    nasm xz-utils unzip pkg-config
+                    nasm xz-utils unzip pkg-config glslang-tools python3-mako python3-yaml python3-packaging ccache wget
             elif have dnf; then
                 $SUDO dnf install -y @development-tools git curl ca-certificates cmake ninja-build flex bison python3 nasm xz unzip pkgconf
             elif have pacman; then
@@ -93,7 +92,7 @@ install_packages() {
 }
 
 missing=
-for tool in git curl cmake ninja flex bison python3 nasm; do
+for tool in git cmake ninja flex bison python3 nasm xz; do
     have "$tool" || missing="$missing $tool"
 done
 
@@ -104,15 +103,10 @@ else
     log "Host tools are present"
 fi
 
-if [ ! -d "$ROSBE_ROOT/llvm" ]; then
-    log "Installing the RosBE toolchain into $ROSBE_ROOT"
-    TMP=$(mktemp -d)
-    trap 'rm -rf "$TMP"' EXIT
-    curl -fsSL -o "$TMP/rosbe-bootstrap.sh" "$ROSBE_BOOTSTRAP_URL"
-    sh "$TMP/rosbe-bootstrap.sh"
-else
-    log "RosBE toolchain found in $ROSBE_ROOT"
-fi
+TOOLCHAIN_ROOT="${LAKOOS_TOOLCHAIN:-$HOME/.local/opt/lakoos}"
+export LAKOOS_TOOLCHAIN="$TOOLCHAIN_ROOT"
+log "Preparing the compiler toolchain in $TOOLCHAIN_ROOT"
+"$SELF_DIR/toolchain/build-toolchain.sh"
 
 if [ "$ENV_ONLY" -eq 1 ]; then
     log "Build environment is ready"
