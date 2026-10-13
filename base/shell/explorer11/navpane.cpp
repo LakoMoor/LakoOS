@@ -42,6 +42,7 @@ NavAddCsidl(CAtlArray<E11_NAVITEM> &Items, int csidl, LPCWSTR pszName, int nIcon
     item.pidl = pidl;
     item.nDepth = 1;
     item.nIcon = nIcon;
+    item.bCanExpand = TRUE;
     StringCchCopyW(item.szName, _countof(item.szName), pszName);
     Items.Add(item);
 }
@@ -60,6 +61,7 @@ NavAddPath(CAtlArray<E11_NAVITEM> &Items, LPCWSTR pszPath, LPCWSTR pszName, int 
     item.pidl = pidl;
     item.nDepth = 1;
     item.nIcon = nIcon;
+    item.bCanExpand = TRUE;
     StringCchCopyW(item.szName, _countof(item.szName), pszName);
     Items.Add(item);
 }
@@ -98,6 +100,9 @@ VOID CNavPane::Build()
         }
         RegCloseKey(hKey);
     }
+
+    for (SIZE_T q = 0; q < m_Items.GetCount(); q++)
+        m_Items[q].bCanExpand = FALSE;
 
     SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidlPc);
     NavAddRoot(m_Items, L"This PC", EI_PC, pidlPc);
@@ -149,11 +154,13 @@ VOID CNavPane::Build()
 
     NavAddRoot(m_Items, L"Network", EI_NONE, NULL);
     NavAddCsidl(m_Items, CSIDL_NETWORK, L"Network", EI_NETWORK);
+    m_Items[m_Items.GetCount() - 1].bCanExpand = FALSE;
+    m_nScroll = 0;
 }
 
 VOID CNavPane::Layout(const RECT *prcPane)
 {
-    int y = prcPane->top + E11Scale(10);
+    int y = prcPane->top + E11Scale(10) - m_nScroll;
     BOOL bParentExpanded = TRUE;
 
     for (SIZE_T i = 0; i < m_Items.GetCount(); i++)
@@ -171,7 +178,7 @@ VOID CNavPane::Layout(const RECT *prcPane)
             continue;
         }
 
-        int nRowH = item.nKind == NAV_ROOT ? E11Scale(30) : E11Scale(26);
+        int nRowH = item.nKind == NAV_ROOT ? E11Scale(30) : E11Scale(28);
         SetRect(&item.rc, prcPane->left, y, prcPane->right, y + nRowH);
 
         if (item.nKind == NAV_ROOT)
@@ -179,6 +186,12 @@ VOID CNavPane::Layout(const RECT *prcPane)
             SetRect(&item.rcChevron, prcPane->left + E11Scale(4), y + (nRowH - E11Scale(16)) / 2,
                     prcPane->left + E11Scale(20), y + (nRowH + E11Scale(16)) / 2);
             bParentExpanded = item.bExpanded;
+        }
+        else if (item.bCanExpand)
+        {
+            int xChev = prcPane->left + E11Scale(6) + (item.nDepth - 1) * E11Scale(16);
+            SetRect(&item.rcChevron, xChev, y + (nRowH - E11Scale(16)) / 2,
+                    xChev + E11Scale(16), y + (nRowH + E11Scale(16)) / 2);
         }
         else
         {
@@ -189,11 +202,133 @@ VOID CNavPane::Layout(const RECT *prcPane)
         if (item.nKind == NAV_ROOT && !item.bExpanded)
             y += E11Scale(2);
     }
+
+    m_nContentH = (y + m_nScroll) - prcPane->top + E11Scale(10);
+}
+
+VOID CNavPane::Scroll(int nDelta, const RECT *prcPane)
+{
+    int nView = prcPane->bottom - prcPane->top;
+    int nMax = max(0, m_nContentH - nView);
+    int nNew = max(0, min(m_nScroll + nDelta, nMax));
+    if (nNew != m_nScroll)
+    {
+        m_nScroll = nNew;
+        Layout(prcPane);
+    }
+}
+
+VOID CNavPane::ToggleItem(int iItem)
+{
+    if (iItem < 0 || (SIZE_T)iItem >= m_Items.GetCount())
+        return;
+
+    E11_NAVITEM item = m_Items[iItem];
+    if (item.nKind != NAV_ITEM || !item.bCanExpand || !item.pidl)
+        return;
+
+    int nDepth = item.nDepth;
+    if (item.bExpanded)
+    {
+        SIZE_T iEnd = (SIZE_T)iItem + 1;
+        while (iEnd < m_Items.GetCount() && m_Items[iEnd].nKind == NAV_ITEM && m_Items[iEnd].nDepth > nDepth)
+            iEnd++;
+
+        CAtlArray<E11_NAVITEM> Kept;
+        for (SIZE_T i = 0; i < m_Items.GetCount(); i++)
+        {
+            if (i > (SIZE_T)iItem && i < iEnd)
+            {
+                if (m_Items[i].pidl)
+                    ILFree(m_Items[i].pidl);
+                continue;
+            }
+            Kept.Add(m_Items[i]);
+        }
+        m_Items.SetCount(0);
+        for (SIZE_T i = 0; i < Kept.GetCount(); i++)
+            m_Items.Add(Kept[i]);
+        m_Items[iItem].bExpanded = FALSE;
+        return;
+    }
+
+    CComPtr<IShellFolder> pParent;
+    if (FAILED(SHBindToObject(NULL, item.pidl, NULL, IID_PPV_ARG(IShellFolder, &pParent))) || !pParent)
+    {
+        m_Items[iItem].bCanExpand = FALSE;
+        return;
+    }
+
+    CComPtr<IEnumIDList> pEnum;
+    if (FAILED(pParent->EnumObjects(NULL, SHCONTF_FOLDERS, &pEnum)) || !pEnum)
+    {
+        m_Items[iItem].bCanExpand = FALSE;
+        return;
+    }
+
+    CAtlArray<E11_NAVITEM> Children;
+    LPITEMIDLIST pidlRel;
+    ULONG cFetched;
+    while (Children.GetCount() < 200 && pEnum->Next(1, &pidlRel, &cFetched) == S_OK && cFetched == 1)
+    {
+        SFGAOF attr = SFGAO_FOLDER | SFGAO_HIDDEN | SFGAO_HASSUBFOLDER;
+        if (FAILED(pParent->GetAttributesOf(1, (PCUITEMID_CHILD *)&pidlRel, &attr)) ||
+            !(attr & SFGAO_FOLDER) || (attr & SFGAO_HIDDEN))
+        {
+            CoTaskMemFree(pidlRel);
+            continue;
+        }
+
+        STRRET sr;
+        E11_NAVITEM child;
+        ZeroMemory(&child, sizeof(child));
+        child.szName[0] = 0;
+        if (SUCCEEDED(pParent->GetDisplayNameOf(pidlRel, SHGDN_INFOLDER, &sr)))
+            StrRetToBufW(&sr, pidlRel, child.szName, _countof(child.szName));
+        LPITEMIDLIST pidlFull = ILCombine(item.pidl, pidlRel);
+        CoTaskMemFree(pidlRel);
+        if (!pidlFull || !child.szName[0])
+        {
+            if (pidlFull)
+                ILFree(pidlFull);
+            continue;
+        }
+        child.nKind = NAV_ITEM;
+        child.nDepth = nDepth + 1;
+        child.nIcon = EI_FOLDER;
+        child.pidl = pidlFull;
+        child.bCanExpand = (attr & SFGAO_HASSUBFOLDER) != 0;
+        Children.Add(child);
+    }
+
+    m_Items[iItem].bExpanded = TRUE;
+    if (Children.GetCount() == 0)
+    {
+        m_Items[iItem].bCanExpand = FALSE;
+        m_Items[iItem].bExpanded = FALSE;
+        return;
+    }
+
+    CAtlArray<E11_NAVITEM> Merged;
+    for (SIZE_T i = 0; i < m_Items.GetCount(); i++)
+    {
+        Merged.Add(m_Items[i]);
+        if (i == (SIZE_T)iItem)
+        {
+            for (SIZE_T c = 0; c < Children.GetCount(); c++)
+                Merged.Add(Children[c]);
+        }
+    }
+    m_Items.SetCount(0);
+    for (SIZE_T i = 0; i < Merged.GetCount(); i++)
+        m_Items.Add(Merged[i]);
 }
 
 VOID CNavPane::Paint(HDC hdc, const RECT *prcPane, const E11_PALETTE *pPal, HFONT hFont, HFONT hFontHeader)
 {
     SetBkMode(hdc, TRANSPARENT);
+    int nSaved = SaveDC(hdc);
+    IntersectClipRect(hdc, prcPane->left, prcPane->top, prcPane->right, prcPane->bottom);
 
     for (SIZE_T i = 0; i < m_Items.GetCount(); i++)
     {
@@ -247,8 +382,15 @@ VOID CNavPane::Paint(HDC hdc, const RECT *prcPane, const E11_PALETTE *pPal, HFON
             DeleteObject(hbrHot);
         }
 
-        int xIcon = item.rc.left + E11Scale(24);
+        int xIcon = item.rc.left + E11Scale(24) + (item.nDepth > 1 ? (item.nDepth - 1) * E11Scale(16) : 0);
         int cyMid = (item.rc.top + item.rc.bottom) / 2;
+        if (item.bCanExpand)
+        {
+            int ccx2 = (item.rcChevron.left + item.rcChevron.right) / 2;
+            int a2 = E11Scale(6);
+            RECT rcChev2 = { ccx2 - a2, cyMid - a2, ccx2 + a2, cyMid + a2 };
+            E11DrawFluentRes(hdc, &rcChev2, item.bExpanded ? IDI_FLU_CHEVDOWN : IDI_FLU_CHEVRIGHT, pPal->Text);
+        }
         RECT rcIcon = { xIcon, cyMid - E11Scale(8), xIcon + E11Scale(16), cyMid + E11Scale(8) };
         E11DrawIcon(hdc, &rcIcon, item.nIcon, pPal);
 
@@ -267,6 +409,8 @@ VOID CNavPane::Paint(HDC hdc, const RECT *prcPane, const E11_PALETTE *pPal, HFON
             E11DrawIconDim(hdc, &rcPin, EI_PIN, pPal, TRUE);
         }
     }
+
+    RestoreDC(hdc, nSaved);
 }
 
 int CNavPane::HitTest(POINT pt)
@@ -289,6 +433,25 @@ BOOL CNavPane::HitChevron(POINT pt, int *piItem)
         {
             *piItem = (int)i;
             return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+BOOL CNavPane::HitItemChevron(POINT pt, int *piItem)
+{
+    for (SIZE_T i = 0; i < m_Items.GetCount(); i++)
+    {
+        E11_NAVITEM &item = m_Items[i];
+        if (item.bVisible && item.nKind == NAV_ITEM && item.bCanExpand)
+        {
+            RECT rc = item.rcChevron;
+            InflateRect(&rc, E11Scale(4), E11Scale(6));
+            if (PtInRect(&rc, pt))
+            {
+                *piItem = (int)i;
+                return TRUE;
+            }
         }
     }
     return FALSE;

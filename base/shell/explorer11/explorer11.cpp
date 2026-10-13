@@ -1938,6 +1938,15 @@ public:
             return 0;
         }
 
+        int iItemChev;
+        if (m_NavPane.HitItemChevron(pt, &iItemChev))
+        {
+            m_NavPane.ToggleItem(iItemChev);
+            m_NavPane.Layout(&m_rcPane);
+            InvalidateRect(NULL, TRUE);
+            return 0;
+        }
+
         int iChevRoot;
         if (m_NavPane.HitChevron(pt, &iChevRoot))
         {
@@ -1959,6 +1968,21 @@ public:
         if (iNav >= 0 && m_NavPane.m_Items[iNav].pidl)
             BrowseTo(m_NavPane.m_Items[iNav].pidl, TRUE);
 
+        return 0;
+    }
+
+    LRESULT OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+    {
+        POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+        ScreenToClient(&pt);
+        if (!PtInRect(&m_rcPane, pt))
+        {
+            bHandled = FALSE;
+            return 0;
+        }
+        int nDelta = -MulDiv(GET_WHEEL_DELTA_WPARAM(wParam), Sc(56), WHEEL_DELTA);
+        m_NavPane.Scroll(nDelta, &m_rcPane);
+        InvalidateRect(&m_rcPane, FALSE);
         return 0;
     }
 
@@ -2028,6 +2052,7 @@ public:
         MESSAGE_HANDLER(WM_LBUTTONUP, OnLButtonUp)
         MESSAGE_HANDLER(WM_RBUTTONUP, OnRButtonUp)
         MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
+        MESSAGE_HANDLER(WM_MOUSEWHEEL, OnMouseWheel)
         MESSAGE_HANDLER(WM_CTLCOLOREDIT, OnCtlColorEdit)
         MESSAGE_HANDLER(E11M_SEARCHENTER, OnSearchEnter)
         MESSAGE_HANDLER(E11M_SEARCHESC, OnSearchEsc)

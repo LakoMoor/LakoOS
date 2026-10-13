@@ -36,7 +36,12 @@ COLORREF Blend(COLORREF a, COLORREF b, int pctB)
 
 static BOOL PrefersDark(void)
 {
-    DWORD v = 1, cb = sizeof(v);
+    DWORD v = 0, cb = sizeof(v);
+    if (SHGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                    L"ControlPanelUsesDarkTheme", NULL, &v, &cb) == ERROR_SUCCESS)
+        return v != 0;
+    return FALSE;
+    cb = sizeof(v);
     if (SHGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
                     L"AppsUseLightTheme", NULL, &v, &cb) == ERROR_SUCCESS)
         return v == 0;
@@ -1343,7 +1348,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPWSTR lpCmdLine, int 
         else if (IsSwitch(L"page", argv[i]) && i + 1 < argc) pszPage = argv[++i];
         else if (IsSwitch(L"category", argv[i]) && i + 1 < argc) startCategory = _wtoi(argv[++i]);
         else if (IsSwitch(L"all", argv[i])) bAll = TRUE;
-        else if (argv[i][0] != L'/' && argv[i][0] != L'-' && argv[i][0] != L'\0')
+        else if (i + 1 >= argc && !lstrcmpiW(argv[i], L"sysdm.cpl")) pszName = L"Microsoft.System";
+        else if (argv[i][0] != L'/' && argv[i][0] != L'-' && argv[i][0] != L'\0' &&
+                 !(i + 1 >= argc && !lstrcmpiW(argv[i], L"sysdm.cpl")))
         {
             WCHAR szParams[MAX_PATH * 2];
             StringCchPrintfW(szParams, _countof(szParams), L"shell32.dll,Control_RunDLL %s", argv[i]);

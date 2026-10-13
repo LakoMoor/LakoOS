@@ -159,6 +159,19 @@ static int PaintSystem(HDC hdc, int x, int y, int cx)
                      osv.szCSDVersion[0] ? L" " : L"", osv.szCSDVersion);
     y += DrawWrapped(hdc, lx, y, lcx, szText, g_f.hfText, g_f.pal.Text) + S(2);
     y += DrawWrapped(hdc, lx, y, lcx, L"LakoOS is free software released under the GNU GPL.", g_f.hfText, g_f.pal.DimText) + S(14);
+    {
+        int ms = S(96), mt = (ms - S(6)) / 2, mx = x + cx - S(140), my = y - S(120);
+        HBRUSH b1 = CreateSolidBrush(RGB(122, 92, 255)), b2 = CreateSolidBrush(RGB(47, 123, 255)), b3 = CreateSolidBrush(RGB(20, 196, 224));
+        RECT r1 = { mx, my, mx + mt, my + mt };
+        RECT r2 = { mx, my + mt + S(6), mx + mt, my + 2 * mt + S(6) };
+        RECT r3 = { mx + mt + S(6), my + mt + S(6), mx + 2 * mt + S(6), my + 2 * mt + S(6) };
+        FillRect(hdc, &r1, b1);
+        FillRect(hdc, &r2, b2);
+        FillRect(hdc, &r3, b3);
+        DeleteObject(b1);
+        DeleteObject(b2);
+        DeleteObject(b3);
+    }
 
     y += SectionTitle(hdc, x, y, cx, L"System");
     int cxLabel = S(150);
@@ -224,6 +237,15 @@ static int PaintSystem(HDC hdc, int x, int y, int cx)
     y += LabelValue(hdc, lx, y, cxLabel, lcx - S(120), L"Workgroup:", szGroup);
     DrawLinkText(hdc, x + cx - S(100), ty, S(100), L"Change settings", g_f.hfText, LA_COMMAND, 0, NULL,
                  L"%SystemRoot%\\system32\\rundll32.exe shell32.dll,Control_RunDLL sysdm.cpl,,1", L"Change computer name and hardware settings", TRUE);
+    y += S(10);
+
+    y += SectionTitle(hdc, x, y, cx, L"LakoOS activation");
+    y += DrawWrapped(hdc, lx, y, lcx, L"LakoOS is free software and does not require activation.", g_f.hfText, g_f.pal.Text) + S(4);
+    WCHAR szPid[128] = L"";
+    RegString(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", L"ProductId", szPid, _countof(szPid));
+    if (!szPid[0])
+        StringCchCopyW(szPid, _countof(szPid), L"00000-00000-00000-AAAAA");
+    y += LabelValue(hdc, lx, y, cxLabel, lcx, L"Product ID:", szPid);
     y += S(10);
     return y;
 }

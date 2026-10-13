@@ -128,6 +128,7 @@ typedef struct _E11_NAVITEM
     BOOL bExpanded;
     BOOL bPinned;
     BOOL bVisible;
+    BOOL bCanExpand;
     RECT rc;
     RECT rcChevron;
 } E11_NAVITEM;
@@ -202,8 +203,10 @@ public:
     CAtlArray<E11_NAVITEM> m_Items;
     int m_iHot;
     int m_iSelected;
+    int m_nScroll;
+    int m_nContentH;
 
-    CNavPane() : m_pFrame(NULL), m_iHot(-1), m_iSelected(-1) {}
+    CNavPane() : m_pFrame(NULL), m_iHot(-1), m_iSelected(-1), m_nScroll(0), m_nContentH(0) {}
     ~CNavPane();
 
     VOID Build();
@@ -211,6 +214,9 @@ public:
     VOID Paint(HDC hdc, const RECT *prcPane, const E11_PALETTE *pPal, HFONT hFont, HFONT hFontHeader);
     int HitTest(POINT pt);
     BOOL HitChevron(POINT pt, int *piItem);
+    BOOL HitItemChevron(POINT pt, int *piItem);
+    VOID ToggleItem(int iItem);
+    VOID Scroll(int nDelta, const RECT *prcPane);
     VOID FreeItems();
 };
 
