@@ -399,6 +399,7 @@ IntMsqSetWakeMask(DWORD WakeMask)
 
    if (Win32Thread->pcti)
    {
+      Win32Thread->pcti->fsWakeMask = LOWORD(WakeMask);
       if ( (Win32Thread->pcti->fsChangeBits & LOWORD(WakeMask)) ||
            ( (dwFlags & MWMO_INPUTAVAILABLE) && (Win32Thread->pcti->fsWakeBits & LOWORD(WakeMask)) ) )
       {
@@ -426,6 +427,7 @@ IntMsqClearWakeMask(VOID)
    // Very hacky, but that is what they do.
    UserDomainLockExclusive(DLT_QUEUE);
    Win32Thread->pcti->fsWakeBits = 0;
+   Win32Thread->pcti->fsWakeMask = 0;
    UserDomainUnlockExclusive(DLT_QUEUE);
 
    IdlePong();
@@ -2252,6 +2254,8 @@ co_MsqWaitForNewMessages(PTHREADINFO pti, PWND WndFilter,
    /* A thread that is about to block in GetMessage is input-idle. */
    IdlePing();
 
+   pti->pcti->fsWakeMask = QS_ALLINPUT;
+
    UserLeaveCo();
 
    ret = KeWaitForSingleObject( pti->pEventQueueServer,
@@ -2260,6 +2264,8 @@ co_MsqWaitForNewMessages(PTHREADINFO pti, PWND WndFilter,
                                 FALSE,
                                 NULL );
    UserEnterCo();
+
+   pti->pcti->fsWakeMask = 0;
    if ( ret == STATUS_USER_APC )
    {
       TRACE("MWFNW User APC\n");
