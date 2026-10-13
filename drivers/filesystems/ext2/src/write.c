@@ -61,7 +61,7 @@ Ext2WriteFile (IN PEXT2_IRP_CONTEXT IrpContext);
 NTSTATUS
 Ext2WriteVolume (IN PEXT2_IRP_CONTEXT IrpContext);
 
-VOID
+VOID NTAPI
 Ext2DeferWrite(IN PEXT2_IRP_CONTEXT, PIRP Irp);
 
 
@@ -223,7 +223,7 @@ Ext2ZeroData (
     return rc;
 }
 
-VOID
+VOID NTAPI
 Ext2DeferWrite(IN PEXT2_IRP_CONTEXT IrpContext, PIRP Irp)
 {
     ASSERT(IrpContext->Irp == Irp);

@@ -123,7 +123,7 @@ else()
 endif()
 
 # Warnings, errors
-add_compile_options(-Werror -Wall -Wpointer-arith "-Wno-error=#pragma-messages")
+add_compile_options(-Werror -Wall -Wpointer-arith "-Wno-error=#pragma-messages" -Wno-error=deprecated-declarations)
 
 add_compile_options(-Wunused-comparison -Wunused-result)
 

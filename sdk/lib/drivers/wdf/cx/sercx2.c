@@ -2062,8 +2062,7 @@ static
 VOID
 NTAPI
 SerCx2DdiNoOperation(
-    _In_ PSERCX_DRIVER_GLOBALS ClientGlobals,
-    ...)
+    _In_ PSERCX_DRIVER_GLOBALS ClientGlobals)
 {
     UNREFERENCED_PARAMETER(ClientGlobals);
 }
