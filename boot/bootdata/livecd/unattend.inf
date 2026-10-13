@@ -1,5 +1,5 @@
 [Unattend]
-Signature = "$ReactOS$"
+Signature = "$LakoOS$"
 
 ; Set UnattendSetupEnabled to yes in order to boot the LiveImage immediately to desktop.
 ; yes - unattend setup enabled

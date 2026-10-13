@@ -35,10 +35,10 @@ STRINGTABLE
 {
 5000, "LakoOS 預設"
 5001, "視覺樣式"
-5002, "ReactOS Project"
+5002, "LakoOS Project"
 5003, "Foxlet, 基於 Lautus"
 5004, "於 2019 年以 GNU/GPL 2.0 條款發行"
-5005, "https://reactos.org/"
+5005, "https://lakomoor.github.io/LakoOS/"
 5006, "1.0"
 5007, "LakoOS 的視覺樣式"
 }

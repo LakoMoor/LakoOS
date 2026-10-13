@@ -8,7 +8,7 @@ Signature  = "$Windows NT$"
 LayoutFile = layout.inf
 Class      = System
 ClassGUID  = {4D36E97D-E325-11CE-BFC1-08002BE10318}
-Provider   = %ReactOS%
+Provider   = %LakoOS%
 DriverVer  = 08/07/2006,1.02
 
 [DestinationDirs]
@@ -167,7 +167,7 @@ LoadOrderGroup = Boot Bus Extender
 
 [Strings]
 ; Non-localizable
-ReactOS = "LakoOS Project"
+LakoOS = "LakoOS Project"
 
 IntelMfg = "Intel"
 NecMfg = "NEC"

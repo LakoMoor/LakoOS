@@ -1271,9 +1271,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(shell);
 
 const char * const SHELL_Authors[] =
 {
-    "Copyright 2026 LiberNT Team",
+    "Copyright 2026 LakoOS Team",
     "Copyright 1993-"COPYRIGHT_YEAR" WINE team",
-    "Copyright 1998-"COPYRIGHT_YEAR" ReactOS Team",
+    "Copyright 1998-"COPYRIGHT_YEAR" LakoOS Team",
 #ifdef ENABLE_FEX_ARM64EC
     "Copyright 2019 Ryan Houdek (FEX-Emu)",
 #endif

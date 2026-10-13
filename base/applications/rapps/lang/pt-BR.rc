@@ -168,11 +168,11 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_APPTITLE "Central de Aplicativos ReactOS"
+    IDS_APPTITLE "Central de Aplicativos LakoOS"
     IDS_APP_AUTHORS "Copyright 2009 Dmitry Chapyshev"
-    IDS_WELCOME_TITLE "Bem-vindo(a) a Central de Aplicativos ReactOS!"
+    IDS_WELCOME_TITLE "Bem-vindo(a) a Central de Aplicativos LakoOS!"
     IDS_WELCOME_TEXT "Escolha uma categoria à esquerda, então escolha um aplicativo para instalar ou desinstalar.\nWeb Site LakoOS: "
-    IDS_WELCOME_URL "https://reactos.org"
+    IDS_WELCOME_URL "https://lakomoor.github.io/LakoOS/"
 
     IDS_APPWIZ_TITLE "Add/Remove Programs"
     IDS_APPWIZ_TEXT1 "Choose ""Applications"" or ""Updates"" to view the list of applications or updates installed on your system."

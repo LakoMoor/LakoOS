@@ -8,13 +8,13 @@ Signature  = "$Windows NT$"
 LayoutFile = layout.inf
 Class      = NetTrans
 ClassGUID  = {4D36E975-E325-11CE-BFC1-08002BE10318}
-Provider   = %ReactOS%
+Provider   = %LakoOS%
 DriverVer  = 04/12/2006,1.00
 
 [Manufacturer]
-%ReactOS% = ReactOS
+%LakoOS% = LakoOS
 
-[ReactOS]
+[LakoOS]
 %NDISUIO_DisplayName% = Install, MS_NDISUIO
 
 ;--------------------------- NDISUIO DRIVER -----------------------------
@@ -49,7 +49,7 @@ ndisuio.sys
 
 [Strings]
 ; Non-localizable
-ReactOS = "LakoOS Project"
+LakoOS = "LakoOS Project"
 
 ; Localizable
 NDISUIO_DisplayName = "NDIS Usermode I/O Protocol"

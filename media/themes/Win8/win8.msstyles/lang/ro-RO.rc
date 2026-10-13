@@ -30,10 +30,10 @@ STRINGTABLE
 {
 5000, "LakoOS implicit"
 5001, "Stil vizual"
-5002, "Fundația ReactOS"
+5002, "Fundația LakoOS"
 5003, "Foxlet, bazat pe Lautus"
 5004, "Publicat sub GNU/GPL 2.0, 2019"
-5005, "https://reactos.org/"
+5005, "https://lakomoor.github.io/LakoOS/"
 5006, "1.0"
 5007, "Stil vizual pentru LakoOS"
 }

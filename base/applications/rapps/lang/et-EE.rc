@@ -168,11 +168,11 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_APPTITLE "ReactOS'i Rakenduste Haldur"
+    IDS_APPTITLE "LakoOS'i Rakenduste Haldur"
     IDS_APP_AUTHORS "Copyright 2009 Dmitry Chapyshev"
-    IDS_WELCOME_TITLE "Tere tulemast ReactOS'i Rakenduste Haldurisse!"
-    IDS_WELCOME_TEXT "Vali vasakult teema, siis vali paremalt rakendusi mida soovid installida või desinstallida.\nReactOS'i veebileht: "
-    IDS_WELCOME_URL "https://reactos.org"
+    IDS_WELCOME_TITLE "Tere tulemast LakoOS'i Rakenduste Haldurisse!"
+    IDS_WELCOME_TEXT "Vali vasakult teema, siis vali paremalt rakendusi mida soovid installida või desinstallida.\nLakoOS'i veebileht: "
+    IDS_WELCOME_URL "https://lakomoor.github.io/LakoOS/"
 
     IDS_APPWIZ_TITLE "Add/Remove Programs"
     IDS_APPWIZ_TEXT1 "Choose ""Applications"" or ""Updates"" to view the list of applications or updates installed on your system."

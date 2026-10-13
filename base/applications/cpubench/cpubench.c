@@ -630,7 +630,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    emit("[cpubench] ===== ReactOS CPU benchmark =====\n");
+    emit("[cpubench] ===== LakoOS CPU benchmark =====\n");
     emit("[cpubench] baseline RPi5/Linux: Dhrystone ~20570 VAX-MIPS (8.57 DMIPS/MHz @2.4GHz), ~x4.0 on 4 cores\n");
     ReportTopology();
     RunBench("Dhrystone", 0, 1, Freq.QuadPart, NumCpus);

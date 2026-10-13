@@ -11,7 +11,7 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
-        MENUITEM "&About ReactOS Management Console", IDM_HELP_ABOUT_MMC
+        MENUITEM "&About LakoOS Management Console", IDM_HELP_ABOUT_MMC
     END
 END
 
@@ -64,7 +64,7 @@ BEGIN
     BEGIN
         MENUITEM "&Help Topics", IDM_HELP_TOPICS
         MENUITEM SEPARATOR
-        MENUITEM "&About ReactOS Management Console", IDM_HELP_ABOUT_MMC
+        MENUITEM "&About LakoOS Management Console", IDM_HELP_ABOUT_MMC
     END
 END
 
@@ -187,7 +187,7 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_APPTITLE "ReactOS Management Console"
+    IDS_APPTITLE "LakoOS Management Console"
     IDS_CONSOLETITLE "Console%1!u!"
     IDS_MODULE "Module"
     IDS_VENDOR "Vendor"

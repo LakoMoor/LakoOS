@@ -8,13 +8,13 @@ Signature  = "$Windows NT$"
 LayoutFile = layout.inf
 Class      = NetTrans
 ClassGUID  = {4D36E975-E325-11CE-BFC1-08002BE10318}
-Provider   = %ReactOS%
+Provider   = %LakoOS%
 DriverVer  = 04/12/2006,1.00
 
 [Manufacturer]
-%ReactOS% = ReactOS
+%LakoOS% = LakoOS
 
-[ReactOS]
+[LakoOS]
 %MS_TCPIP.DisplayName% = MS_TCPIP.PrimaryInstall, MS_TCPIP
 
 ;--------------------------- TCP/IPv4 DRIVER ----------------------------
@@ -374,7 +374,7 @@ HKR,"Parameters","ServiceDll",0x00020000,"%SystemRoot%\system32\dnsrslvr.dll"
 
 [Strings]
 ; Non-localizable
-ReactOS = "LakoOS Project"
+LakoOS = "LakoOS Project"
 
 ; Localizable
 MS_TCPIP.DisplayName = "Internet Protocol Version 4 (TCP/IPv4)"

@@ -8,7 +8,7 @@ hdaudio.sys         = 3426
 Signature="$Windows NT$"
 Class=MEDIA
 ClassGuid={4d36e96c-e325-11ce-bfc1-08002be10318}
-Provider=ReactOS
+Provider=LakoOS
 
 DriverVer=06/21/2006,6.0.6002.18005
 pnplockdown=1
@@ -20,7 +20,7 @@ HdAudModel.CopyList =10,system32\drivers
 HdAudShortCut.CopyList =10,system^32
 
 [Manufacturer]
-ReactOS = ReactOS, NTx86, NTarm64, NTamd64
+LakoOS = LakoOS, NTx86, NTarm64, NTamd64
 
 [SignatureAttributes]
 drmk.sys=SignatureAttributes.DRM
@@ -33,14 +33,14 @@ DRMLevel=1200
 [ControlFlags]
 ExcludeFromSelect = *
 
-[ReactOS.NTx86]
+[LakoOS.NTx86]
 %HdAudioFunctionDriver.Generic.DeviceDesc%  = HdAudModel, ,HDAUDIO\FUNC_01
 
-[ReactOS.NTarm64]
+[LakoOS.NTarm64]
 %HdAudioFunctionDriver.Generic.DeviceDesc%  = HdAudModel, ,HDAUDIO\FUNC_01
 
 
-[ReactOS.NTamd64]
+[LakoOS.NTamd64]
 %HdAudioFunctionDriver.Generic.DeviceDesc%  = HdAudModel, ,HDAUDIO\FUNC_01
 
 
@@ -144,7 +144,7 @@ HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%GUID.REDIRECTED_INTERNAL_
 
 [HdAudBranding.AddProperty]
 DeviceBrandingIcon,,,,"%1%\HDAudio.sys,-203"
-DeviceVendorWebSite,,,,"http://www.ReactOS.com"
+DeviceVendorWebSite,,,,"http://www.LakoOS.com"
 
 
 [HdAudModel.Interfaces]
@@ -1098,21 +1098,21 @@ HKR,,Security,,"D:P(A;;GA;;;SY)(A;;GRGWGX;;;BA)(A;;GRGWGX;;;WD)(A;;GRGWGX;;;RC)S
 
 [Strings]
 DiskId1 = "UAA Function Driver for High Definition Audio. Installation Disk" 
-HdAudioFunctionDriver.CMedia9880.DeviceDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio - CMedia 9880" 
-HdAudioFunctionDriver.Realtek880.DeviceDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio - Realtek 880" 
-HdAudioFunctionDriver.Realtek860.DeviceDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio - Realtek 860" 
-HdAudioFunctionDriver.Realtek280.DeviceDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio - Realtek 280" 
-HdAudioFunctionDriver.Realtek260.DeviceDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio - Realtek 260" 
-HdAudioFunctionDriver.Realtek261.DeviceDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio - Realtek 261" 
-HdAudioFunctionDriver.DDKCodec.DeviceDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio - DDKCodec" 
+HdAudioFunctionDriver.CMedia9880.DeviceDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio - CMedia 9880" 
+HdAudioFunctionDriver.Realtek880.DeviceDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio - Realtek 880" 
+HdAudioFunctionDriver.Realtek860.DeviceDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio - Realtek 860" 
+HdAudioFunctionDriver.Realtek280.DeviceDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio - Realtek 280" 
+HdAudioFunctionDriver.Realtek260.DeviceDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio - Realtek 260" 
+HdAudioFunctionDriver.Realtek261.DeviceDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio - Realtek 261" 
+HdAudioFunctionDriver.DDKCodec.DeviceDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio - DDKCodec" 
 HdAudioFunctionDriver.Generic.DeviceDesc = "High Definition Audio Device" 
 
-HdAudioFunctionDriver.Sigma9770.DeviceDesc= "ReactOS 1.1 UAA Function Driver for High Definition Audio - Sigmatel 9770" 
-HdAudioFunctionDriver.Sigma9772.DeviceDesc= "ReactOS 1.1 UAA Function Driver for High Definition Audio - Sigmatel 9772" 
-HdAudioFunctionDriver.ConexantWaikiki.DeviceDesc= "ReactOS 1.1 UAA Function Driver for High Definition Audio - Conexant Waikiki" 
-HdAudioFunctionDriver.Adi1986.DeviceDesc= "ReactOS 1.1 UAA Function Driver for High Definition Audio - Adi 1986" 
-HdAudioFunctionDriver.Adi1983.DeviceDesc= "ReactOS 1.1 UAA Function Driver for High Definition Audio - Adi 1983" 
-UAAFunctionDriverForHdAudio.SvcDesc = "ReactOS 1.1 UAA Function Driver for High Definition Audio Service" 
+HdAudioFunctionDriver.Sigma9770.DeviceDesc= "LakoOS 1.1 UAA Function Driver for High Definition Audio - Sigmatel 9770" 
+HdAudioFunctionDriver.Sigma9772.DeviceDesc= "LakoOS 1.1 UAA Function Driver for High Definition Audio - Sigmatel 9772" 
+HdAudioFunctionDriver.ConexantWaikiki.DeviceDesc= "LakoOS 1.1 UAA Function Driver for High Definition Audio - Conexant Waikiki" 
+HdAudioFunctionDriver.Adi1986.DeviceDesc= "LakoOS 1.1 UAA Function Driver for High Definition Audio - Adi 1986" 
+HdAudioFunctionDriver.Adi1983.DeviceDesc= "LakoOS 1.1 UAA Function Driver for High Definition Audio - Adi 1983" 
+UAAFunctionDriverForHdAudio.SvcDesc = "LakoOS 1.1 UAA Function Driver for High Definition Audio Service" 
 
 PrimarySpeakerWaveDeviceName  =        "HD Audio Speaker"         
 PrimarySpeakerTopoDeviceName  =        "HD Audio Speaker mixer"   
@@ -1396,7 +1396,7 @@ FrontHPOutDacName =                   "HD Audio headphone"
 
 
 DisableDigitalOutputName = "Disable Digital Output"
-HdAudioDeviceDescription = "ReactOS 1.1 UAA Function Driver for High Definition Audio" 
+HdAudioDeviceDescription = "LakoOS 1.1 UAA Function Driver for High Definition Audio" 
 
 PKEY_FX_Association  = "{D04E05A6-594B-4fb6-A80D-01AF5EED7D1D},0"
 PKEY_FX_PreMixClsid  = "{D04E05A6-594B-4fb6-A80D-01AF5EED7D1D},1"
@@ -1408,6 +1408,6 @@ FX_UI_CLSID      = "{5860E1C5-F95C-4a7a-8EC8-8AEF24F379A1}"
 KSNODETYPE_ANY   = "{00000000-0000-0000-0000-000000000000}"
 FX_PREMIX_CLSID  = "{62dc1a93-ae24-464c-a43e-452f824c4250}"
 FX_POSTMIX_CLSID = "{637c490d-eee3-4c0a-973f-371958802da2}"
-FX_FriendlyName  = "ReactOS Audio Home Theater Effects"
+FX_FriendlyName  = "LakoOS Audio Home Theater Effects"
 
 

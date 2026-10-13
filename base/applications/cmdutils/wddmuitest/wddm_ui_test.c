@@ -660,7 +660,7 @@ CreateHoverMenu(
         L"System Configuration",
         L"Hardware Diagnostics",
         L"Network Connections",
-        L"Shut Down ReactOS"
+        L"Shut Down LakoOS"
     };
     HMENU Menu = CreatePopupMenu();
     UINT i;

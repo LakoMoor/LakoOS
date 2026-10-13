@@ -19,7 +19,7 @@ BEGIN
     LTEXT "", IDC_MACHINELINE4, 130, 155, 118, 9
     LTEXT "", IDC_MACHINELINE5, 130, 164, 118, 9
     LTEXT "", IDC_MACHINELINE6, 130, 173, 118, 9
-    CONTROL "Visiter la <A HREF=""https://libernt.com/"">page d'accueil LakoOS</A>", IDC_ROSHOMEPAGE_LINK, "SysLink", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 200, 140, 10
+    CONTROL "Visiter la <A HREF=""https://lakomoor.github.io/LakoOS/"">page d'accueil LakoOS</A>", IDC_ROSHOMEPAGE_LINK, "SysLink", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 10, 200, 140, 10
     PUSHBUTTON "Voir la &licence...", IDC_LICENCE, 170, 198, 78, 15
 END
 
@@ -80,7 +80,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     LTEXT "LakoOS envoie toujours au projet des données de diagnostic obligatoires : la version, le résultat et la durée du démarrage, le matériel et les résumés des plantages. Cela ne peut pas être désactivé.", IDC_STATIC, 7, 7, 226, 33
     AUTOCHECKBOX "Envoyer aussi les données de diagnostic &facultatives (entrées d'erreur du journal système)", IDC_SENDOPTIONAL, 7, 46, 226, 20, BS_MULTILINE | BS_TOP | WS_TABSTOP
-    LTEXT "Les données facultatives restent désactivées tant que vous ne les activez pas. Elles ne contiennent ni fichiers, ni documents, ni adresses réseau. Voir libernt.com/legal.", IDC_OPTIONALINFO, 7, 72, 226, 33
+    LTEXT "Les données facultatives restent désactivées tant que vous ne les activez pas. Elles ne contiennent ni fichiers, ni documents, ni adresses réseau. Voir lakomoor.github.io/LakoOS/.", IDC_OPTIONALINFO, 7, 72, 226, 33
     DEFPUSHBUTTON "OK", IDOK, 129, 128, 50, 14
     PUSHBUTTON "Annuler", IDCANCEL, 183, 128, 50, 14
 END

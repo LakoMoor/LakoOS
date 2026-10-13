@@ -422,7 +422,7 @@ VER [/C][/R][/W]\n\n\
     STRING_VERSION_HELP5 "\nバグ報告は <ros-dev@reactos.org> へ送ってください。\n\
 最新のバージョンは次のページから入手できます: https://reactos.org"
     STRING_VERSION_HELP6 "\nFreeDOS バージョンの著者:\n"
-    STRING_VERSION_HELP7 "\nReactOS バージョンの著者:\n"
+    STRING_VERSION_HELP7 "\nLakoOS バージョンの著者:\n"
     STRING_VOL_HELP1 " ドライブ %c: のボリューム ラベルは %s です。\n"
     STRING_VOL_HELP2 " ドライブ %c: にはボリューム ラベルがありません。\n"
     STRING_VOL_HELP3 " ボリューム シリアル番号は %04X-%04X です。\n"
@@ -507,7 +507,7 @@ RESTORE       ウィンドウを元のサイズに戻します。\n\
     STRING_ERROR_WHILE_PROCESSING "%s の処理中にエラーが発生しました\n"
     STRING_SET_ENV_ERROR "環境変数 '%s' は未定義です。\n"
     STRING_CMD_INFOLINE "  LakoOS Command Prompt                                      Type HELP = Help  "
-    STRING_CMD_COPYRIGHT "(C) Copyright 2026 LiberNT Team.\n(C) Copyright 1996-%s ReactOS Team.\n"
+    STRING_CMD_COPYRIGHT "(C) Copyright 2026 LakoOS Project.\n"
     STRING_REACTOS_VERSION "LakoOS [Version %s %s]\n"
     STRING_CMD_SHELLINFO "\nLakoOS Command Line Interpreter\nVersion %s %s"
     STRING_VERSION_RUNNING_ON "実行中: "

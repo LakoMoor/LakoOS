@@ -152,7 +152,7 @@ void Stage0Main(u32 r3, u32 r4, void *r5)
     a[3] = 4;
     of_call("getprop", 4, 1, a);
 
-    puts_of("\r\nReactOS PowerPC stage0\r\n");
+    puts_of("\r\nLakoOS PowerPC stage0\r\n");
 
     if ((u32)(LoaderImageEnd - LoaderImage) < 0x200)
         halt("no loader image");

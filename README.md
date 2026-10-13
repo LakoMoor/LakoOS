@@ -18,25 +18,22 @@
 
 LakoOS is a free NT operating system, built out of love for the NT architecture. LakoOS targets Windows® 11 compatibility, with room for freestyle and experimental features.
 
-LakoOS is based on ReactOS, the Open Source effort to develop an operating system that is compatible with applications and drivers written for the Microsoft Windows NT family of operating systems. It is a fork with extensive changes to kernel-space components and drivers, aimed at stability and modern hardware, and it focuses on 64-bit platforms: amd64, arm64 and riscv64.
+LakoOS is built on a mature NT-style code base with extensive changes to kernel-space components and drivers, aimed at stability and modern hardware. It focuses on 64-bit platforms: amd64, arm64 and riscv64.
 
 Our goal is a system that stays maintainable in the long run: stable, reliable and efficient, running on embedded devices too, and able to support every feature a modern operating system should have.
 
-LakoOS is licensed under the [GNU GPL 3.0](COPYING). Code inherited from ReactOS keeps the licence stated in its file headers, most of it GPL 2.0 or later. The GPL 2.0, LGPL 2.1 and BSD texts those files refer to are in [COPYING2](COPYING2), [COPYING.LIB](COPYING.LIB) and [COPYING.ARM](COPYING.ARM).
+LakoOS is licensed under the [GNU GPL 3.0](COPYING). Inherited code keeps the licence stated in its file headers, most of it GPL 2.0 or later. The GPL 2.0, LGPL 2.1 and BSD texts those files refer to are in [COPYING2](COPYING2), [COPYING.LIB](COPYING.LIB) and [COPYING.ARM](COPYING.ARM).
 
-LakoOS is a fork of [LiberNT](https://github.com/ahmedarif193/LiberNT), which is a fork of ReactOS. The changes made in LiberNT are Copyright © 2026 the LiberNT contributors; the changes made in LakoOS are Copyright © 2026 LakoMoor. Code inherited from ReactOS and from third parties keeps the copyright notices of its authors. See [CREDITS.md](CREDITS.md).
+Changes made in LakoOS are Copyright © 2026 LakoMoor. Inherited code and third-party code keep the copyright notices of their authors. See [CREDITS.md](CREDITS.md).
 
 ### Status
 
-So far, LakoOS has proven more stable and faster than ReactOS in CPU management, memory management and I/O resource handling. Windows 11 is the compatibility reference.
+So far, LakoOS is stable in CPU management, memory management and I/O resource handling in our virtual machine tests. Windows 11 is the compatibility reference.
 
 ## Support LakoOS
 
 We want LakoOS to be a free NT operating system that everyone can rely on, every day. See [Contributing](#contributing) to get started.
 
-## Upstream ReactOS
-
-LakoOS would not exist without ReactOS. With all our respect and gratitude to the ReactOS Team & Contributors, whose work LakoOS builds on, you can find the upstream source code at [github.com/reactos/reactos](https://github.com/reactos/reactos).
 
 ## Building
 

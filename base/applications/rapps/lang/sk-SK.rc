@@ -169,11 +169,11 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_APPTITLE "Manažér aplikácií systému ReactOS"
+    IDS_APPTITLE "Manažér aplikácií systému LakoOS"
     IDS_APP_AUTHORS "Copyright 2009 Dmitry Chapyshev"
-    IDS_WELCOME_TITLE "Víta Vás Manažér aplikácií systému ReactOS!"
+    IDS_WELCOME_TITLE "Víta Vás Manažér aplikácií systému LakoOS!"
     IDS_WELCOME_TEXT "Vyberte si kategóriu na ľavej strane, potom vyberte aplikáciu, ktorú chcete nainštalovať alebo odinštalovať.\nWebstránka projektu LakoOS: "
-    IDS_WELCOME_URL "https://reactos.org"
+    IDS_WELCOME_URL "https://lakomoor.github.io/LakoOS/"
 
     IDS_APPWIZ_TITLE "Pridať/Odobrať programy"
     IDS_APPWIZ_TEXT1 "Vyberte ""Aplikácie"" alebo ""Aktualizácie"" pre zobrazenie zoznamu aplikácií alebo aktualizácií nainštalovaných vo vašom systéme."

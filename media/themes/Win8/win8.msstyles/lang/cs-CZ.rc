@@ -28,10 +28,10 @@ STRINGTABLE
 {
 5000, "LakoOS výchozí"
 5001, "Motiv"
-5002, "Nadace ReactOS"
+5002, "Nadace LakoOS"
 5003, "Foxlet, založeno na Lautus"
 5004, "Uvolněno pod licencí GNU/GPL 2.0, 2019"
-5005, "https://reactos.org/"
+5005, "https://lakomoor.github.io/LakoOS/"
 5006, "1.0"
 5007, "Motiv pro LakoOS"
 }

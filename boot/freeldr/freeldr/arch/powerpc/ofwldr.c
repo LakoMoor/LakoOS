@@ -26,7 +26,7 @@ OfwEntry(_In_ PPPC_STAGE0_INFO Info)
             NOTHING;
     }
 
-    OfwConsWriteString("\nReactOS FreeLoader for PowerPC (Open Firmware)\n");
+    OfwConsWriteString("\nLakoOS FreeLoader for PowerPC (Open Firmware)\n");
 
     OfwDetectMachine();
     MachInit(CmdLine);

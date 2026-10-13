@@ -8,7 +8,7 @@
 #define REACTOS_VERSION_DLL
 
 /* Each bootvid configuration file defines REACTOS_STR_FILE_DESCRIPTION */
-#cmakedefine REACTOS_STR_FILE_DESCRIPTION    "${REACTOS_STR_FILE_DESCRIPTION}"
+#cmakedefine REACTOS_STR_FILE_DESCRIPTION    "${LAKOOS_STR_FILE_DESCRIPTION}"
 #ifndef REACTOS_STR_FILE_DESCRIPTION
 #define REACTOS_STR_FILE_DESCRIPTION    "Boot Video Driver"
 #endif
@@ -16,12 +16,12 @@
 /* The main bootvid CMake file defines default values for
  * REACTOS_STR_INTERNAL_NAME and REACTOS_STR_ORIGINAL_FILENAME.
  * Each bootvid configuration file can override these values. */
-#cmakedefine REACTOS_STR_INTERNAL_NAME       "${REACTOS_STR_INTERNAL_NAME}"
+#cmakedefine REACTOS_STR_INTERNAL_NAME       "${LAKOOS_STR_INTERNAL_NAME}"
 #ifndef REACTOS_STR_INTERNAL_NAME
 #define REACTOS_STR_INTERNAL_NAME       "bootvid"
 #endif
 
-#cmakedefine REACTOS_STR_ORIGINAL_FILENAME   "${REACTOS_STR_ORIGINAL_FILENAME}"
+#cmakedefine REACTOS_STR_ORIGINAL_FILENAME   "${LAKOOS_STR_ORIGINAL_FILENAME}"
 #ifndef REACTOS_STR_ORIGINAL_FILENAME
 #define REACTOS_STR_ORIGINAL_FILENAME   "bootvid.dll"
 #endif

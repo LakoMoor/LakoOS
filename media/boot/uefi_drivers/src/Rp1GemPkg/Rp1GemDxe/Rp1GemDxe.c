@@ -7,7 +7,7 @@
   and its BCM54210E PHY, and drives both rings by polling, which is all the
   SNP contract asks for.
 
-  Copyright (c) 2026, LiberNT Project. All rights reserved.
+  Copyright (c) 2026, LakoOS Project. All rights reserved.
   SPDX-License-Identifier: GPL-3.0-or-later
 **/
 

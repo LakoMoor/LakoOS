@@ -491,8 +491,8 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/preinstall.cmake.lst "")
 
 set(_preinstall_boot_partition_file ${CMAKE_CURRENT_BINARY_DIR}/partition.boot.fat)
 set(_preinstall_system_partition_file ${CMAKE_CURRENT_BINARY_DIR}/partition.ntfs)
-set(_preinstall_image_file ${REACTOS_BINARY_DIR}/ReactOS.img)
-set(_preinstall_vhd_file ${REACTOS_BINARY_DIR}/ReactOS.vhd)
+set(_preinstall_image_file ${REACTOS_BINARY_DIR}/LakoOS.img)
+set(_preinstall_vhd_file ${REACTOS_BINARY_DIR}/LakoOS.vhd)
 # Keep ROSBOOT as an active MBR ESP. UEFI discovers it by type, while the BIOS
 # MBR follows the active flag and loads its FAT32 boot sector. The Raspberry Pi
 # 1-3 boot ROM only scans for FAT MBR ids and skips 0xEF, so the Raspberry Pi

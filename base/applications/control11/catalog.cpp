@@ -58,7 +58,7 @@ static const CPBUILTIN s_Builtin[] =
     { L"Microsoft.EaseOfAccessCenter",        L"Ease of Access Center",           L"{D555645E-D4F8-4C29-A827-D93C859C4F2A}", L"7,1",  HUB_NONE, L"Make your computer easier to use." },
     { L"Microsoft.FolderOptions",             L"Folder Options",                  L"{6DFD7C5C-2451-11D3-A299-00C04F8EF6AF}", L"1",    HUB_NONE, L"Customize the display of files and folders." },
     { L"Microsoft.Fonts",                     L"Fonts",                           L"{D20EA4E1-3957-11D2-A40B-0C5020524152}", L"1",    HUB_NONE, L"Add, change, and manage fonts on your computer." },
-    { L"Microsoft.GettingStarted",            L"Getting Started",                 L"{CB1B7F8C-C50A-4176-B604-9E24DEE8D4D1}", L"0",    HUB_NONE, L"Learn about the features of ReactOS." },
+    { L"Microsoft.GettingStarted",            L"Getting Started",                 L"{CB1B7F8C-C50A-4176-B604-9E24DEE8D4D1}", L"0",    HUB_NONE, L"Learn about the features of LakoOS." },
     { L"Microsoft.HomeGroup",                 L"HomeGroup",                       L"{67CA7650-96E6-4FDD-BB43-A8E774F73A57}", L"3",    HUB_NONE, L"Share libraries and printers with other computers on your home network." },
     { L"Microsoft.IndexingOptions",           L"Indexing Options",                L"{87D66A43-7B11-4A28-9811-C86EE395ACF7}", L"5",    HUB_NONE, L"Change how Windows indexes to search faster." },
     { L"Microsoft.InternetOptions",           L"Internet Options",                L"{A3DD4F92-658A-410F-84FD-6FBBBEF2FFFE}", L"3",    HUB_NONE, L"Configure your Internet display and connection settings." },

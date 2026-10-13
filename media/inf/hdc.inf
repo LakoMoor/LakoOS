@@ -8,7 +8,7 @@ Signature  = "$Windows NT$"
 LayoutFile = layout.inf
 Class      = hdc
 ClassGUID  = {4D36E96A-E325-11CE-BFC1-08002BE10318}
-Provider   = %ReactOS%
+Provider   = %LakoOS%
 DriverVer  = 09/10/2008,0.39.10.0
 
 [DestinationDirs]
@@ -399,7 +399,7 @@ LoadOrderGroup = SCSI Miniport
 
 [Strings]
 ; Non-localizable
-ReactOS="LakoOS Project"
+LakoOS="LakoOS Project"
 
 ; Localizable
 HDCClassName="IDE ATA/ATAPI controllers"

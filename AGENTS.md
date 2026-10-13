@@ -4,19 +4,19 @@ This file introduces LakoOS and sets the working rules and engineering criteria 
 
 ## About LakoOS
 
-LakoOS is a free NT operating system. It is a fork of ReactOS with extensive changes to kernel-space components and drivers, aimed at stability and modern hardware. It focuses on 64-bit platforms, amd64, arm64 and riscv64, and targets NT10/Windows 11 compatibility. LakoOS may collaborate with ReactOS occasionally, but the code written here is written for LakoOS first: never shape a change around sending it to ReactOS.
+LakoOS is a free NT operating system. It is built on a mature NT-style codebase with extensive changes to kernel-space components and drivers, aimed at stability and modern hardware. It focuses on 64-bit platforms, amd64, arm64 and riscv64, and targets NT10/Windows 11 compatibility. LakoOS may collaborate with ReactOS occasionally, but the code written here is written for LakoOS first: never shape a change around sending it to ReactOS.
 
 - Target architectures: amd64, i386 and arm64, with RISC-V64/PPC in progress.
 - Windows 11 is the compatibility reference.
 - A subdirectory can have its own `AGENTS.md`; its rules add to these for that subtree. The kernel has one for the memory manager.
 
-### How LakoOS differs from ReactOS
+### What is new in LakoOS
 
-Most of the tree is still shared with ReactOS, and the components synchronised with Wine are listed in `media/doc/WINESYNC.txt`. The main departures are:
+Most of the tree is inherited, and the components synchronised with Wine are listed in `media/doc/WINESYNC.txt`. The main departures are:
 
 | Area | In LakoOS | Where |
 |---|---|---|
-| Memory manager | NVS, the NT Virtual Memory Subsystem: a clean-room NT10 memory manager with its own kernel pool. The ReactOS ARM3 memory manager has been removed. | `ntoskrnl/nvs` |
+| Memory manager | NVS, the NT Virtual Memory Subsystem: a clean-room NT10 memory manager with its own kernel pool. The previous memory manager has been removed. | `ntoskrnl/nvs` |
 | Cache manager | A clean-room cache manager. | `ntoskrnl/cc` |
 | ARM64 | The ARM64 port: kernel, HAL and FreeLoader. | `ntoskrnl/ke/arm64`, `hal/halarm64`, `boot/freeldr/freeldr/arch/arm64` |
 | RISC-V64 | The HAL of the port in progress. | `hal/halriscv64` |
@@ -55,7 +55,7 @@ Most of the tree is still shared with ReactOS, and the components synchronised w
 - Black-box study is the legal default. A lawful user may observe, study and test a program while running it to find the ideas and principles behind it (EU Software Directive 2009/24/EC, art. 5(3); in France, Code de la propriété intellectuelle L122-6-1 III).
 - Reading Windows binaries is decompilation and is allowed only within art. 6 of the same directive (L122-6-1 IV): by a lawful licensee, only when the information needed for interoperability is not otherwise readily available, and only for the parts needed for interoperability. Never use that information for another goal, never give it to others except for interoperability, and never use it to write a program substantially similar in its expression. The Windows licence forbids reverse engineering beyond what this law allows.
 - Never copy GPL code from Linux. Study the technique and reimplement it.
-- Never use legacy ReactOS code (the ARM3 memory manager, NT4 and NT5-era designs) as a reference.
+- Never use legacy code (the old memory manager, NT4 and NT5-era designs) as a reference.
 
 ## Compatibility criteria
 
@@ -117,7 +117,7 @@ Most of the tree is still shared with ReactOS, and the components synchronised w
 
 - Reuse the existing build directories and artifacts. Do not duplicate build caches, executables or disk images, or create per-test, per-session, dated or prefixed output paths.
 - Run builds with `CCACHE_DISABLE=1`; compiler caching is disabled to avoid duplicate artifacts.
-- Keep one working log, overwritten in place. Use the existing build's `ReactOS.img` and one fixed test payload image. Pass the raw payload image to `--apps`; passing a directory creates additional cached images and overlays.
+- Keep one working log, overwritten in place. Use the existing build's `LakoOS.img` and one fixed test payload image. Pass the raw payload image to `--apps`; passing a directory creates additional cached images and overlays.
 - Run `vm_monitor.py` with `--timeout 30 --stall 6`. Never use a timeout above 30 seconds or a stall timeout above 6 seconds.
 - Run without a display by setting `ROS_QEMU_DISPLAY=none`; omit screen arguments.
 - Never rebuild or repack a disk image while a VM is using it.

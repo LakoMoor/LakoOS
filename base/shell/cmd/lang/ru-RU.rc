@@ -432,7 +432,7 @@ GNU General Public License для получения дополнительно�
     STRING_VERSION_HELP5 "\nПосылайте отчеты об ошибках на <ros-dev@reactos.org>.\n\
 Обновления доступны по адресу: https://reactos.org"
     STRING_VERSION_HELP6 "\nFreeDOS версия написана:\n"
-    STRING_VERSION_HELP7 "\nReactOS версия написана:\n"
+    STRING_VERSION_HELP7 "\nLakoOS версия написана:\n"
     STRING_VOL_HELP1 " Том в устройстве %c имеет метку %s\n"
     STRING_VOL_HELP2 " Том в устройстве %c не имеет метки\n"
     STRING_VOL_HELP3 " Серийный номер тома: %04X-%04X\n"
@@ -517,7 +517,7 @@ RESTORE       восстанавливает окно\n\
     STRING_ERROR_WHILE_PROCESSING "Error occurred while processing: %s.\n"
     STRING_SET_ENV_ERROR "Переменная окружения '%s' не определена\n"
     STRING_CMD_INFOLINE "  LakoOS Командная строка                            Введите HELP для Справки  "
-    STRING_CMD_COPYRIGHT "(C) Copyright 2026 LiberNT Team.\n(C) Copyright 1996-%s ReactOS Team.\n"
+    STRING_CMD_COPYRIGHT "(C) Copyright 2026 LakoOS Project.\n"
     STRING_REACTOS_VERSION "LakoOS [Версия %s %s]\n"
     STRING_CMD_SHELLINFO "\nИнтерпретатор командной строки LakoOS\nВерсия %s %s"
     STRING_VERSION_RUNNING_ON "Запущен на: "

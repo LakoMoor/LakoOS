@@ -28,10 +28,10 @@ STRINGTABLE
 {
 5000, "LakoOS predefinito"
 5001, "Stile di visualizzazione"
-5002, "ReactOS Project"
+5002, "LakoOS Project"
 5003, "Foxlet, basato on Lautus"
 5004, "Distribuito sotto licenza GNU/GPL 2.0, 2019"
-5005, "https://reactos.org/"
+5005, "https://lakomoor.github.io/LakoOS/"
 5006, "1.0"
 5007, "Stile di visualizzazione per LakoOS"
 }

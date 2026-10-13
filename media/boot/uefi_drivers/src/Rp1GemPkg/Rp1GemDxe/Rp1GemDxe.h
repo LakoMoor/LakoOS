@@ -6,7 +6,7 @@
   definitions follow the Cadence MACB/GEM programming model, matching the
   ReactOS rp1gem NDIS miniport this driver shares its bring-up sequence with.
 
-  Copyright (c) 2026, LiberNT Project. All rights reserved.
+  Copyright (c) 2026, LakoOS Project. All rights reserved.
   SPDX-License-Identifier: GPL-3.0-or-later
 **/
 

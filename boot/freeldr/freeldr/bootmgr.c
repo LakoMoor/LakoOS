@@ -83,8 +83,8 @@ WarnDeprecated(
         "\n"
         "%s\n"
         "\n"
-        "Should you need assistance, please contact ReactOS developers\n"
-        "on the official ReactOS Mattermost server <chat.reactos.org>.",
+        "Should you need assistance, please contact LakoOS developers\n"
+        "on the official LakoOS Mattermost server <chat.reactos.org>.",
         msgString);
 }
 #endif // HAS_DEPRECATED_OPTIONS

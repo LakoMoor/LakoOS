@@ -8,7 +8,7 @@ Signature  = "$Windows NT$"
 LayoutFile = layout.inf
 Class      = USB
 ClassGUID  = {36FC9E60-C465-11CF-8056-444553540000}
-Provider   = %ReactOS%
+Provider   = %LakoOS%
 DriverVer  = 10/02/2005,1.01.0.0
 
 [DestinationDirs]
@@ -44,7 +44,7 @@ ServiceBinary = %12%\usbstor.sys
 
 [Strings]
 ; Non-localizable
-ReactOS = "LakoOS Project"
+LakoOS = "LakoOS Project"
 
 ; Localizable
 GenericMfg = "(Generic USB devices)"

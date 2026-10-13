@@ -1,6 +1,6 @@
 # Coding Style
 
-This article describes general coding style guidelines, which should be used for new LakoOS code. These guidelines apply exclusively to C and C++ source files. They come from the ReactOS coding style, which the members of ReactOS agreed on in their October 2013 meeting.
+This article describes general coding style guidelines, which should be used for new LakoOS code. These guidelines apply exclusively to C and C++ source files. They come from the project coding style, which the members of ReactOS agreed on in their October 2013 meeting.
 
 Existing code is not converted to this style as part of an unrelated change. See [Notes on reformatting existing code](#notes-on-reformatting-existing-code) for more details.
 
@@ -346,5 +346,3 @@ The `.clang-format` file in the top level directory describes this style for cla
 
 ## See also
 
-- [Kernel Coding Style](https://reactos.org/wiki/Kernel_Coding_Style) in the ReactOS wiki
-- [GNU Indent](https://reactos.org/wiki/GNU_Indent) in the ReactOS wiki

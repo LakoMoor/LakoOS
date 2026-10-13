@@ -8,7 +8,7 @@ Signature  = "$Windows NT$"
 LayoutFile = layout.inf
 Class      = Display
 ClassGUID  = {4D36E968-E325-11CE-BFC1-08002BE10318}
-Provider   = %ReactOS%
+Provider   = %LakoOS%
 DriverVer  = 08/25/2007,1.10
 
 [DestinationDirs]
@@ -26,7 +26,7 @@ HKR, , Installer32,     0, "desk.cpl,DisplayClassInstaller"
 
 [Strings]
 ; Non-localizable
-ReactOS = "LakoOS Project"
+LakoOS = "LakoOS Project"
 
 ; Localizable
 DisplayClassName = "Display adapters"

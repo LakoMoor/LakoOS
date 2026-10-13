@@ -118,7 +118,7 @@ WlanSvcPopulateInterfacesLocked(VOID)
         iface->MacAddress = ref->MacAddress;
         WlanSvcSynthesizeGuid(ref, &iface->InterfaceGuid);
         _snwprintf(iface->Description, WLAN_MAX_NAME_LENGTH - 1,
-                   L"ReactOS Native WiFi Adapter #%lu", ref->InterfaceIndex + 1);
+                   L"LakoOS Native WiFi Adapter #%lu", ref->InterfaceIndex + 1);
         iface->PhyType = dot11_phy_type_erp;
         iface->AutoConfigEnabled = TRUE;
 

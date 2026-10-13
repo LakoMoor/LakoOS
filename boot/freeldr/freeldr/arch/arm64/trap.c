@@ -166,7 +166,7 @@ TrapDisplayDumpContext(
     if (!TrapDisplayBegin())
         return;
 
-    TrapDisplayPuts(" ReactOS FreeLDR ARM64 ", TRAP_DISPLAY_HEADER_ATTR);
+    TrapDisplayPuts(" LakoOS FreeLDR ARM64 ", TRAP_DISPLAY_HEADER_ATTR);
     TrapDisplayPuts(Title, TRAP_DISPLAY_HEADER_ATTR);
     TrapDisplayPutChar('\n', TRAP_DISPLAY_ATTR);
 

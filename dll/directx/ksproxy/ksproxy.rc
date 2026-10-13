@@ -67,7 +67,7 @@ BEGIN
     BEGIN
         BLOCK "040704b0"
         BEGIN
-            VALUE "CompanyName", "ReactOS WDM Streaming ActiveMovie Proxy"
+            VALUE "CompanyName", "LakoOS WDM Streaming ActiveMovie Proxy"
             VALUE "FileDescription", "LakoOS WDM Streaming ActiveMovie Proxy"
             VALUE "FileVersion", "5, 3, 2600, 3264"
             VALUE "InternalName", "ksproxy"

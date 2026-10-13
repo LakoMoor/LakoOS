@@ -168,11 +168,11 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_APPTITLE "Trình quản lý ứng dụng ReactOS"
+    IDS_APPTITLE "Trình quản lý ứng dụng LakoOS"
     IDS_APP_AUTHORS "Bản quyền 2009 Dmitry Chapyshev"
-    IDS_WELCOME_TITLE "Chào mừng bạn đến với Trình quản lý ứng dụng ReactOS!"
+    IDS_WELCOME_TITLE "Chào mừng bạn đến với Trình quản lý ứng dụng LakoOS!"
     IDS_WELCOME_TEXT "Chọn một danh mục bên trái, sau đó chọn một ứng dụng để cài đặt hoặc gỡ bỏ.\nTrang web LakoOS: "
-    IDS_WELCOME_URL "https://reactos.org"
+    IDS_WELCOME_URL "https://lakomoor.github.io/LakoOS/"
 
     IDS_APPWIZ_TITLE "Thêm/Xóa chương trình"
     IDS_APPWIZ_TEXT1 "Chọn ""Ứng dụng"" hoặc ""Bản cập nhật"" để xem danh sách các ứng dụng hoặc bản cập nhật đã cài đặt trên hệ thống."

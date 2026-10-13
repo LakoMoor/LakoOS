@@ -83,15 +83,15 @@ You may use AI tools. Tell us in the pull request which parts they helped with a
 
 ## Copyright and Licences
 
-You keep the copyright on what you write. LiberNT has no copyright assignment and no contributor licence agreement.
+You keep the copyright on what you write. LakoOS has no copyright assignment and no contributor licence agreement.
 
 - New files start with the header shown in [Code style](AGENTS.md#code-style), with your name and e-mail in the `COPYRIGHT` line and an SPDX licence identifier.
 - When you make a major change to an existing file, you may add your own `COPYRIGHT` line under the existing ones.
 - Never remove or change an existing copyright or licence notice, and never edit the licence texts in the top level directory.
-- Keep the licence of the files you change. Code inherited from ReactOS keeps the licence stated in its header.
+- Keep the licence of the files you change. Inherited code keeps the licence stated in its header.
 - Never copy code whose licence is incompatible with the GNU GPL 3.0, and never copy GPL code from Linux.
 
-See [CREDITS.md](CREDITS.md) for the people behind LakoOS and ReactOS.
+See [CREDITS.md](CREDITS.md) for the people behind LakoOS.
 
 ## Where To Start?
 
