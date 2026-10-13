@@ -4,6 +4,7 @@ list(APPEND SOURCE
     userinit.c
     userinit.h)
 
+add_rc_deps(userinit.rc ${CMAKE_CURRENT_SOURCE_DIR}/res/rosbitmap.bmp ${CMAKE_CURRENT_SOURCE_DIR}/res/rosbitmap_mask.bmp)
 add_executable(userinit ${SOURCE} userinit.rc)
 target_link_libraries(userinit wine)
 set_module_type(userinit win32gui UNICODE)

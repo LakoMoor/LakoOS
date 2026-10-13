@@ -14,6 +14,7 @@
 #include <winreg.h>
 #include <winsvc.h>
 #include <ntddndis.h>
+#include <iphlpapi.h>
 
 #include <ndk/exfuncs.h>
 #include <ntsecapi.h>
@@ -25,12 +26,57 @@
 
 /* FUNCTIONS ****************************************************************/
 
+typedef DWORD (WINAPI *PGET_ADAPTERS_INFO)(PIP_ADAPTER_INFO, PULONG);
+
 static BOOLEAN
 getMacAddress(UCHAR * MacAddress)
 {
-    /* FIXME: query NDIS for all the interfaces */
-    UNIMPLEMENTED;
-    return FALSE;
+    PGET_ADAPTERS_INFO pGetAdaptersInfo;
+    PIP_ADAPTER_INFO Adapters, Adapter;
+    HMODULE hIpHlpApi;
+    ULONG Size = 0, Index;
+    BOOLEAN Found = FALSE;
+
+    hIpHlpApi = LoadLibraryW(L"iphlpapi.dll");
+    if (hIpHlpApi == NULL)
+        return FALSE;
+
+    pGetAdaptersInfo = (PGET_ADAPTERS_INFO)GetProcAddress(hIpHlpApi, "GetAdaptersInfo");
+    if (pGetAdaptersInfo == NULL ||
+        pGetAdaptersInfo(NULL, &Size) != ERROR_BUFFER_OVERFLOW || Size == 0)
+    {
+        FreeLibrary(hIpHlpApi);
+        return FALSE;
+    }
+
+    Adapters = HeapAlloc(GetProcessHeap(), 0, Size);
+    if (Adapters != NULL && pGetAdaptersInfo(Adapters, &Size) == ERROR_SUCCESS)
+    {
+        for (Adapter = Adapters; Adapter != NULL && !Found; Adapter = Adapter->Next)
+        {
+            BOOLEAN NonZero = FALSE;
+
+            if (Adapter->AddressLength != SEED_BUFFER_SIZE)
+                continue;
+            if (Adapter->Type != MIB_IF_TYPE_ETHERNET && Adapter->Type != IF_TYPE_IEEE80211)
+                continue;
+            for (Index = 0; Index < SEED_BUFFER_SIZE; Index++)
+            {
+                if (Adapter->Address[Index] != 0)
+                    NonZero = TRUE;
+            }
+            if (!NonZero)
+                continue;
+
+            memcpy(MacAddress, Adapter->Address, SEED_BUFFER_SIZE);
+            Found = TRUE;
+        }
+    }
+
+    if (Adapters != NULL)
+        HeapFree(GetProcessHeap(), 0, Adapters);
+    FreeLibrary(hIpHlpApi);
+    return Found;
 }
 
 static VOID

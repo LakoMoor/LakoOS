@@ -159,14 +159,6 @@ set(dir_taskbarpin_default     "Users/Default/AppData/Roaming/Microsoft/Internet
 
 cmdenvvar(envvar_systemdrive "SystemDrive" TRUE)
 cmdenvvar(envvar_archdir     "PROCESSOR_ARCHITECTURE:x86=I386" TRUE)
-add_livecd_shortcut("Install LakoOS"
-    "shell:system\\cmd.exe"
-    CMDLINE_ARGS "/D /E:ON /C \"start ${envvar_systemdrive}\\${envvar_archdir}\\reactos.exe\""
-    ICON "${envvar_systemdrive}\\icon.ico"
-    MINIMIZE
-    FOR livecd
-    DESTINATION "${dir_allusers_desktop}")
-
 add_livecd_shortcut("Read Me"
     "shell:windows\\readme.txt"
     ICON "${envvar_systemroot}\\system32\\shell32.dll" ICON_INDEX -152
