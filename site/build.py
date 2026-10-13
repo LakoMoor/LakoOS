@@ -39,7 +39,7 @@ FOOT = '''</main>
     <div><h4>Learn</h4><a href="docs.html">Documentation</a><a href="docs.html#build">Build from source</a><a href="docs.html#settings">Settings</a></div>
     <div><h4>Project</h4><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Issues</a><a href="about.html">About</a></div>
   </div>
-  <div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft. Based on LakoOS and ReactOS.</div>
+  <div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div>
 </div></footer>
 <script src="assets/app.js"></script>
 </body>
@@ -127,8 +127,16 @@ dl += sec('''
 <div class="card2"><h3>Hyper-V</h3><ol><li>New virtual machine, <b>Generation 1</b>.</li><li>2048 MB of memory, attach the ISO as a DVD drive.</li><li>Start and connect.</li></ol></div>
 </div>''', alt=True)
 dl += sec('''
+<div class="center"><h2>Three steps to try LakoOS</h2></div>
+<div class="bento">''' + card("1. Download", "Pick the ISO for your architecture, amd64 or arm64.", "①") + card("2. Create a VM", "Use QEMU, VirtualBox or Hyper-V with 2 GB of memory.", "②") + card("3. Start", "Attach the ISO and boot. Choose Install to keep it on a disk.", "③") + '</div>')
+dl += sec('''
 <h2>System requirements</h2>
 <div class="req"><div><b>CPU</b><span>64-bit x86, 2 cores</span></div><div><b>Memory</b><span>2 GB RAM</span></div><div><b>Storage</b><span>1 GB live · 8 GB install</span></div><div><b>Graphics</b><span>1024×768 VGA</span></div></div>''')
+dl += sec('''<h2 class="center">Questions</h2><div class="faq">
+<details><summary>Which file should I download?</summary><p>Use the Live ISO to look around without changing anything. Use the Setup ISO to install to a virtual disk. Pick amd64 for PCs and arm64 for ARM virtual machines.</p></details>
+<details><summary>Can I run it on real hardware?</summary><p>LakoOS is a development preview. Use a virtual machine for now.</p></details>
+<details><summary>Is it free?</summary><p>Yes, under the GNU GPL.</p></details>
+<details><summary>Does it run Windows apps?</summary><p>Many classic Win32 apps run. See the compatibility page for the current status.</p></details></div>''', alt=True)
 write("download.html", "Download — LakoOS", "Download the LakoOS live ISO and run it in QEMU, VirtualBox or Hyper-V.", dl)
 
 docs = page_hero("Documentation", "Learn LakoOS", "First boot, settings, building from source and where things live.")
@@ -157,8 +165,8 @@ reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced /
 <div class="codebox"><button class="copy">Copy</button><pre>git clone https://github.com/LakoMoor/LakoOS.git
 cd LakoOS
 ./buildenv/build.sh                 # Linux, macOS
-.\\buildenv\\build.ps1                # Windows (WSL2 or -Backend docker)</pre></div>
-<p>Options: <code>--arch amd64|i386|arm64</code>, <code>--target livecd|bootcd|reactosimg|reactosvhd</code>, <code>--release</code>, <code>--env-only</code>. The first build needs about 15 GB of free disk.</p>
+.\\buildenv\\build.ps1                # Windows (WSL2)</pre></div>
+<p>Options: <code>--arch amd64|i386|arm64</code>, <code>--target livecd|bootcd|lakoosimg|lakoosvhd</code>, <code>--release</code>, <code>--env-only</code>. The first build needs about 15 GB of free disk.</p>
 <h2 id="help">Getting help</h2>
 <p>Report problems in <a href="https://github.com/LakoMoor/LakoOS/issues">GitHub Issues</a> with the architecture, the build type and the steps that lead to the problem.</p>
 </div></div>''')
@@ -174,13 +182,13 @@ tbl = "".join(f'<tr><td>{a}</td><td><span class="st {c}">{b}</span></td></tr>' f
 comp += sec(f'<table class="compat"><tr><th>Area</th><th>Status</th></tr>{tbl}</table><p class="muted" style="margin-top:20px">Found a program that does not work? Please <a href="https://github.com/LakoMoor/LakoOS/issues">open an issue</a> with its name and version.</p>')
 write("compatibility.html", "Compatibility — LakoOS", "Which applications and features work in LakoOS today.", comp)
 
-about = page_hero("About", "A free NT, with credit where it is due", "LakoOS is an independent fork. It builds on the work of many people.")
+about = page_hero("About", "A free NT, with credit where it is due", "LakoOS is an independent project built on the work of many people.")
 about += sec('''
 <div class="doc"><aside class="toc"><a href="#what">What it is</a><a href="#lineage">Lineage</a><a href="#license">License</a><a href="#trademarks">Trademarks</a></aside>
 <div class="prose">
 <h2 id="what">What it is</h2><p>LakoOS is a free operating system on the NT architecture with a familiar desktop, maintained by <a href="https://github.com/LakoMoor">LakoMoor</a>.</p>
-<h2 id="lineage">Lineage</h2><p>LakoOS is a fork of <a href="https://github.com/ahmedarif193/LakoOS">LakoOS</a>, which is a fork of ReactOS. Their authors are credited in <a href="https://github.com/LakoMoor/LakoOS/blob/main/CREDITS.md">CREDITS.md</a>, and their copyright notices stay in the source files.</p>
-<h2 id="license">License</h2><p>GNU GPL 3.0. Code inherited from ReactOS keeps the license stated in its file headers, mostly GPL 2.0 or later. The full texts are in the repository.</p>
+<h2 id="lineage">Credits</h2><p>LakoOS builds on the work of many open source contributors. They are credited in <a href="https://github.com/LakoMoor/LakoOS/blob/main/CREDITS.md">CREDITS.md</a>, and their copyright notices stay in the source files.</p>
+<h2 id="license">License</h2><p>GNU GPL 3.0. Inherited code keeps the license stated in its file headers, mostly GPL 2.0 or later. The full texts are in the repository.</p>
 <h2 id="trademarks">Trademarks</h2><p>Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</p>
 </div></div>''')
 write("about.html", "About — LakoOS", "About the LakoOS project, its lineage and license.", about)
