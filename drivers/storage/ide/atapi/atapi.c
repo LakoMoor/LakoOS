@@ -597,14 +597,17 @@ AtaAddChannel(
     PATAPORT_CHANNEL_EXTENSION ChanExt;
     WCHAR DeviceNameBuffer[sizeof("\\Device\\Ide\\IdePort99999")];
     DECLARE_PAGED_WSTRING(FdoFormat, L"\\Device\\Ide\\IdePort%lu");
-    static ULONG AtapFdoNumber = 0;
+    static volatile LONG AtapFdoNumber = -1;
+    ULONG FdoNumber;
 
     PAGED_CODE();
+
+    FdoNumber = (ULONG)InterlockedIncrement(&AtapFdoNumber);
 
     Status = RtlStringCbPrintfW(DeviceNameBuffer,
                                 sizeof(DeviceNameBuffer),
                                 FdoFormat,
-                                AtapFdoNumber);
+                                FdoNumber);
     ASSERT(NT_SUCCESS(Status));
     RtlInitUnicodeString(&DeviceName, DeviceNameBuffer);
 
@@ -635,7 +638,7 @@ AtaAddChannel(
         Status = STATUS_DEVICE_REMOVED;
         goto Failure;
     }
-    ChanExt->DeviceObjectNumber = AtapFdoNumber++;
+    ChanExt->DeviceObjectNumber = FdoNumber;
     ChanExt->Pdo = PhysicalDeviceObject;
 
     /* DMA buffers alignment */
