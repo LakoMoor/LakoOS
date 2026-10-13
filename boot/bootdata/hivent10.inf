@@ -1,5 +1,5 @@
 [Version]
-Signature = "$LakoOS$"
+Signature = "$ReactOS$"
 
 [AddReg]
 HKLM,"SYSTEM\CurrentControlSet\Control\Windows","CSDVersion",0x00010001,0x00000000

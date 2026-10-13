@@ -159,7 +159,11 @@ enum E11_RIBBON_CMD
     E11CMD_SETTINGS,
     E11CMD_UNINSTALL,
     E11CMD_SYSPROPS,
-    E11CMD_MANAGE
+    E11CMD_MANAGE,
+    E11CMD_NEWMENU,
+    E11CMD_SORTMENU,
+    E11CMD_VIEWMENU,
+    E11CMD_MOREMENU
 };
 
 typedef struct _E11_RIBBONBTN
@@ -171,6 +175,7 @@ typedef struct _E11_RIBBONBTN
     BOOL bBig;
     BOOL bDisabled;
     RECT rc;
+    UINT nFluent;
 } E11_RIBBONBTN;
 
 typedef struct _E11_CRUMB

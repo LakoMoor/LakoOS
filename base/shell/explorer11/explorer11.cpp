@@ -144,7 +144,7 @@ public:
     HWND m_hwndSearchEdit;
     CAtlArray<E11_RIBBONBTN> m_RibbonBtns;
     CAtlArray<E11_RIBBONGROUP> m_RibbonGroups;
-    RECT m_rcTabs, m_rcRibbon;
+    RECT m_rcTabs, m_rcRibbon, m_rcTab;
     struct { LPCWSTR pszName; int nId; } m_aTabs[4];
     RECT m_aTabRects[4];
     int m_nTabCount;
@@ -160,6 +160,7 @@ public:
     {
         ZeroMemory(&m_Pal, sizeof(m_Pal));
         ZeroMemory(m_aTabRects, sizeof(m_aTabRects));
+        ZeroMemory(&m_rcTab, sizeof(m_rcTab));
         ZeroMemory(m_aTabs, sizeof(m_aTabs));
         m_szTitle[0] = 0;
         m_szItems[0] = 0;
@@ -169,9 +170,9 @@ public:
     }
 
     int Sc(int v) const { return E11Scale(v); }
-    int TabsH() const { return Sc(28); }
-    int RibbonH() const { return m_bRibbonCollapsed ? 0 : Sc(92); }
-    int NavRowH() const { return Sc(40); }
+    int TabsH() const { return Sc(40); }
+    int RibbonH() const { return Sc(48); }
+    int NavRowH() const { return Sc(44); }
     int BarH() const { return TabsH() + RibbonH() + NavRowH(); }
     int PaneW() const { return Sc(224); }
     int StatusH() const { return Sc(24); }
@@ -653,120 +654,44 @@ public:
     // *** Ribbon ***
     VOID BuildRibbon()
     {
-        static const E11_RIBBONBTN c_HomeBtns[] =
+        struct CMDITEM { LPCWSTR pszLabel; int nCmd; int nIcon; UINT nFluent; BOOL bDisabled; int w; };
+        BOOL bPC = (m_nContent != CONTENT_SHELL);
+        const CMDITEM c_Items[] =
         {
-            { L"Copy",       L"Clipboard", E11CMD_COPY,       EI_COPY,       TRUE,  FALSE, {0} },
-            { L"Cut",        L"Clipboard", E11CMD_CUT,        EI_CUT,        TRUE,  FALSE, {0} },
-            { L"Paste",      L"Clipboard", E11CMD_PASTE,      EI_PASTE,      TRUE,  FALSE, {0} },
-            { L"Delete",     L"Organize",  E11CMD_DELETE,     EI_DELETE,     TRUE,  FALSE, {0} },
-            { L"Rename",     L"Organize",  E11CMD_RENAME,     EI_RENAME,     TRUE,  FALSE, {0} },
-            { L"New folder", L"New",       E11CMD_NEWFOLDER,  EI_NEWFOLDER,  TRUE,  FALSE, {0} },
-            { L"Properties", L"Open",      E11CMD_PROPERTIES, EI_PROPERTIES, TRUE,  FALSE, {0} },
-            { L"Pin to Quick access", L"Quick access", E11CMD_PIN, EI_PIN,   TRUE,  FALSE, {0} },
+            { L"New",  E11CMD_NEWMENU,  EI_NONE,   IDI_FLU_ADD,     bPC,   84 },
+            { NULL,    E11CMD_NONE,     EI_NONE,   0,               TRUE,  14 },
+            { NULL,    E11CMD_CUT,      EI_CUT,    0,               bPC,   40 },
+            { NULL,    E11CMD_COPY,     EI_COPY,   0,               bPC,   40 },
+            { NULL,    E11CMD_PASTE,    EI_PASTE,  0,               bPC,   40 },
+            { NULL,    E11CMD_RENAME,   EI_RENAME, 0,               bPC,   40 },
+            { NULL,    E11CMD_DELETE,   EI_DELETE, 0,               bPC,   40 },
+            { NULL,    E11CMD_NONE,     EI_NONE,   0,               TRUE,  14 },
+            { L"Sort", E11CMD_SORTMENU, EI_NONE,   IDI_FLU_ARROWUP, bPC,   84 },
+            { L"View", E11CMD_VIEWMENU, EI_NONE,   IDI_FLU_GRID,    FALSE, 84 },
+            { L"...",  E11CMD_MOREMENU, EI_NONE,   0,               FALSE, 40 },
         };
-        static const E11_RIBBONBTN c_ComputerBtns[] =
-        {
-            { L"Properties", L"Location",  E11CMD_SYSPROPS,   EI_PROPERTIES, TRUE,  FALSE, {0} },
-            { L"Open",       L"Location",  E11CMD_OPEN,       EI_OPEN,       TRUE,  TRUE,  {0} },
-            { L"Rename",     L"Location",  E11CMD_RENAME,     EI_RENAME,     TRUE,  TRUE,  {0} },
-            { L"Access media", L"Network", E11CMD_MEDIA,      EI_MEDIA,      TRUE,  TRUE,  {0} },
-            { L"Map network drive", L"Network", E11CMD_MAPDRIVE, EI_MAPDRIVE, TRUE, TRUE,  {0} },
-            { L"Add a network location", L"Network", E11CMD_ADDNETLOC, EI_NETLOC, TRUE, TRUE, {0} },
-            { L"Open Settings", L"System", E11CMD_SETTINGS,   EI_SETTINGS,   TRUE,  FALSE, {0} },
-            { L"Uninstall or change a program", L"System", E11CMD_UNINSTALL, EI_UNINSTALL, FALSE, FALSE, {0} },
-            { L"System properties", L"System", E11CMD_SYSPROPS, EI_SYSPROPS, FALSE, FALSE, {0} },
-            { L"Manage",     L"System",    E11CMD_MANAGE,     EI_MANAGE,     FALSE, TRUE,  {0} },
-        };
-        static const E11_RIBBONBTN c_ShareBtns[] =
-        {
-            { L"Copy path",  L"Send",      E11CMD_COPYPATH,   EI_COPYPATH,   TRUE,  FALSE, {0} },
-        };
-        static const E11_RIBBONBTN c_ViewBtns[] =
-        {
-            { L"Extra large icons", L"Layout", E11CMD_VIEW_EXTRALARGE, EI_VIEW_XLARGE, FALSE, FALSE, {0} },
-            { L"Large icons",       L"Layout", E11CMD_VIEW_LARGE,      EI_VIEW_LARGE,  FALSE, FALSE, {0} },
-            { L"Medium icons",      L"Layout", E11CMD_VIEW_MEDIUM,     EI_VIEW_MEDIUM, FALSE, FALSE, {0} },
-            { L"Small icons",       L"Layout", E11CMD_VIEW_SMALL,      EI_VIEW_SMALL,  FALSE, FALSE, {0} },
-            { L"List",              L"Layout", E11CMD_VIEW_LIST,       EI_VIEW_LIST,   FALSE, FALSE, {0} },
-            { L"Details",           L"Layout", E11CMD_VIEW_DETAILS,    EI_VIEW_DETAILS, FALSE, FALSE, {0} },
-            { L"Tiles",             L"Layout", E11CMD_VIEW_TILES,      EI_VIEW_TILES,  FALSE, FALSE, {0} },
-            { L"Refresh",           L"Current view", E11CMD_REFRESH,   EI_REFRESH,     TRUE,  FALSE, {0} },
-        };
-
-        const E11_RIBBONBTN *pBtns = NULL;
-        UINT cBtns = 0;
-
-        switch (m_iActiveTab)
-        {
-            case T_HOME:     pBtns = c_HomeBtns; cBtns = _countof(c_HomeBtns); break;
-            case T_COMPUTER: pBtns = c_ComputerBtns; cBtns = _countof(c_ComputerBtns); break;
-            case T_SHARE:    pBtns = c_ShareBtns; cBtns = _countof(c_ShareBtns); break;
-            case T_VIEW:     pBtns = c_ViewBtns; cBtns = _countof(c_ViewBtns); break;
-        }
 
         m_RibbonBtns.SetCount(0);
         m_RibbonGroups.SetCount(0);
-        if (!pBtns || m_bRibbonCollapsed)
-            return;
 
-        int x = Sc(6);
-        int yTop = m_rcRibbon.top + Sc(4);
-        int yBottom = m_rcRibbon.bottom - Sc(20);
-        LPCWSTR pszGroup = NULL;
-        int xGroupStart = x;
-        int nSmallRow = 0;
-        int xSmallCol = x;
-
-        for (UINT i = 0; i < cBtns; i++)
+        int x = Sc(12);
+        int yTop = m_rcRibbon.top + Sc(6);
+        int yBottom = m_rcRibbon.bottom - Sc(6);
+        for (UINT i = 0; i < _countof(c_Items); i++)
         {
-            E11_RIBBONBTN btn = pBtns[i];
-
-            if (pszGroup && wcscmp(pszGroup, btn.pszGroup))
-            {
-                E11_RIBBONGROUP grp = { pszGroup, xGroupStart, x - Sc(2) };
-                m_RibbonGroups.Add(grp);
-                x += Sc(10);
-                xGroupStart = x;
-                nSmallRow = 0;
-                xSmallCol = x;
-            }
-            pszGroup = btn.pszGroup;
-
-            if (btn.bBig)
-            {
-                BOOL bWide = wcslen(btn.pszLabel) > 10;
-                int w = bWide ? Sc(86) : Sc(56);
-                SetRect(&btn.rc, x, yTop, x + w, yBottom);
-                x += w + Sc(2);
-                xSmallCol = x;
-                nSmallRow = 0;
-            }
-            else
-            {
-                int w = Sc(150);
-                int h = Sc(21);
-                SetRect(&btn.rc,
-                        xSmallCol, yTop + nSmallRow * h,
-                        xSmallCol + w, yTop + nSmallRow * h + h);
-                nSmallRow++;
-                if (nSmallRow == 3)
-                {
-                    xSmallCol += w + Sc(2);
-                    nSmallRow = 0;
-                }
-                if (xSmallCol > x)
-                    x = xSmallCol;
-                if (nSmallRow && xSmallCol + Sc(150) > x)
-                    x = xSmallCol + Sc(150);
-            }
-
+            E11_RIBBONBTN btn;
+            ZeroMemory(&btn, sizeof(btn));
+            btn.pszLabel = c_Items[i].pszLabel;
+            btn.pszGroup = L"";
+            btn.nCmd = c_Items[i].nCmd;
+            btn.nIcon = c_Items[i].nIcon;
+            btn.nFluent = c_Items[i].nFluent;
+            btn.bBig = FALSE;
+            btn.bDisabled = c_Items[i].bDisabled;
+            int w = Sc(c_Items[i].w);
+            SetRect(&btn.rc, x, yTop, x + w, yBottom);
+            x += w + Sc(2);
             m_RibbonBtns.Add(btn);
-        }
-
-        if (pszGroup)
-        {
-            E11_RIBBONGROUP grp = { pszGroup, xGroupStart, x - Sc(2) };
-            m_RibbonGroups.Add(grp);
         }
     }
 
@@ -777,29 +702,18 @@ public:
         GetClientRect(&rcClient);
 
         SetRect(&m_rcTabs, 0, 0, rcClient.right, TabsH());
-        SetRect(&m_rcRibbon, 0, TabsH(), rcClient.right, TabsH() + RibbonH());
+        SetRect(&m_rcRibbon, 0, TabsH() + NavRowH(), rcClient.right, TabsH() + NavRowH() + RibbonH());
 
-        int xTab = Sc(4);
-        SetRect(&m_rcQat1, xTab, Sc(5), xTab + Sc(22), TabsH() - Sc(5));
-        xTab += Sc(24);
-        SetRect(&m_rcQat2, xTab, Sc(5), xTab + Sc(22), TabsH() - Sc(5));
-        xTab += Sc(30);
-
-        for (int t = 0; t < m_nTabCount; t++)
-        {
-            int w = Sc(12) + Sc(9) * (int)wcslen(m_aTabs[t].pszName);
-            if (w < Sc(44))
-                w = Sc(44);
-            SetRect(&m_aTabRects[t], xTab, Sc(2), xTab + w, TabsH());
-            xTab += w;
-        }
-        for (int t = m_nTabCount; t < 4; t++)
+        SetRect(&m_rcTab, Sc(8), Sc(6), Sc(8) + Sc(230), TabsH());
+        SetRect(&m_rcCollapse, m_rcTab.right - Sc(32), m_rcTab.top + Sc(8),
+                m_rcTab.right - Sc(8), m_rcTab.top + Sc(30));
+        SetRect(&m_rcQat1, m_rcTab.right + Sc(6), m_rcTab.top + Sc(8),
+                m_rcTab.right + Sc(30), m_rcTab.top + Sc(30));
+        SetRectEmpty(&m_rcQat2);
+        for (int t = 0; t < 4; t++)
             SetRectEmpty(&m_aTabRects[t]);
 
-        SetRect(&m_rcCollapse, rcClient.right - Sc(28), Sc(5),
-                rcClient.right - Sc(6), TabsH() - Sc(5));
-
-        int nNavTop = TabsH() + RibbonH();
+        int nNavTop = TabsH();
         int nNavMid = nNavTop + NavRowH() / 2;
         SetRect(&m_rcBack, Sc(8), nNavMid - Sc(14), Sc(8) + Sc(30), nNavMid + Sc(14));
         SetRect(&m_rcFwd, m_rcBack.right + Sc(2), m_rcBack.top,
@@ -905,133 +819,97 @@ public:
 
         SetBkMode(hdc, TRANSPARENT);
 
-        E11DrawIconDim(hdc, &m_rcQat1, EI_NEWFOLDER, &m_Pal, m_nHotMisc != HM_QAT1);
-        E11DrawIconDim(hdc, &m_rcQat2, EI_PROPERTIES, &m_Pal, m_nHotMisc != HM_QAT2);
-
-        HGDIOBJ hTabFontOld = SelectObject(hdc, m_hFont);
-        for (int t = 0; t < m_nTabCount; t++)
         {
-            if (m_aTabs[t].nId == T_FILE)
-            {
-                HBRUSH hbrFile = CreateSolidBrush(m_Pal.Accent);
-                FillRect(hdc, &m_aTabRects[t], hbrFile);
-                DeleteObject(hbrFile);
-                SetTextColor(hdc, RGB(255, 255, 255));
-            }
-            else if (m_aTabs[t].nId == m_iActiveTab && !m_bRibbonCollapsed)
-            {
-                HBRUSH hbrActive = CreateSolidBrush(m_Pal.FrameBg);
-                FillRect(hdc, &m_aTabRects[t], hbrActive);
-                DeleteObject(hbrActive);
-                SetTextColor(hdc, m_Pal.Text);
-            }
-            else
-            {
-                if (t == m_iHotTab)
-                {
-                    HBRUSH hbrHotTab = CreateSolidBrush(m_Pal.HotFill);
-                    FillRect(hdc, &m_aTabRects[t], hbrHotTab);
-                    DeleteObject(hbrHotTab);
-                }
-                SetTextColor(hdc, m_Pal.Text);
-            }
-            DrawTextW(hdc, m_aTabs[t].pszName, -1, &m_aTabRects[t],
-                      DT_SINGLELINE | DT_VCENTER | DT_CENTER | DT_NOPREFIX);
-        }
-        SelectObject(hdc, hTabFontOld);
+            RECT rcRest = { 0, TabsH(), rcClient.right, BarH() };
+            HBRUSH hbrRest = CreateSolidBrush(m_Pal.FrameBg);
+            FillRect(hdc, &rcRest, hbrRest);
+            DeleteObject(hbrRest);
 
-        if (m_nHotMisc == HM_COLLAPSE)
-        {
-            HBRUSH hbrHot = CreateSolidBrush(m_Pal.HotFill);
-            FillRect(hdc, &m_rcCollapse, hbrHot);
-            DeleteObject(hbrHot);
-        }
-        DrawChevronGlyph(hdc, (m_rcCollapse.left + m_rcCollapse.right) / 2,
-                         (m_rcCollapse.top + m_rcCollapse.bottom) / 2,
-                         !m_bRibbonCollapsed, m_Pal.DimText);
+            HBRUSH hbrTab = CreateSolidBrush(m_Pal.FrameBg);
+            HGDIOBJ hOldBr = SelectObject(hdc, hbrTab);
+            HGDIOBJ hOldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
+            RoundRect(hdc, m_rcTab.left, m_rcTab.top, m_rcTab.right + 1, m_rcTab.bottom + Sc(10), Sc(10), Sc(10));
+            SelectObject(hdc, hOldPen);
+            SelectObject(hdc, hOldBr);
+            DeleteObject(hbrTab);
 
-        if (!m_bRibbonCollapsed)
-        {
-            HBRUSH hbrRibbonBg = CreateSolidBrush(m_Pal.FrameBg);
-            FillRect(hdc, &m_rcRibbon, hbrRibbonBg);
-            DeleteObject(hbrRibbonBg);
+            RECT rcTabIcon = { m_rcTab.left + Sc(12), m_rcTab.top + Sc(9),
+                               m_rcTab.left + Sc(28), m_rcTab.top + Sc(25) };
+            E11DrawIcon(hdc, &rcTabIcon, (m_nContent != CONTENT_SHELL) ? EI_PC : EI_FOLDER, &m_Pal);
 
-            SelectObject(hdc, m_hFontSmall);
-            for (SIZE_T g = 0; g < m_RibbonGroups.GetCount(); g++)
+            SelectObject(hdc, m_hFont);
+            SetTextColor(hdc, m_Pal.Text);
+            RECT rcTabText = { m_rcTab.left + Sc(36), m_rcTab.top, m_rcCollapse.left - Sc(4), m_rcTab.bottom - Sc(10) };
+            DrawTextW(hdc, m_szTitle[0] ? m_szTitle : L"This PC", -1, &rcTabText,
+                      DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS | DT_NOPREFIX);
+
+            if (m_nHotMisc == HM_COLLAPSE)
             {
-                E11_RIBBONGROUP &grp = m_RibbonGroups[g];
-                RECT rcCaption = { grp.xStart, m_rcRibbon.bottom - Sc(18),
-                                   grp.xEnd, m_rcRibbon.bottom - Sc(2) };
-                SetTextColor(hdc, m_Pal.DimText);
-                DrawTextW(hdc, grp.pszLabel, -1, &rcCaption,
-                          DT_SINGLELINE | DT_VCENTER | DT_CENTER | DT_END_ELLIPSIS | DT_NOPREFIX);
-
-                if (g + 1 < m_RibbonGroups.GetCount())
-                {
-                    RECT rcSep = { grp.xEnd + Sc(5), m_rcRibbon.top + Sc(6),
-                                   grp.xEnd + Sc(6), m_rcRibbon.bottom - Sc(6) };
-                    HBRUSH hbrSep = CreateSolidBrush(m_Pal.Border);
-                    FillRect(hdc, &rcSep, hbrSep);
-                    DeleteObject(hbrSep);
-                }
+                HBRUSH hbrHot = CreateSolidBrush(m_Pal.HotFill);
+                FillRect(hdc, &m_rcCollapse, hbrHot);
+                DeleteObject(hbrHot);
             }
+            RECT rcClose = { m_rcCollapse.left + Sc(5), m_rcCollapse.top + Sc(3),
+                             m_rcCollapse.right - Sc(5), m_rcCollapse.bottom - Sc(3) };
+            E11DrawFluentRes(hdc, &rcClose, IDI_FLU_TRAYDISMISS, m_Pal.Text);
+
+            if (m_nHotMisc == HM_QAT1)
+            {
+                HBRUSH hbrHot = CreateSolidBrush(m_Pal.HotFill);
+                FillRect(hdc, &m_rcQat1, hbrHot);
+                DeleteObject(hbrHot);
+            }
+            RECT rcPlus = { m_rcQat1.left + Sc(4), m_rcQat1.top + Sc(3),
+                            m_rcQat1.right - Sc(4), m_rcQat1.bottom - Sc(3) };
+            E11DrawFluentRes(hdc, &rcPlus, IDI_FLU_ADD, m_Pal.Text);
 
             for (SIZE_T b = 0; b < m_RibbonBtns.GetCount(); b++)
             {
                 E11_RIBBONBTN &btn = m_RibbonBtns[b];
-                BOOL bChecked = FALSE;
-
-                switch (btn.nCmd)
+                BOOL bSeparator = (btn.nCmd == E11CMD_NONE);
+                if (bSeparator)
                 {
-                    case E11CMD_VIEW_EXTRALARGE: bChecked = (m_uViewMode == FVM_THUMBNAIL); break;
-                    case E11CMD_VIEW_LARGE:      bChecked = (m_uViewMode == FVM_THUMBSTRIP); break;
-                    case E11CMD_VIEW_MEDIUM:     bChecked = (m_uViewMode == FVM_ICON); break;
-                    case E11CMD_VIEW_SMALL:      bChecked = (m_uViewMode == FVM_SMALLICON); break;
-                    case E11CMD_VIEW_LIST:       bChecked = (m_uViewMode == FVM_LIST); break;
-                    case E11CMD_VIEW_DETAILS:    bChecked = (m_uViewMode == FVM_DETAILS); break;
-                    case E11CMD_VIEW_TILES:      bChecked = (m_uViewMode == FVM_TILE); break;
+                    int xs = (btn.rc.left + btn.rc.right) / 2;
+                    RECT rcLine = { xs, btn.rc.top + Sc(6), xs + 1, btn.rc.bottom - Sc(6) };
+                    HBRUSH hbrLine2 = CreateSolidBrush(m_Pal.Border);
+                    FillRect(hdc, &rcLine, hbrLine2);
+                    DeleteObject(hbrLine2);
+                    continue;
                 }
 
-                if (bChecked)
-                {
-                    HBRUSH hbrChk = CreateSolidBrush(m_Pal.HotFill);
-                    FillRect(hdc, &btn.rc, hbrChk);
-                    DeleteObject(hbrChk);
-                    HBRUSH hbrChkEdge = CreateSolidBrush(m_Pal.Accent);
-                    FrameRect(hdc, &btn.rc, hbrChkEdge);
-                    DeleteObject(hbrChkEdge);
-                }
-                else if ((int)b == m_iHotBtn && !btn.bDisabled)
+                if ((int)b == m_iHotBtn && !btn.bDisabled)
                 {
                     HBRUSH hbrHotBtn = CreateSolidBrush(m_Pal.HotFill);
                     FillRect(hdc, &btn.rc, hbrHotBtn);
                     DeleteObject(hbrHotBtn);
                 }
 
-                SetTextColor(hdc, btn.bDisabled ? m_Pal.DimText : m_Pal.Text);
+                COLORREF crText = btn.bDisabled ? m_Pal.DimText : m_Pal.Text;
+                SetTextColor(hdc, crText);
+                SelectObject(hdc, m_hFont);
 
-                if (btn.bBig)
+                int cyMid = (btn.rc.top + btn.rc.bottom) / 2;
+                if (btn.pszLabel && btn.nIcon == EI_NONE && btn.nFluent == 0)
                 {
-                    int cx = (btn.rc.left + btn.rc.right) / 2;
-                    RECT rcIcon = { cx - Sc(13), btn.rc.top + Sc(4),
-                                    cx + Sc(13), btn.rc.top + Sc(30) };
-                    E11DrawIconDim(hdc, &rcIcon, btn.nIcon, &m_Pal, btn.bDisabled);
-
-                    RECT rcLabel = { btn.rc.left + Sc(2), btn.rc.top + Sc(32),
-                                     btn.rc.right - Sc(2), btn.rc.bottom - Sc(2) };
-                    DrawTextW(hdc, btn.pszLabel, -1, &rcLabel,
-                              DT_CENTER | DT_WORDBREAK | DT_NOPREFIX);
+                    DrawTextW(hdc, btn.pszLabel, -1, &btn.rc,
+                              DT_SINGLELINE | DT_VCENTER | DT_CENTER | DT_NOPREFIX);
+                    continue;
                 }
+
+                BOOL bIconOnly = (btn.pszLabel == NULL);
+                int xIcon = bIconOnly ? (btn.rc.left + btn.rc.right) / 2 - Sc(9) : btn.rc.left + Sc(10);
+                RECT rcIcon = { xIcon, cyMid - Sc(9), xIcon + Sc(18), cyMid + Sc(9) };
+                if (btn.nFluent)
+                    E11DrawFluentRes(hdc, &rcIcon, btn.nFluent, crText);
                 else
-                {
-                    RECT rcIcon = { btn.rc.left + Sc(3), (btn.rc.top + btn.rc.bottom) / 2 - Sc(8),
-                                    btn.rc.left + Sc(19), (btn.rc.top + btn.rc.bottom) / 2 + Sc(8) };
                     E11DrawIconDim(hdc, &rcIcon, btn.nIcon, &m_Pal, btn.bDisabled);
 
+                if (btn.pszLabel)
+                {
                     RECT rcLabel = btn.rc;
-                    rcLabel.left += Sc(24);
+                    rcLabel.left += Sc(36);
                     DrawTextW(hdc, btn.pszLabel, -1, &rcLabel,
-                              DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS | DT_NOPREFIX);
+                              DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX);
                 }
             }
         }
@@ -1580,6 +1458,83 @@ public:
         }
     }
 
+    VOID DoSortBy(int nColumn)
+    {
+        if (!m_hwndView)
+            return;
+        HWND hList = FindWindowExW(m_hwndView, NULL, L"SysListView32", NULL);
+        if (!hList)
+            return;
+        NMLISTVIEW nm;
+        ZeroMemory(&nm, sizeof(nm));
+        nm.hdr.hwndFrom = hList;
+        nm.hdr.idFrom = (UINT_PTR)::GetDlgCtrlID(hList);
+        nm.hdr.code = LVN_COLUMNCLICK;
+        nm.iSubItem = nColumn;
+        ::SendMessageW(m_hwndView, WM_NOTIFY, nm.hdr.idFrom, (LPARAM)&nm);
+    }
+
+    VOID ShowCommandMenu(int nCmd, const RECT *prcAnchor)
+    {
+        HMENU hMenu = CreatePopupMenu();
+        if (!hMenu)
+            return;
+
+        switch (nCmd)
+        {
+            case E11CMD_NEWMENU:
+                AppendMenuW(hMenu, MF_STRING, 1, L"Folder");
+                break;
+            case E11CMD_SORTMENU:
+                AppendMenuW(hMenu, MF_STRING, 10, L"Name");
+                AppendMenuW(hMenu, MF_STRING, 11, L"Size");
+                AppendMenuW(hMenu, MF_STRING, 12, L"Type");
+                AppendMenuW(hMenu, MF_STRING, 13, L"Date modified");
+                break;
+            case E11CMD_VIEWMENU:
+                AppendMenuW(hMenu, MF_STRING | (m_uViewMode == FVM_THUMBNAIL ? MF_CHECKED : 0), 20, L"Extra large icons");
+                AppendMenuW(hMenu, MF_STRING | (m_uViewMode == FVM_THUMBSTRIP ? MF_CHECKED : 0), 21, L"Large icons");
+                AppendMenuW(hMenu, MF_STRING | (m_uViewMode == FVM_ICON ? MF_CHECKED : 0), 22, L"Medium icons");
+                AppendMenuW(hMenu, MF_STRING | (m_uViewMode == FVM_SMALLICON ? MF_CHECKED : 0), 23, L"Small icons");
+                AppendMenuW(hMenu, MF_STRING | (m_uViewMode == FVM_LIST ? MF_CHECKED : 0), 24, L"List");
+                AppendMenuW(hMenu, MF_STRING | (m_uViewMode == FVM_DETAILS ? MF_CHECKED : 0), 25, L"Details");
+                AppendMenuW(hMenu, MF_STRING | (m_uViewMode == FVM_TILE ? MF_CHECKED : 0), 26, L"Tiles");
+                break;
+            case E11CMD_MOREMENU:
+                AppendMenuW(hMenu, MF_STRING, 30, L"Properties");
+                AppendMenuW(hMenu, MF_STRING, 31, L"Copy as path");
+                AppendMenuW(hMenu, MF_STRING, 32, L"Refresh");
+                AppendMenuW(hMenu, MF_STRING, 33, L"Pin to Quick access");
+                break;
+        }
+
+        POINT pt = { prcAnchor->left, prcAnchor->bottom };
+        ClientToScreen(&pt);
+        UINT uCmd = (UINT)TrackPopupMenu(hMenu, TPM_RETURNCMD | TPM_LEFTALIGN | TPM_TOPALIGN,
+                                         pt.x, pt.y, 0, m_hWnd, NULL);
+        DestroyMenu(hMenu);
+
+        switch (uCmd)
+        {
+            case 1:  DoNewFolder(); break;
+            case 10: DoSortBy(0); break;
+            case 11: DoSortBy(1); break;
+            case 12: DoSortBy(2); break;
+            case 13: DoSortBy(3); break;
+            case 20: SetViewMode(FVM_THUMBNAIL); break;
+            case 21: SetViewMode(FVM_THUMBSTRIP); break;
+            case 22: SetViewMode(FVM_ICON); break;
+            case 23: SetViewMode(FVM_SMALLICON); break;
+            case 24: SetViewMode(FVM_LIST); break;
+            case 25: SetViewMode(FVM_DETAILS); break;
+            case 26: SetViewMode(FVM_TILE); break;
+            case 30: DoProperties(); break;
+            case 31: DoCopyPath(); break;
+            case 32: DoRefresh(); break;
+            case 33: DoPinCurrent(); break;
+        }
+    }
+
     VOID DoRefresh()
     {
         if (m_nContent != CONTENT_SHELL && m_pThisPC)
@@ -1892,40 +1847,17 @@ public:
     {
         POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 
-        for (int t = 0; t < m_nTabCount; t++)
-        {
-            if (PtInRect(&m_aTabRects[t], pt))
-            {
-                if (m_aTabs[t].nId == T_FILE)
-                {
-                    ShowFileMenu();
-                }
-                else if (m_aTabs[t].nId != m_iActiveTab || m_bRibbonCollapsed)
-                {
-                    m_iActiveTab = m_aTabs[t].nId;
-                    m_bRibbonCollapsed = FALSE;
-                    Layout();
-                    InvalidateRect(NULL, TRUE);
-                }
-                return 0;
-            }
-        }
-
         if (PtInRect(&m_rcCollapse, pt))
         {
-            m_bRibbonCollapsed = !m_bRibbonCollapsed;
-            Layout();
-            InvalidateRect(NULL, TRUE);
+            PostMessageW(WM_CLOSE, 0, 0);
             return 0;
         }
         if (PtInRect(&m_rcQat1, pt))
         {
-            DoNewFolder();
-            return 0;
-        }
-        if (PtInRect(&m_rcQat2, pt))
-        {
-            DoProperties();
+            WCHAR szPath[MAX_PATH] = L"";
+            if (m_pidlCurrent && !SHGetPathFromIDListW(m_pidlCurrent, szPath))
+                szPath[0] = 0;
+            ShellExecuteW(NULL, NULL, L"explorer.exe", szPath[0] ? szPath : NULL, NULL, SW_SHOWNORMAL);
             return 0;
         }
 
@@ -1934,7 +1866,14 @@ public:
             if (PtInRect(&m_RibbonBtns[b].rc, pt))
             {
                 if (!m_RibbonBtns[b].bDisabled)
-                    DispatchRibbonCmd(m_RibbonBtns[b].nCmd);
+                {
+                    int nCmd = m_RibbonBtns[b].nCmd;
+                    if (nCmd == E11CMD_NEWMENU || nCmd == E11CMD_SORTMENU ||
+                        nCmd == E11CMD_VIEWMENU || nCmd == E11CMD_MOREMENU)
+                        ShowCommandMenu(nCmd, &m_RibbonBtns[b].rc);
+                    else
+                        DispatchRibbonCmd(nCmd);
+                }
                 return 0;
             }
         }

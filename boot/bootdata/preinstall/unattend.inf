@@ -1,5 +1,5 @@
 [Unattend]
-Signature = "$LakoOS$"
+Signature = "$ReactOS$"
 
 ; Unattended 2nd stage setup for pre-installed disk image
 ; First boot runs InstallReactOS() automatically
