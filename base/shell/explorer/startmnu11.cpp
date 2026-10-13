@@ -487,7 +487,20 @@ public:
             AddCell(SM11K_BUTTON_ALLAPPS, W - pad - Sc(100), Sc(80), W - pad, Sc(110), L"All apps");
 
             int cw = inner / 6, ch = Sc(86);
-            for (SIZE_T i = 0; i < m_Pinned.GetCount(); i++)
+            int pinRows = 3, recRows = 3;
+            while (listTop + pinRows * ch + Sc(64) + recRows * Sc(52) > footerTop - Sc(8))
+            {
+                if (recRows > 1)
+                    recRows--;
+                else if (pinRows > 1)
+                    pinRows--;
+                else
+                {
+                    recRows = 0;
+                    break;
+                }
+            }
+            for (SIZE_T i = 0; i < m_Pinned.GetCount() && i < (SIZE_T)(pinRows * 6); i++)
             {
                 int col = (int)(i % 6), row = (int)(i / 6);
                 AddCell(SM11K_PIN, pad + col * cw, listTop + row * ch,
@@ -495,8 +508,9 @@ public:
                         m_Apps[m_Pinned[i]]->szName, m_Pinned[i]);
             }
 
-            int recTop = listTop + 3 * ch + Sc(20);
-            AddCell(SM11K_HEADER, pad, recTop, pad + Sc(200), recTop + Sc(28), L"Recommended");
+            int recTop = listTop + pinRows * ch + Sc(20);
+            if (recRows > 0)
+                AddCell(SM11K_HEADER, pad, recTop, pad + Sc(200), recTop + Sc(28), L"Recommended");
 
             BOOL bDocs = m_Docs.GetCount() > 0;
             CAtlArray<SM11APP*> &Src = bDocs ? m_Docs : m_Apps;
@@ -528,7 +542,7 @@ public:
                     }
                 }
             }
-            for (SIZE_T i = 0; i < Order.GetCount() && n < SM11_MAX_RECOMMENDED; i++, n++)
+            for (SIZE_T i = 0; i < Order.GetCount() && n < recRows * 2; i++, n++)
             {
                 int col = n % 2, row = n / 2;
                 AddCell(SM11K_RECOMMENDED, pad + col * rw, ry + row * rh,
