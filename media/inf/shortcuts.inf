@@ -13,17 +13,12 @@ EntertainmentShortcuts=2, %ACCESSORIES%\%ENTERTAINMENT%
 CommunicationsShortcuts=2, %ACCESSORIES%\%COMMUNICATIONS%
 GamesShortcuts=2, %GAMES%
 QuickLaunchShortcuts=26, Microsoft\Internet Explorer\Quick Launch
+PinnedShortcuts=26, Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
 
 [DesktopShortcuts]
-%SystemRoot%\readme.txt, %README_TITLE%, %README_DESC%
-%SystemRoot%\system32\cmd.exe, %CMD_TITLE%, %CMD_DESC%, 0, %HOMEDRIVE%%HOMEPATH%
-%SystemRoot%\system32\rapps.exe, %RAPPS_TITLE_SHORT%, %RAPPS_DESC%, 0
-%SystemRoot%\system32\devmgmt.exe, %DEVMGMT_TITLE%, %DEVMGMT_DESC%, 0
-%SystemRoot%\system32\dwmsettings.exe, %DWMSETTINGS_TITLE%, %DWMSETTINGS_DESC%, 0
-%SystemRoot%\system32\rosget.exe, %ROSGET_TITLE%, %ROSGET_DESC%, 0, %SystemRoot%\system32, gui
 
 [ProgramShortcuts]
-%SystemRoot%\explorer.exe, %EXPLORER_TITLE%, %EXPLORER_DESC%, 1, %HOMEDRIVE%%HOMEPATH%
+%SystemRoot%\explorer.exe, %EXPLORER_TITLE%, %EXPLORER_DESC%, 0, %HOMEDRIVE%%HOMEPATH%
 %SystemRoot%\system32\rapps.exe, %RAPPS_TITLE%, %RAPPS_DESC%, 0
 %16422%\Internet Explorer\iexplore.exe, %IEXPLORE_TITLE%, %IEXPLORE_DESC%, 0
 
@@ -69,8 +64,12 @@ QuickLaunchShortcuts=26, Microsoft\Internet Explorer\Quick Launch
 %SystemRoot%\system32\winmine.exe, %WINMINE_TITLE%, %WINMINE_DESC%, 0
 %SystemRoot%\system32\spider.exe, %SPIDER_TITLE%, %SPIDER_DESC%, 0
 
+[PinnedShortcuts]
+%SystemRoot%\explorer.exe, %EXPLORER_TITLE%, %EXPLORER_DESC%, 0, %HOMEDRIVE%%HOMEPATH%
+%SystemRoot%\system32\cmd.exe, %CMD_TITLE%, %CMD_DESC%, 0, %HOMEDRIVE%%HOMEPATH%
+
 [QuickLaunchShortcuts]
-%SystemRoot%\explorer.exe, %EXPLORER_TITLE%, %EXPLORER_DESC%, 1, %HOMEDRIVE%%HOMEPATH%
+%SystemRoot%\explorer.exe, %EXPLORER_TITLE%, %EXPLORER_DESC%, 0, %HOMEDRIVE%%HOMEPATH%
 %SystemRoot%\system32\cmd.exe, %CMD_TITLE%, %CMD_DESC%, 0, %HOMEDRIVE%%HOMEPATH%
 %SystemRoot%\system32\rapps.exe, %RAPPS_TITLE_SHORT%, %RAPPS_DESC%, 0
 

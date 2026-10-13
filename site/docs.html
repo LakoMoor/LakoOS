@@ -24,10 +24,13 @@
 <div class="wrap"><span class="eyebrow">Documentation</span><h1 class="ph">Learn LakoOS</h1><p class="lead" style="margin-left:0">First boot, settings, building from source and where things live.</p></div></section>
 <section><div class="wrap">
 <div class="doc">
-<aside class="toc"><a href="#start">First boot</a><a href="#settings">Settings</a><a href="#layout">Folder layout</a><a href="#build">Build from source</a><a href="#help">Getting help</a></aside>
+<aside class="toc"><a href="#start">First boot</a><a href="#install">Install</a><a href="#settings">Settings</a><a href="#layout">Folder layout</a><a href="#build">Build from source</a><a href="#help">Getting help</a></aside>
 <div class="prose">
 <h2 id="start">First boot</h2>
 <p>Start the live ISO. The desktop appears with the taskbar in the center. Open Start to see pinned apps, type to search, or open <b>This PC</b> to browse drives.</p>
+<h2 id="install">Install to a disk</h2>
+<p>Boot the <b>Setup ISO</b> (<code>LakoOS-amd64-setup.iso</code>) with an empty virtual disk attached. Choose a language, pick <b>Install LakoOS</b>, select the disk and follow the wizard: account, time zone, summary. After the first restart the desktop opens and signs you in automatically when no password is set.</p>
+<p>Build the Setup ISO yourself with <code>./buildenv/build.sh --target bootcd</code>.</p>
 <h2 id="settings">Settings</h2>
 <p>The shell reads these values from <code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced</code>. Changes apply the next time you open Start.</p>
 <table><tr><th>Value</th><th>Data</th><th>Meaning</th></tr>
