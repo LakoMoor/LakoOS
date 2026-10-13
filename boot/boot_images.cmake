@@ -883,6 +883,8 @@ add_custom_target(reactosvhd
     DEPENDS ${_reactosimg_deps}
     VERBATIM)
 add_dependencies(reactosvhd preinstall_partition)
+add_custom_target(lakoosimg DEPENDS reactosimg)
+add_custom_target(lakoosvhd DEPENDS reactosvhd)
 
 
 if(DEFINED EFI_PLATFORM_ID)

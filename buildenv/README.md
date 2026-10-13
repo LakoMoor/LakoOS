@@ -15,7 +15,7 @@ Options:
 | Option | Meaning |
 |---|---|
 | `-a`, `--arch` | `amd64` (default), `i386`, `arm64` |
-| `-t`, `--target` | `livecd` (default), `bootcd`, `reactosimg`, `reactosvhd` |
+| `-t`, `--target` | `livecd` (default), `bootcd`, `lakoosimg`, `lakoosvhd` |
 | `-r`, `--release` | Release build |
 | `--env-only` | Install the tools and stop |
 

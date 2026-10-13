@@ -8,8 +8,8 @@ Set up the build environment and configure a build as described in [Building](RE
 |---|---|---|
 | `ninja bootcd` | `bootcd.iso` | Start LakoOS Setup from a CD image and install LakoOS on a disk. |
 | `ninja livecd` | `livecd.iso` | Run LakoOS from a CD image without installing it. |
-| `ninja reactosimg` | `LakoOS.img` | Boot a disk with LakoOS already installed. It boots with UEFI or BIOS. |
-| `ninja reactosvhd` | `LakoOS.vhd` | Use the same preinstalled disk in virtual machines that take VHD disks, such as Hyper-V and VirtualBox. |
+| `ninja lakoosimg` | `LakoOS.img` | Boot a disk with LakoOS already installed. It boots with UEFI or BIOS. |
+| `ninja lakoosvhd` | `LakoOS.vhd` | Use the same preinstalled disk in virtual machines that take VHD disks, such as Hyper-V and VirtualBox. |
 
 Each target builds everything it needs first, and the files are written to the output folder.
 

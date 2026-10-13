@@ -18,7 +18,7 @@ Usage: buildenv/build.sh [options]
 Prepares a complete build environment from scratch and builds LakoOS.
 
   -a, --arch <arch>     amd64 (default), i386, arm64
-  -t, --target <name>   livecd (default), bootcd, reactosimg, reactosvhd
+  -t, --target <name>   livecd (default), bootcd, lakoosimg, lakoosvhd
   -r, --release         Release build instead of Debug
       --env-only        Install the build environment and stop
   -h, --help            Show this help
