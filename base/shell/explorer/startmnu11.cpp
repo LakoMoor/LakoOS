@@ -771,10 +771,23 @@ public:
                 int ic = Sc(16);
                 if (cell.kind == SM11K_BUTTON_ALLAPPS)
                 {
-                    rcT.right -= ic + Sc(8);
-                    DrawText1(hdc, cell.szText, rcT, m_hFont, m_Pal.Text, DT_SINGLELINE | DT_VCENTER | DT_RIGHT);
-                    RECT rcI = { rc.right - ic - Sc(8), rc.top, rc.right - Sc(6), rc.bottom };
-                    DrawFluent(hdc, &rcI, IDI_FLU_CHEVRIGHT, ic);
+                    if (m_bLight)
+                    {
+                        CStringW szLabel = cell.szText + L"  \x203A";
+                        DrawText1(hdc, szLabel, rcT, m_hFont, m_Pal.Text, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
+                    }
+                    else
+                    {
+                        rcT.right -= ic + Sc(8);
+                        DrawText1(hdc, cell.szText, rcT, m_hFont, m_Pal.Text, DT_SINGLELINE | DT_VCENTER | DT_RIGHT);
+                        RECT rcI = { rc.right - ic - Sc(8), rc.top, rc.right - Sc(6), rc.bottom };
+                        DrawFluent(hdc, &rcI, IDI_FLU_CHEVRIGHT, ic);
+                    }
+                }
+                else if (m_bLight)
+                {
+                    CStringW szLabel = L"\x2039  " + cell.szText;
+                    DrawText1(hdc, szLabel, rcT, m_hFont, m_Pal.Text, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
                 }
                 else
                 {
@@ -848,7 +861,8 @@ public:
                 FillRound(hdc, &rc, m_Pal.Field, r, m_Pal.Border);
                 int ic = Sc(16);
                 RECT rcI = { rc.right - ic - Sc(16), rc.top, rc.right - Sc(8), rc.bottom };
-                DrawFluent(hdc, &rcI, IDI_FLU_SEARCH, ic);
+                if (!m_bLight)
+                    DrawFluent(hdc, &rcI, IDI_FLU_SEARCH, ic);
                 break;
             }
 
@@ -889,7 +903,12 @@ public:
             case SM11K_RAIL_SETTINGS:
             {
                 if (bHot)
-                    FillRound(hdc, &rc, m_Pal.Hot, r);
+                    FillRound(hdc, &rc, (m_bWin10 && m_bLight) ? RGB(62, 62, 62) : m_Pal.Hot, r);
+                if (cell.kind == SM11K_POWER && m_bLight && !m_bWin10)
+                {
+                    DrawText1(hdc, L"Power", rc, m_hFontSmall, m_Pal.Text, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
+                    break;
+                }
                 UINT nId = IDI_FLU_PLUG;
                 if (cell.kind == SM11K_RAIL_MENU)
                     nId = IDI_FLU_NAVIGATION;
@@ -913,7 +932,7 @@ public:
         if (m_bWin10)
         {
             RECT rcRail = { 0, 0, Sc(48), m_size.cy };
-            hbr = CreateSolidBrush(m_Pal.Footer);
+            hbr = CreateSolidBrush(m_bLight ? RGB(32, 32, 32) : m_Pal.Footer);
             FillRect(hdc, &rcRail, hbr);
             DeleteObject(hbr);
         }
