@@ -25,8 +25,13 @@
 <section><div class="wrap">
 <div class="dl">
 <div class="dcard feat"><div class="ic">⬇</div><h3>Live ISO</h3><p>Boots directly to the desktop. Nothing is written to your disk.</p><div class="meta">LakoOS-amd64-livecd.iso · 64-bit</div><a class="btn primary" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-livecd.iso">Download ISO</a></div>
-<div class="dcard"><div class="ic">⛁</div><h3>Setup ISO</h3><p>Install to a virtual disk and keep your settings.</p><div class="meta">LakoOS-amd64-setup.iso · 64-bit</div><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/latest">Open releases</a></div>
+<div class="dcard"><div class="ic">⛁</div><h3>Setup ISO</h3><p>Install to a virtual disk and keep your settings.</p><div class="meta">LakoOS-amd64-setup.iso · 64-bit</div><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-setup.iso">Download setup ISO</a></div>
 <div class="dcard"><div class="ic">⚙</div><h3>Build it yourself</h3><p>One command prepares everything from scratch.</p><div class="meta">Linux · macOS · Windows</div><a class="btn ghost" href="docs.html#build">Build instructions</a></div>
+</div>
+<h2 style="margin-top:48px">ARM64</h2>
+<div class="dl" style="margin-top:16px">
+<div class="dcard"><div class="ic">⬇</div><h3>Live ISO (ARM64)</h3><p>For ARM64 virtual machines with UEFI, for example QEMU <code>virt</code>.</p><div class="meta">LakoOS-arm64-livecd.iso · UEFI</div><a class="btn primary" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-arm64-livecd.iso">Download ISO</a></div>
+<div class="dcard"><div class="ic">⛁</div><h3>Setup ISO (ARM64)</h3><p>Install LakoOS to a virtual ARM64 disk.</p><div class="meta">LakoOS-arm64-setup.iso · UEFI</div><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-arm64-setup.iso">Download setup ISO</a></div>
 </div></div></section>
 <section class="alt"><div class="wrap">
 <h2>Run it</h2>
@@ -34,6 +39,12 @@
 <div class="card2"><h3>QEMU</h3><div class="codebox"><button class="copy">Copy</button><pre>qemu-system-x86_64 -m 2048 -smp 4 \
   -cdrom LakoOS-amd64-livecd.iso -boot d \
   -vga std -usb -device usb-tablet</pre></div><p class="muted">On Linux add <code>-enable-kvm</code> for speed.</p></div>
+<div class="card2"><h3>QEMU ARM64</h3><div class="codebox"><button class="copy">Copy</button><pre>qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 4 -m 3072 \
+  -drive if=pflash,format=raw,readonly=on,file=AAVMF_CODE.fd \
+  -drive if=pflash,format=raw,file=vars.fd \
+  -device ramfb -device qemu-xhci -device usb-kbd -device usb-tablet \
+  -drive file=LakoOS-arm64-livecd.iso,if=none,id=cd,media=cdrom \
+  -device usb-storage,drive=cd,bootindex=0</pre></div></div>
 <div class="card2"><h3>VirtualBox</h3><ol><li>New machine, type <b>Other</b>, version <b>Other/Unknown (64-bit)</b>.</li><li>2048 MB of memory, no hard disk needed for the live image.</li><li>Attach the ISO to the optical drive and start.</li></ol></div>
 <div class="card2"><h3>Hyper-V</h3><ol><li>New virtual machine, <b>Generation 1</b>.</li><li>2048 MB of memory, attach the ISO as a DVD drive.</li><li>Start and connect.</li></ol></div>
 </div></div></section>
