@@ -69,6 +69,11 @@
 #define IDD_PROCESSPAGE      2060
 #define IDC_ACTIVITY         2061
 #define IDC_ITEM             2062
+#define IDC_STEP1            2290
+#define IDC_STEP2            2291
+#define IDC_STEP3            2292
+#define IDC_STEP4            2293
+#define IDC_STEP5            2294
 #define IDC_PROCESSPROGRESS  2063
 
 #define IDD_FINISHPAGE       2070

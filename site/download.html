@@ -1,74 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Download — LakoOS</title>
-<meta name="description" content="Download the LakoOS live ISO and run it in QEMU, VirtualBox or Hyper-V.">
-<meta property="og:title" content="Download — LakoOS">
-<meta property="og:image" content="assets/screens/start-win11.png">
-<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
-<link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-<header class="nav"><div class="wrap">
-  <a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a>
-  <nav><a href="features.html" data-i18n="nav.features">Features</a><a href="download.html" aria-current="page" data-i18n="nav.download">Download</a><a href="docs.html" data-i18n="nav.docs">Docs</a><a href="compatibility.html" data-i18n="nav.compat">Compatibility</a><a href="mobile.html" data-i18n="nav.mobile">Mobile</a><a href="about.html" data-i18n="nav.about">About</a></nav>
-  <span class="sp"></span>
-  <button class="icon-btn lang" id="lang" aria-label="Language">RU</button>
-  <button class="icon-btn" id="theme" aria-label="Theme">&#9790;</button>
-  <a class="btn primary sm" href="download.html" data-i18n="nav.get">Get LakoOS</a>
-</div></header>
-<main>
-<section class="phero"><span class="blob b1"></span><span class="blob b2"></span>
-<div class="wrap"><span class="eyebrow">Download</span><h1 class="ph">Get LakoOS</h1><p class="lead" style="margin-left:0">Pick an image and start it in a virtual machine. LakoOS is a development preview.</p></div></section>
-<section><div class="wrap">
-<div class="dl">
-<div class="dcard feat"><div class="ic">⬇</div><h3>Live ISO</h3><p>Boots directly to the desktop. Nothing is written to your disk.</p><div class="meta">LakoOS-amd64-livecd.iso · 64-bit</div><a class="btn primary" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-livecd.iso">Download ISO</a></div>
-<div class="dcard"><div class="ic">⛁</div><h3>Setup ISO</h3><p>Install to a virtual disk and keep your settings.</p><div class="meta">LakoOS-amd64-setup.iso · 64-bit</div><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-setup.iso">Download setup ISO</a></div>
-<div class="dcard"><div class="ic">⚙</div><h3>Build it yourself</h3><p>One command prepares everything from scratch.</p><div class="meta">Linux · macOS · Windows</div><a class="btn ghost" href="docs.html#build">Build instructions</a></div>
-</div>
-<h2 style="margin-top:48px">ARM64</h2>
-<div class="dl" style="margin-top:16px">
-<div class="dcard"><div class="ic">⬇</div><h3>Live ISO (ARM64)</h3><p>For ARM64 virtual machines with UEFI, for example QEMU <code>virt</code>.</p><div class="meta">LakoOS-arm64-livecd.iso · UEFI</div><a class="btn primary" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-arm64-livecd.iso">Download ISO</a></div>
-<div class="dcard"><div class="ic">⛁</div><h3>Setup ISO (ARM64)</h3><p>Install LakoOS to a virtual ARM64 disk.</p><div class="meta">LakoOS-arm64-setup.iso · UEFI</div><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-arm64-setup.iso">Download setup ISO</a></div>
-</div></div></section>
-<section class="alt"><div class="wrap">
-<h2>Run it</h2>
-<div class="runs">
-<div class="card2"><h3>QEMU</h3><div class="codebox"><button class="copy">Copy</button><pre>qemu-system-x86_64 -m 2048 -smp 4 \
-  -cdrom LakoOS-amd64-livecd.iso -boot d \
-  -vga std -usb -device usb-tablet</pre></div><p class="muted">On Linux add <code>-enable-kvm</code> for speed.</p></div>
-<div class="card2"><h3>QEMU ARM64</h3><div class="codebox"><button class="copy">Copy</button><pre>qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 4 -m 3072 \
-  -drive if=pflash,format=raw,readonly=on,file=AAVMF_CODE.fd \
-  -drive if=pflash,format=raw,file=vars.fd \
-  -device ramfb -device qemu-xhci -device usb-kbd -device usb-tablet \
-  -drive file=LakoOS-arm64-livecd.iso,if=none,id=cd,media=cdrom \
-  -device usb-storage,drive=cd,bootindex=0</pre></div></div>
-<div class="card2"><h3>VirtualBox</h3><ol><li>New machine, type <b>Other</b>, version <b>Other/Unknown (64-bit)</b>.</li><li>2048 MB of memory, no hard disk needed for the live image.</li><li>Attach the ISO to the optical drive and start.</li></ol></div>
-<div class="card2"><h3>Hyper-V</h3><ol><li>New virtual machine, <b>Generation 1</b>.</li><li>2048 MB of memory, attach the ISO as a DVD drive.</li><li>Start and connect.</li></ol></div>
-</div></div></section>
-<section><div class="wrap">
-<div class="center"><h2>Three steps to try LakoOS</h2></div>
-<div class="bento"><div class="tile s2 reveal"><div class="ic">①</div><h3>1. Download</h3><p>Pick the ISO for your architecture, amd64 or arm64.</p></div><div class="tile s2 reveal"><div class="ic">②</div><h3>2. Create a VM</h3><p>Use QEMU, VirtualBox or Hyper-V with 2 GB of memory.</p></div><div class="tile s2 reveal"><div class="ic">③</div><h3>3. Start</h3><p>Attach the ISO and boot. Choose Install to keep it on a disk.</p></div></div></div></section>
-<section><div class="wrap">
-<h2>System requirements</h2>
-<div class="req"><div><b>CPU</b><span>64-bit x86, 2 cores</span></div><div><b>Memory</b><span>2 GB RAM</span></div><div><b>Storage</b><span>1 GB live · 8 GB install</span></div><div><b>Graphics</b><span>1024×768 VGA</span></div></div></div></section>
-<section class="alt"><div class="wrap"><h2 class="center">Questions</h2><div class="faq">
-<details><summary>Which file should I download?</summary><p>Use the Live ISO to look around without changing anything. Use the Setup ISO to install to a virtual disk. Pick amd64 for PCs and arm64 for ARM virtual machines.</p></details>
-<details><summary>Can I run it on real hardware?</summary><p>LakoOS is a development preview. Use a virtual machine for now.</p></details>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Get LakoOS</title><link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"><link rel="stylesheet" href="assets/style.css"></head><body>
+<div class="utility"><div class="w"><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Support</a></div></div>
+<header class="hdr"><div class="w"><a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a><nav><a href="index.html">Home</a><a href="features.html">What's new</a><a href="download.html" aria-current="page">Get LakoOS</a><a href="compatibility.html">Compatibility</a><a href="mobile.html">Mobile</a><a href="docs.html">Docs</a><a href="about.html">About</a></nav><a class="btn" href="download.html">Download</a></div></header>
+<div class="hero"><div class="w"><h1>Get LakoOS</h1><p>Download an image and start it in a virtual machine. LakoOS is a development preview.</p><div class="cta"></div></div></div><section><div class="w"><h2>Choose an image</h2><div class="dl">
+<div class="card"><h3>Live image, amd64</h3><p>Boots to the desktop without touching your disk.</p><div class="meta">LakoOS-amd64-livecd.iso</div><a class="btn" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-livecd.iso">Download</a></div>
+<div class="card"><h3>Setup image, amd64</h3><p>Installs LakoOS to a virtual disk.</p><div class="meta">LakoOS-amd64-setup.iso</div><a class="btn" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-amd64-setup.iso">Download</a></div>
+<div class="card"><h3>Live image, arm64</h3><p>For UEFI ARM64 virtual machines.</p><div class="meta">LakoOS-arm64-livecd.iso</div><a class="btn" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-arm64-livecd.iso">Download</a></div>
+<div class="card"><h3>Setup image, arm64</h3><p>Installs to a virtual ARM64 disk.</p><div class="meta">LakoOS-arm64-setup.iso</div><a class="btn" href="https://github.com/LakoMoor/LakoOS/releases/latest/download/LakoOS-arm64-setup.iso">Download</a></div></div></div></section><section class="g"><div class="w"><h2>Install in three steps</h2><div class="steps">
+<div class="step"><h3>Create a machine</h3><p>2 GB of memory, a 16 GB disk, UEFI.</p></div>
+<div class="step"><h3>Attach the setup ISO</h3><p>Start the machine and pick your language.</p></div>
+<div class="step"><h3>Follow the wizard</h3><p>Choose the disk, name your PC and finish.</p></div></div></div></section>
+<section id="req"><div class="w"><h2>System requirements</h2><table><tr><th>Processor</th><td>64-bit x86 or ARM64, 2 cores</td></tr><tr><th>Memory</th><td>2 GB</td></tr><tr><th>Storage</th><td>8 GB for installation</td></tr><tr><th>Firmware</th><td>UEFI or BIOS (amd64), UEFI (arm64)</td></tr></table></div></section>
+<section class="g"><div class="w"><h2>Frequently asked questions</h2>
+<details><summary>Which file should I download?</summary><p>Use the live image to look around, the setup image to install.</p></details>
+<details><summary>Can I run it on real hardware?</summary><p>It is a development preview. Use a virtual machine first.</p></details>
 <details><summary>Is it free?</summary><p>Yes, under the GNU GPL.</p></details>
-<details><summary>Does it run Windows apps?</summary><p>Many classic Win32 apps run. See the compatibility page for the current status.</p></details></div></div></section>
-</main>
-<footer><div class="wrap">
-  <div class="cols">
-    <div><a class="brand" href="index.html" style="margin-bottom:10px"><img src="assets/logo-mark.svg" alt="">LakoOS</a>A free NT operating system with a familiar desktop.</div>
-    <div><h4>Product</h4><a href="features.html">Features</a><a href="compatibility.html">Compatibility</a><a href="download.html">Download</a></div>
-    <div><h4>Learn</h4><a href="docs.html">Documentation</a><a href="docs.html#build">Build from source</a><a href="docs.html#settings">Settings</a></div>
-    <div><h4>Project</h4><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Issues</a><a href="about.html">About</a></div>
-  </div>
-  <div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div>
-</div></footer>
-<script src="assets/app.js"></script>
-</body>
-</html>
+<details><summary>Does it run my programs?</summary><p>Many classic programs do. See the compatibility page.</p></details></div></section>
+<footer><div class="w"><div class="fcols">
+<div><h4>What's new</h4><a href="features.html">Features</a><a href="mobile.html">Mobile</a><a href="compatibility.html">Compatibility</a></div>
+<div><h4>Get LakoOS</h4><a href="download.html">Download</a><a href="download.html#req">System requirements</a><a href="docs.html#build">Build from source</a></div>
+<div><h4>Support</h4><a href="docs.html">Documentation</a><a href="https://github.com/LakoMoor/LakoOS/issues">Report a problem</a></div>
+<div><h4>About</h4><a href="about.html">About LakoOS</a><a href="https://github.com/LakoMoor/LakoOS">Source code</a></div></div>
+<div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div></div></footer></body></html>

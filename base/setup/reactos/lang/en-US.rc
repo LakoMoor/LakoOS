@@ -169,8 +169,13 @@ STYLE DS_SHELLFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYS
 CAPTION "LakoOS Setup"
 FONT 8, "MS Shell Dlg"
 BEGIN
-    LTEXT "Preparing the installation...", IDC_ACTIVITY, 20, 50, 277, 10
-    LTEXT "", IDC_ITEM, 30, 80, 257, 10
+    LTEXT "Preparing the installation...", IDC_ACTIVITY, 20, 14, 277, 10
+    LTEXT "", IDC_ITEM, 30, 28, 257, 10
+    LTEXT "Copying LakoOS files", IDC_STEP1, 24, 52, 270, 10
+    LTEXT "Getting files ready for installation", IDC_STEP2, 24, 66, 270, 10
+    LTEXT "Installing features", IDC_STEP3, 24, 80, 270, 10
+    LTEXT "Installing updates", IDC_STEP4, 24, 94, 270, 10
+    LTEXT "Finishing up", IDC_STEP5, 24, 108, 270, 10
     CONTROL "", IDC_PROCESSPROGRESS, "msctls_progress32", PBS_SMOOTH | WS_CHILD | WS_VISIBLE | WS_BORDER, 7, 120, 303, 8
 END
 

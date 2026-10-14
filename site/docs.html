@@ -1,28 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documentation — LakoOS</title>
-<meta name="description" content="How to boot, configure and build LakoOS.">
-<meta property="og:title" content="Documentation — LakoOS">
-<meta property="og:image" content="assets/screens/start-win11.png">
-<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
-<link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-<header class="nav"><div class="wrap">
-  <a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a>
-  <nav><a href="features.html" data-i18n="nav.features">Features</a><a href="download.html" data-i18n="nav.download">Download</a><a href="docs.html" aria-current="page" data-i18n="nav.docs">Docs</a><a href="compatibility.html" data-i18n="nav.compat">Compatibility</a><a href="mobile.html" data-i18n="nav.mobile">Mobile</a><a href="about.html" data-i18n="nav.about">About</a></nav>
-  <span class="sp"></span>
-  <button class="icon-btn lang" id="lang" aria-label="Language">RU</button>
-  <button class="icon-btn" id="theme" aria-label="Theme">&#9790;</button>
-  <a class="btn primary sm" href="download.html" data-i18n="nav.get">Get LakoOS</a>
-</div></header>
-<main>
-<section class="phero"><span class="blob b1"></span><span class="blob b2"></span>
-<div class="wrap"><span class="eyebrow">Documentation</span><h1 class="ph">Learn LakoOS</h1><p class="lead" style="margin-left:0">First boot, settings, building from source and where things live.</p></div></section>
-<section><div class="wrap">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentation — LakoOS</title><link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"><link rel="stylesheet" href="assets/style.css"></head><body>
+<div class="utility"><div class="w"><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Support</a></div></div>
+<header class="hdr"><div class="w"><a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a><nav><a href="index.html">Home</a><a href="features.html">What's new</a><a href="download.html">Get LakoOS</a><a href="compatibility.html">Compatibility</a><a href="mobile.html">Mobile</a><a href="docs.html" aria-current="page">Docs</a><a href="about.html">About</a></nav><a class="btn" href="download.html">Download</a></div></header>
+<div class="hero"><div class="w"><h1>Documentation</h1><p>Boot, configure and build.</p><div class="cta"></div></div></div><section><div class="w">
 <div class="doc">
 <aside class="toc"><a href="#start">First boot</a><a href="#install">Install</a><a href="#settings">Settings</a><a href="#layout">Folder layout</a><a href="#build">Build from source</a><a href="#help">Getting help</a></aside>
 <div class="prose">
@@ -32,36 +12,29 @@
 <p>Boot the <b>Setup ISO</b> (<code>LakoOS-amd64-setup.iso</code>) with an empty virtual disk attached. Choose a language, pick <b>Install LakoOS</b>, select the disk and follow the wizard: account, time zone, summary. After the first restart the desktop opens and signs you in automatically when no password is set.</p>
 <p>Build the Setup ISO yourself with <code>./buildenv/build.sh --target bootcd</code>.</p>
 <h2 id="settings">Settings</h2>
-<p>The shell reads these values from <code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced</code>. Changes apply the next time you open Start.</p>
+<p>The shell reads these values from <code>HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced</code>. Changes apply the next time you open Start.</p>
 <table><tr><th>Value</th><th>Data</th><th>Meaning</th></tr>
 <tr><td><code>ShellStyle</code></td><td>11</td><td>Centered Start (default)</td></tr>
 <tr><td><code>ShellStyle</code></td><td>10</td><td>List and tiles Start</td></tr>
 <tr><td><code>ShellStyle</code></td><td>7</td><td>Classic two-column Start</td></tr>
 <tr><td><code>TaskbarAl</code></td><td>0 / 1</td><td>Taskbar left / center</td></tr></table>
-<div class="codebox"><button class="copy">Copy</button><pre>reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v ShellStyle /t REG_DWORD /d 10 /f
-reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v TaskbarAl /t REG_DWORD /d 0 /f</pre></div>
+<div class="codebox"><button class="copy">Copy</button><pre>reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced /v ShellStyle /t REG_DWORD /d 10 /f
+reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced /v TaskbarAl /t REG_DWORD /d 0 /f</pre></div>
 <h2 id="layout">Folder layout</h2>
-<p>System files live in <code>Windows</code> and <code>Windows\System32</code>. Applications go to <code>Program Files</code> and <code>Program Files (x86)</code>. Shared data is in <code>ProgramData</code>, and user profiles are under <code>Users</code>.</p>
+<p>System files live in <code>Windows</code> and <code>Windows\\System32</code>. Applications go to <code>Program Files</code> and <code>Program Files (x86)</code>. Shared data is in <code>ProgramData</code>, and user profiles are under <code>Users</code>.</p>
 <h2 id="build">Build from source</h2>
 <p>The <code>buildenv</code> folder installs the compilers and tools and builds the image from scratch.</p>
 <div class="codebox"><button class="copy">Copy</button><pre>git clone https://github.com/LakoMoor/LakoOS.git
 cd LakoOS
 ./buildenv/build.sh                 # Linux, macOS
-.\buildenv\build.ps1                # Windows (WSL2)</pre></div>
+.\\buildenv\\build.ps1                # Windows (WSL2)</pre></div>
 <p>Options: <code>--arch amd64|i386|arm64</code>, <code>--target livecd|bootcd|lakoosimg|lakoosvhd</code>, <code>--release</code>, <code>--env-only</code>. The first build needs about 15 GB of free disk.</p>
 <h2 id="help">Getting help</h2>
 <p>Report problems in <a href="https://github.com/LakoMoor/LakoOS/issues">GitHub Issues</a> with the architecture, the build type and the steps that lead to the problem.</p>
 </div></div></div></section>
-</main>
-<footer><div class="wrap">
-  <div class="cols">
-    <div><a class="brand" href="index.html" style="margin-bottom:10px"><img src="assets/logo-mark.svg" alt="">LakoOS</a>A free NT operating system with a familiar desktop.</div>
-    <div><h4>Product</h4><a href="features.html">Features</a><a href="compatibility.html">Compatibility</a><a href="download.html">Download</a></div>
-    <div><h4>Learn</h4><a href="docs.html">Documentation</a><a href="docs.html#build">Build from source</a><a href="docs.html#settings">Settings</a></div>
-    <div><h4>Project</h4><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Issues</a><a href="about.html">About</a></div>
-  </div>
-  <div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div>
-</div></footer>
-<script src="assets/app.js"></script>
-</body>
-</html>
+<footer><div class="w"><div class="fcols">
+<div><h4>What's new</h4><a href="features.html">Features</a><a href="mobile.html">Mobile</a><a href="compatibility.html">Compatibility</a></div>
+<div><h4>Get LakoOS</h4><a href="download.html">Download</a><a href="download.html#req">System requirements</a><a href="docs.html#build">Build from source</a></div>
+<div><h4>Support</h4><a href="docs.html">Documentation</a><a href="https://github.com/LakoMoor/LakoOS/issues">Report a problem</a></div>
+<div><h4>About</h4><a href="about.html">About LakoOS</a><a href="https://github.com/LakoMoor/LakoOS">Source code</a></div></div>
+<div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div></div></footer></body></html>

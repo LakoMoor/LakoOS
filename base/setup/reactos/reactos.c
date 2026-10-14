@@ -4147,6 +4147,52 @@ FinishDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 static INT_PTR CALLBACK
 ProcessDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    static WCHAR s_Last[256];
+    static INT s_Changes;
+    static const UINT Ids[5] = { IDC_STEP1, IDC_STEP2, IDC_STEP3, IDC_STEP4, IDC_STEP5 };
+
+    if (uMsg == WM_INITDIALOG)
+    {
+        s_Last[0] = 0;
+        s_Changes = 0;
+        SetTimer(hwndDlg, 0x4C41, 700, NULL);
+    }
+    else if (uMsg == WM_TIMER && wParam == 0x4C41)
+    {
+        WCHAR cur[256];
+        INT i, step;
+        HWND hWnd;
+
+        cur[0] = 0;
+        GetDlgItemTextW(hwndDlg, IDC_ACTIVITY, cur, ARRAYSIZE(cur));
+        if (cur[0] && wcscmp(cur, s_Last))
+        {
+            wcscpy(s_Last, cur);
+            s_Changes++;
+        }
+        step = min(4, (s_Changes * 5) / 8);
+        for (i = 0; i < 5; i++)
+        {
+            WCHAR text[160], clean[160], *p;
+
+            hWnd = GetDlgItem(hwndDlg, Ids[i]);
+            if (!hWnd)
+                break;
+            GetWindowTextW(hWnd, text, ARRAYSIZE(text));
+            p = text;
+            if (text[0] == 0x2713 && text[1] == L' ')
+                p = text + 2;
+            wcscpy(clean, p);
+            if (i < step)
+                wsprintfW(text, L"%c %s", 0x2713, clean);
+            else
+                wcscpy(text, clean);
+            if (wcscmp(text, p == text ? clean : text))
+                SetWindowTextW(hWnd, text);
+            SendMessageW(hWnd, WM_SETFONT,
+                         (WPARAM)(i == step ? GetPropW(hwndDlg, L"BoldFont") : NULL), TRUE);
+        }
+    }
     if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
     {
         INT_PTR r = ProcessDlgProc(hwndDlg, uMsg, wParam, lParam);
@@ -4220,6 +4266,19 @@ UpgradeRepairDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
         return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
     }
     return UpgradeRepairDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+
+static int CALLBACK
+SetupSheetCallback(HWND hwndDlg, UINT uMsg, LPARAM lParam)
+{
+    if (uMsg == PSCB_INITIALIZED)
+    {
+        HBRUSH hbr = CreateSolidBrush(RGB(255, 255, 255));
+        SetClassLongPtrW(hwndDlg, GCLP_HBRBACKGROUND, (LONG_PTR)hbr);
+        InvalidateRect(hwndDlg, NULL, TRUE);
+    }
+    return 0;
 }
 
 
@@ -4422,7 +4481,8 @@ _tWinMain(HINSTANCE hInst,
 
     /* Create the property sheet */
     psh.dwSize = sizeof(psh);
-    psh.dwFlags = PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER;
+    psh.dwFlags = PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER | PSH_USECALLBACK;
+    psh.pfnCallback = SetupSheetCallback;
     psh.hInstance = hInst;
     psh.hwndParent = NULL;
     psh.nPages = nPages;

@@ -1,53 +1,11 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Features — LakoOS</title>
-<meta name="description" content="What is inside LakoOS: Start menu, File Explorer, familiar tools and a modern NT core.">
-<meta property="og:title" content="Features — LakoOS">
-<meta property="og:image" content="assets/screens/start-win11.png">
-<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
-<link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-<header class="nav"><div class="wrap">
-  <a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a>
-  <nav><a href="features.html" aria-current="page" data-i18n="nav.features">Features</a><a href="download.html" data-i18n="nav.download">Download</a><a href="docs.html" data-i18n="nav.docs">Docs</a><a href="compatibility.html" data-i18n="nav.compat">Compatibility</a><a href="mobile.html" data-i18n="nav.mobile">Mobile</a><a href="about.html" data-i18n="nav.about">About</a></nav>
-  <span class="sp"></span>
-  <button class="icon-btn lang" id="lang" aria-label="Language">RU</button>
-  <button class="icon-btn" id="theme" aria-label="Theme">&#9790;</button>
-  <a class="btn primary sm" href="download.html" data-i18n="nav.get">Get LakoOS</a>
-</div></header>
-<main>
-<section class="phero"><span class="blob b1"></span><span class="blob b2"></span>
-<div class="wrap"><span class="eyebrow">Features</span><h1 class="ph">Built to feel familiar</h1><p class="lead" style="margin-left:0">The shell, the apps and the layout follow the Windows you know. Underneath is a free NT-style system.</p></div></section>
-<section><div class="wrap">
-<div class="two"><div><span class="eyebrow">Start</span><h2>A Start menu you can shape</h2>
-<p class="sub">Two layouts share one engine. Pinned apps, recommendations, instant search and a power menu.</p>
-<ul class="chk"><li><b>Centered style:</b> rounded panel, 6×3 pinned grid, Recommended list.</li><li><b>List and tiles style:</b> navigation rail, alphabetical list with letters, tiles.</li><li>Keyboard first: type to search, Enter to launch, Esc to close.</li><li>Follows the light or dark theme.</li></ul></div>
-<div class="shot"><img src="assets/screens/start-win11.png" alt="Start menu"></div></div></div></section>
-<section class="alt"><div class="wrap">
-<div class="two"><div class="shot"><img src="assets/screens/explorer.png" alt="File Explorer"></div>
-<div><span class="eyebrow">File Explorer</span><h2>Ribbon, panes and drives</h2>
-<p class="sub">The new File Explorer opens for every folder. It is <code>explorer.exe</code> in the Windows folder.</p>
-<ul class="chk"><li>Ribbon with File, Computer and View tabs.</li><li>Navigation pane with Quick access and This PC.</li><li>Drives with free-space bars, address bar and search.</li><li>List and tile views.</li></ul></div></div></div></section>
-<section><div class="wrap">
-<div class="center"><span class="eyebrow">Everyday tools</span><h2>The tools keep their names</h2><p class="sub">Open them the way you always did.</p></div>
-<div class="bento"><div class="tile s2 reveal"><div class="ic">▣</div><h3>Task Manager</h3><p><code>taskmgr.exe</code> with processes, performance and details.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>Control Panel</h3><p><code>control.exe</code> with categories, search and every <code>.cpl</code> applet.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>Command Prompt</h3><p><code>cmd.exe</code> with the usual command line tools.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>Registry Editor</h3><p><code>regedit.exe</code> for hives and values.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>Disk Management</h3><p><code>diskmgmt.exe</code> and <code>diskpart.exe</code>.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>Event Viewer</h3><p><code>eventvwr.exe</code> for system logs.</p></div></div></div></section>
-<section class="alt"><div class="wrap">
-<div class="center"><span class="eyebrow">Under the hood</span><h2>A modern NT core</h2><p class="sub">The system is a fork of LakoOS, which targets Windows 11 (NT 10) compatibility on 64-bit platforms.</p></div>
-<div class="bento"><div class="tile s2 reveal"><div class="ic">▣</div><h3>64-bit first</h3><p>amd64, arm64 and riscv64 are the focus, with i386 kept building.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>WoW64</h3><p>32-bit applications run on 64-bit systems through WoW64.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>WDDM and DWM</h3><p>A display driver model and desktop composition for blur and effects.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>New memory manager</h3><p>A clean-room memory manager and cache manager.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>UEFI boot</h3><p>UEFI with a GOP framebuffer, plus legacy BIOS boot.</p></div><div class="tile s2 reveal"><div class="ic">▣</div><h3>Open source</h3><p>GNU GPL. Read it, change it and share it.</p></div></div></div></section>
-</main>
-<footer><div class="wrap">
-  <div class="cols">
-    <div><a class="brand" href="index.html" style="margin-bottom:10px"><img src="assets/logo-mark.svg" alt="">LakoOS</a>A free NT operating system with a familiar desktop.</div>
-    <div><h4>Product</h4><a href="features.html">Features</a><a href="compatibility.html">Compatibility</a><a href="download.html">Download</a></div>
-    <div><h4>Learn</h4><a href="docs.html">Documentation</a><a href="docs.html#build">Build from source</a><a href="docs.html#settings">Settings</a></div>
-    <div><h4>Project</h4><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Issues</a><a href="about.html">About</a></div>
-  </div>
-  <div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div>
-</div></footer>
-<script src="assets/app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What's new — LakoOS</title><link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg"><link rel="stylesheet" href="assets/style.css"></head><body>
+<div class="utility"><div class="w"><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Support</a></div></div>
+<header class="hdr"><div class="w"><a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a><nav><a href="index.html">Home</a><a href="features.html" aria-current="page">What's new</a><a href="download.html">Get LakoOS</a><a href="compatibility.html">Compatibility</a><a href="mobile.html">Mobile</a><a href="docs.html">Docs</a><a href="about.html">About</a></nav><a class="btn" href="download.html">Download</a></div></header>
+<div class="hero"><div class="w"><h1>What's new in LakoOS</h1><p>The shell, the apps and the layout, in one place.</p><div class="cta"><a class="btn" href="download.html">Download</a></div></div></div><section><div class="w"><div class="row"><div class="t"><h2>Start</h2><p class="lead">Pinned apps, recommendations and search in one panel. Switch between the centered grid and the list with tiles.</p></div><img src="assets/screens/start-win11.png" alt=""></div></div></section><section><div class="w"><div class="row r"><div class="t"><h2>File Explorer</h2><p class="lead">Tabs, command bar, drives with free-space bars, a tree of subfolders.</p></div><img src="assets/screens/explorer.png" alt=""></div></div></section><section><div class="w"><div class="row"><div class="t"><h2>Control Panel and System</h2><p class="lead">A light Control Panel and a System page with edition, processor and memory.</p></div><img src="assets/screens/control.png" alt=""></div></div></section><section><div class="w"><div class="row r"><div class="t"><h2>Task Manager and tools</h2><p class="lead">taskmgr, cmd, regedit, eventvwr, diskmgmt keep their names.</p></div><img src="assets/screens/system.png" alt=""></div></div></section><section class="g"><div class="w"><h2>Under the hood</h2><div class="cards"><div class="card"><h3>NT kernel</h3><p>WoW64 for 32-bit programs on 64-bit systems.</p></div><div class="card"><h3>Graphics</h3><p>WDDM and DWM composition; Mesa LLVMpipe, Lavapipe and DXVK.</p></div><div class="card"><h3>Updates</h3><p>lakoupdate checks, downloads and verifies packages and drivers.</p></div></div></div></section>
+<footer><div class="w"><div class="fcols">
+<div><h4>What's new</h4><a href="features.html">Features</a><a href="mobile.html">Mobile</a><a href="compatibility.html">Compatibility</a></div>
+<div><h4>Get LakoOS</h4><a href="download.html">Download</a><a href="download.html#req">System requirements</a><a href="docs.html#build">Build from source</a></div>
+<div><h4>Support</h4><a href="docs.html">Documentation</a><a href="https://github.com/LakoMoor/LakoOS/issues">Report a problem</a></div>
+<div><h4>About</h4><a href="about.html">About LakoOS</a><a href="https://github.com/LakoMoor/LakoOS">Source code</a></div></div>
+<div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div></div></footer></body></html>
