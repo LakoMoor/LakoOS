@@ -7,12 +7,13 @@ import java.util.zip.*;
 
 public final class Qemu {
     public static final int VNC_PORT = 5900;
+    static final int VERSION = 2;
     static Process proc;
     static final StringBuilder log = new StringBuilder();
 
     public static File home(Context c) { return new File(c.getFilesDir(), "qemu"); }
 
-    public static boolean installed(Context c) { return new File(home(c), ".ok-" + 1).exists(); }
+    public static boolean installed(Context c) { return new File(home(c), ".ok-" + VERSION).exists(); }
 
     public static void install(Context c, Runnable progress) throws IOException {
         File h = home(c);
@@ -35,7 +36,7 @@ public final class Qemu {
                 if ((++n % 10) == 0 && progress != null) progress.run();
             }
         }
-        new File(h, ".ok-1").createNewFile();
+        new File(h, ".ok-" + VERSION).createNewFile();
     }
 
     static void deleteTree(File f) {
@@ -63,6 +64,7 @@ public final class Qemu {
         List<String> a = new ArrayList<>();
         boolean arm = arch.equals("arm64");
         File vars = new File(data, arm ? "arm-vars.fd" : "x86-vars.fd");
+        if (vars.exists() && vars.length() == 0) vars.delete();
         if (!vars.exists()) copy(new File(sh, arm ? "edk2-arm-vars.fd" : "edk2-i386-vars.fd"), vars);
         a.add(new File(h, arm ? "bin/qemu-system-aarch64" : "bin/qemu-system-x86_64").getPath());
         a.add("-L"); a.add(sh.getPath());
@@ -70,14 +72,14 @@ public final class Qemu {
             a.addAll(Arrays.asList("-M", "virt", "-cpu", "max", "-accel", "tcg,thread=multi"));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,readonly=on,file=" + new File(sh, "edk2-aarch64-code.fd")));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,file=" + vars));
-            a.addAll(Arrays.asList("-device", "bochs-display,xres=" + xres + ",yres=" + yres, "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
+            a.addAll(Arrays.asList("-device", "bochs-display,xres=" + xres + ",yres=" + yres + ",romfile=", "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
             a.addAll(Arrays.asList("-drive", "file=" + iso + ",if=none,id=cd,media=cdrom,readonly=on",
                     "-device", "usb-storage,drive=cd,bootindex=0"));
         } else {
             a.addAll(Arrays.asList("-machine", "q35", "-cpu", "max", "-accel", "tcg,thread=multi"));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,readonly=on,file=" + new File(sh, "edk2-x86_64-code.fd")));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,file=" + vars));
-            a.addAll(Arrays.asList("-device", "VGA,xres=" + xres + ",yres=" + yres, "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
+            a.addAll(Arrays.asList("-device", "VGA,xres=" + xres + ",yres=" + yres + ",romfile=", "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
             a.addAll(Arrays.asList("-drive", "file=" + iso + ",if=none,id=cd,media=cdrom,readonly=on",
                     "-device", "ide-cd,drive=cd,bus=ide.0,bootindex=0"));
         }

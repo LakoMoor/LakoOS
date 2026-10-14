@@ -57,7 +57,8 @@ for b in ("qemu-system-aarch64", "qemu-system-x86_64"):
     shutil.copy2(P + "/bin/" + b, pay + "/bin/" + b)
 sh = P + "/share/qemu"
 for f in ("edk2-aarch64-code.fd", "edk2-arm-vars.fd", "edk2-x86_64-code.fd", "edk2-i386-vars.fd", "bios-256k.bin",
-          "vgabios-stdvga.bin", "efi-virtio.rom", "efi-e1000.rom", "kvmvapic.bin", "linuxboot_dma.bin"):
+          "vgabios-stdvga.bin", "vgabios-bochs-display.bin", "vgabios.bin", "efi-virtio.rom", "efi-e1000.rom",
+          "kvmvapic.bin", "linuxboot_dma.bin"):
     if os.path.exists(sh + "/" + f):
         shutil.copy2(sh + "/" + f, pay + "/share/qemu/" + f)
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
