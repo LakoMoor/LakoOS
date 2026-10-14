@@ -20,3 +20,10 @@ Applications were placed on a FAT disk image and started from `cmd.exe`.
 6. `winhttp_winetest winhttp` did not finish within 5 minutes.
 7. East Asian glyphs render as boxes in the Steam setup language list (no CJK font).
 8. The tests were built with `-DENABLE_ROSTESTS=TRUE` and run with `secur32_winetest.exe schannel`.
+
+## Steam: network check
+
+`nettest client-update.steamstatic.com` (new tool, `base/applications/cmdutils/nettest`) shows
+WinINet and WinHTTP, over HTTP and HTTPS, reach the Steam update server (HTTP 403 for `/`, which is
+what the server answers). So the "needs to be online" error does not come from these APIs.
+Steam uses its own network stack; the cause is still open.
