@@ -173,12 +173,14 @@ cd LakoOS
 write("docs.html", "Documentation — LakoOS", "How to boot, configure and build LakoOS.", docs)
 
 comp = page_hero("Compatibility", "What works today", "An honest status of the development preview. Statuses change as the system improves.")
-rows = [("Classic Win32 desktop apps", "Many run", "ok"), ("32-bit apps (WoW64)", "Supported on 64-bit builds", "ok"),
+rows = [("Chromium browser", "Starts and browses HTTPS (software rendering)", "mid"), ("SDL2 games (32-bit via WoW64)", "Chocolate Doom plays", "ok"), ("OpenTTD", "Runs", "ok"), ("Steam client", "Installs, cannot go online yet", "no"),
+        ("Classic Win32 desktop apps", "Many run", "ok"), ("32-bit apps (WoW64)", "Supported on 64-bit builds", "ok"),
         ("Command line tools", "Work", "ok"), ("Windows drivers (NT style)", "Partial", "mid"),
-        (".NET applications", "Not verified", "no"), ("Browsers (Chromium based)", "Not verified", "no"),
+        (".NET applications", "Not verified", "no"), 
         ("UWP and WinUI apps", "Not supported yet", "no"), ("DirectX 11 / 12 games", "Experimental", "mid"),
         ("Networking and Wi-Fi", "Partial", "mid"), ("Installer to disk", "Works in a VM", "ok")]
 tbl = "".join(f'<tr><td>{a}</td><td><span class="st {c}">{b}</span></td></tr>' for a, b, c in rows)
+comp += sec('''<h2 class="center">Tested applications</h2><div class="bento">''' + "".join(f'<div class="tile s2 reveal"><div class="shot"><img src="assets/screens/{n}.png" alt="{t}"></div><h3>{t}</h3></div>' for n,t in [("app-doom","Chocolate Doom"),("app-openttd","OpenTTD"),("app-chromium","Chromium"),("app-steam","Steam setup")]) + '</div>')
 comp += sec(f'<table class="compat"><tr><th>Area</th><th>Status</th></tr>{tbl}</table><p class="muted" style="margin-top:20px">Found a program that does not work? Please <a href="https://github.com/LakoMoor/LakoOS/issues">open an issue</a> with its name and version.</p>')
 write("compatibility.html", "Compatibility — LakoOS", "Which applications and features work in LakoOS today.", comp)
 
