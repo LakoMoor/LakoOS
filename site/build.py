@@ -177,7 +177,7 @@ rows = [("Chromium browser", "Starts and browses HTTPS (software rendering)", "m
         ("Classic Win32 desktop apps", "Many run", "ok"), ("32-bit apps (WoW64)", "Supported on 64-bit builds", "ok"),
         ("Command line tools", "Work", "ok"), ("Windows drivers (NT style)", "Partial", "mid"),
         (".NET applications", "Not verified", "no"), 
-        ("UWP and WinUI apps", "Not supported yet", "no"), ("DirectX 11 / 12 games", "Experimental", "mid"),
+        ("UWP and WinUI apps", "Not supported yet", "no"), ("DirectX 9 to 12 programs", "Start on a software renderer (feature level 11.0); slow", "mid"), ("DXVK (Proton graphics layer)", "Runs on the software Vulkan driver", "ok"),
         ("Networking and Wi-Fi", "Partial", "mid"), ("Installer to disk", "Works in a VM", "ok")]
 tbl = "".join(f'<tr><td>{a}</td><td><span class="st {c}">{b}</span></td></tr>' for a, b, c in rows)
 comp += sec('''<h2 class="center">Tested applications</h2><div class="bento">''' + "".join(f'<div class="tile s2 reveal"><div class="shot"><img src="assets/screens/{n}.png" alt="{t}"></div><h3>{t}</h3></div>' for n,t in [("app-doom","Chocolate Doom"),("app-openttd","OpenTTD"),("app-chromium","Chromium"),("app-steam","Steam setup")]) + '</div>')

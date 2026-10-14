@@ -146,3 +146,9 @@ Like any other tool, AI is there to help us achieve our goals. It follows the sa
 - We compare our test results check by check with the same tests run on Windows 11.
 
 If you use AI in your own contributions, you are welcome here too. Just tell us in the pull request which parts it helped with and how you tested them. That honesty is all we ask.
+
+## Graphics and games
+
+Direct3D 9 to 12 and OpenGL 4.x programs run on a software renderer (Mesa LLVMpipe, Lavapipe Vulkan)
+with no GPU driver. DXVK works on top of it. See `docs/GAMES.md`. A native GPU driver is needed for
+playable frame rates.
