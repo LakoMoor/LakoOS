@@ -23,6 +23,11 @@ if(REACTOS_USE_XPDM)
     add_registry_inf(hivesys_xpdm.inf)
 endif()
 
+option(MOBILE_SHELL "Use the experimental mobile shell style by default" OFF)
+if(MOBILE_SHELL)
+    add_registry_inf(hivemobile.inf)
+endif()
+
 if(ARCH STREQUAL "arm64")
     add_registry_inf(hivesys_arm64.inf)
     if(RPI3_SUPPORT)
