@@ -437,11 +437,11 @@ ThemeInitDrawContext(PDRAW_CONTEXT pcontext,
     pcontext->Active = IsWindowActive(hWnd, pcontext->wi.dwExStyle);
     pcontext->DarkMode = GetPropW(hWnd, immersive_dark_mode_propW) != NULL;
     pcontext->theme = GetNCCaptionTheme(hWnd, pcontext->wi.dwStyle);
-    if (pcontext->DarkMode && pcontext->theme)
+    if (!pcontext->DarkMode && pcontext->theme)
     {
         COLORREF fill;
 
-        if (SUCCEEDED(GetThemeColor(pcontext->theme, WP_CAPTION, FS_ACTIVE, TMT_FILLCOLORHINT, &fill)) &&
+        if (!SUCCEEDED(GetThemeColor(pcontext->theme, WP_CAPTION, FS_ACTIVE, TMT_FILLCOLORHINT, &fill)) ||
             (GetRValue(fill) * 299 + GetGValue(fill) * 587 + GetBValue(fill) * 114) / 1000 < 128)
             pcontext->DarkMode = TRUE;
     }
@@ -1134,7 +1134,7 @@ ThemeDwmDrawCaptionButton(HDC hDC, const RECT *prc, UINT Button, ULONG State, BO
         hTheme = OpenThemeData(NULL, L"WINDOW");
         if (hTheme)
         {
-            if (SUCCEEDED(GetThemeColor(hTheme, WP_CAPTION, FS_ACTIVE, TMT_FILLCOLORHINT, &fill)) &&
+            if (!SUCCEEDED(GetThemeColor(hTheme, WP_CAPTION, FS_ACTIVE, TMT_FILLCOLORHINT, &fill)) ||
                 (GetRValue(fill) * 299 + GetGValue(fill) * 587 + GetBValue(fill) * 114) / 1000 < 128)
                 Dark = TRUE;
             CloseThemeData(hTheme);

@@ -119,9 +119,19 @@ ShellGetTaskbarMaterial(COLORREF *pcr, INT *pcyTaskRow = NULL)
     return TRUE;
 }
 
+static inline BOOL
+ShellIsLightColor(COLORREF cr)
+{
+    return (GetRValue(cr) * 299 + GetGValue(cr) * 587 + GetBValue(cr) * 114) / 1000 >= 140;
+}
+
 static inline COLORREF
 ShellLiftColor(COLORREF cr, INT lift)
 {
+    if (ShellIsLightColor(cr))
+        return RGB(max(0, (INT)GetRValue(cr) - lift),
+                   max(0, (INT)GetGValue(cr) - lift),
+                   max(0, (INT)GetBValue(cr) - lift));
     return RGB(min(255, GetRValue(cr) + lift),
                min(255, GetGValue(cr) + lift),
                min(255, GetBValue(cr) + lift));

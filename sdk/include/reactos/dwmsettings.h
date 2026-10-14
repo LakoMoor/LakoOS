@@ -30,13 +30,13 @@ DwmSettingsReadColorScheme(void)
 
     if (RegOpenKeyExW(HKEY_CURRENT_USER, REACTOS_DWM_SETTINGS_KEY, 0,
                       KEY_QUERY_VALUE, &Key) != ERROR_SUCCESS)
-        return DWM_COLOR_SCHEME_DARK;
+        return DWM_COLOR_SCHEME_LIGHT;
     Error = RegQueryValueExW(Key, REACTOS_DWM_COLOR_SCHEME, NULL, &Type,
                              (BYTE *)&Scheme, &Size);
     RegCloseKey(Key);
     if (Error != ERROR_SUCCESS || Type != REG_DWORD ||
         Size != sizeof(Scheme) || Scheme > DWM_COLOR_SCHEME_DARK)
-        return DWM_COLOR_SCHEME_DARK;
+        return DWM_COLOR_SCHEME_LIGHT;
     return Scheme;
 }
 

@@ -164,7 +164,7 @@ SM11IsLightTheme(VOID)
     {
         return dwValue != 0;
     }
-    return FALSE;
+    return TRUE;
 }
 
 typedef CWinTraits<WS_POPUP | WS_CLIPCHILDREN, WS_EX_TOOLWINDOW | WS_EX_TOPMOST> CStartMenu11Traits;
@@ -920,7 +920,15 @@ public:
                     FillRound(hdc, &rc, (m_bWin10 && m_bLight) ? RGB(62, 62, 62) : m_Pal.Hot, r);
                 if (cell.kind == SM11K_POWER && m_bLight && !m_bWin10)
                 {
-                    DrawText1(hdc, L"Power", rc, m_hFontSmall, m_Pal.Text, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
+                    int cx = (rc.left + rc.right) / 2, cy = (rc.top + rc.bottom) / 2, rr = Sc(7);
+                    HPEN hPen = CreatePen(PS_SOLID, max(1, Sc(2)), m_Pal.Text);
+                    HGDIOBJ hOld = SelectObject(hdc, hPen);
+                    Arc(hdc, cx - rr, cy - rr, cx + rr, cy + rr,
+                        cx - rr / 2, cy - rr, cx + rr / 2, cy - rr);
+                    MoveToEx(hdc, cx, cy - rr - Sc(1), NULL);
+                    LineTo(hdc, cx, cy - Sc(1));
+                    SelectObject(hdc, hOld);
+                    DeleteObject(hPen);
                     break;
                 }
                 UINT nId = IDI_FLU_PLUG;

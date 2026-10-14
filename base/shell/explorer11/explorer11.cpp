@@ -12,8 +12,7 @@ E11IsDark(VOID)
     {
         return dwValue == 0;
     }
-    COLORREF c = GetSysColor(COLOR_WINDOW);
-    return (GetRValue(c) * 299 + GetGValue(c) * 587 + GetBValue(c) * 114) / 1000 < 128;
+    return FALSE;
 }
 
 VOID E11GetPalette(E11_PALETTE *pPal)

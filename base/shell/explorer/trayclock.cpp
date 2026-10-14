@@ -219,6 +219,11 @@ LRESULT CTrayClockWnd::OnThemeChanged()
         hFont = CreateFontIndirectW(&clockFont);
 
         GetThemeColor(clockTheme, CLP_TIME, 0, TMT_TEXTCOLOR, &textColor);
+        {
+            COLORREF crMaterial;
+            if (ShellGetTaskbarMaterial(&crMaterial) && ShellIsLightColor(crMaterial))
+                textColor = RGB(28, 28, 28);
+        }
 
         if (this->hFont != NULL)
             DeleteObject(this->hFont);
