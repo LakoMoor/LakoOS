@@ -28,7 +28,7 @@ Reference for the Windows ARM64 version of this setup:
 | Setting | Value | Why |
 |---|---|---|
 | System DPI (`LogPixels`) | 240 (250 %) | 2246x1080 panel at about 400 ppi |
-| `ShellStyle` | 12 | full-screen tile Start (needs the `experimental/mobile` branch) |
+| `ShellStyle` | 12 | mobile shell: home screen with tiles and a navigation bar (portrait layout when the screen is taller than wide) |
 
 Verified in QEMU arm64: the whole shell scales to 250 %.
 
