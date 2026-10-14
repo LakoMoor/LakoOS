@@ -1,8 +1,8 @@
 /*
- * PROJECT:     ReactX Diagnosis Application
+ * PROJECT:     DirectX Diagnosis Application
  * LICENSE:     LGPL - See COPYING in the top level directory
  * FILE:        base/applications/dxdiag/help.c
- * PURPOSE:     ReactX diagnosis help page
+ * PURPOSE:     DirectX diagnosis help page
  * COPYRIGHT:   Copyright 2008 Johannes Anderwald
  *
  */

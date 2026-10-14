@@ -1,8 +1,8 @@
 /*
- * PROJECT:     ReactX Diagnosis Application
+ * PROJECT:     DirectX Diagnosis Application
  * LICENSE:     LGPL - See COPYING in the top level directory
  * FILE:        base/applications/dxdiag/sound.c
- * PURPOSE:     ReactX diagnosis sound page
+ * PURPOSE:     DirectX diagnosis sound page
  * COPYRIGHT:   Copyright 2008 Johannes Anderwald
  *
  */

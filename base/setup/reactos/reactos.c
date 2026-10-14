@@ -4180,17 +4180,15 @@ ProcessDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 break;
             GetWindowTextW(hWnd, text, ARRAYSIZE(text));
             p = text;
-            if (text[0] == 0x2713 && text[1] == L' ')
-                p = text + 2;
+            if (text[0] == L'[' && text[1] == L'x' && text[2] == L']' && text[3] == L' ')
+                p = text + 4;
             wcscpy(clean, p);
             if (i < step)
-                wsprintfW(text, L"%c %s", 0x2713, clean);
+                wsprintfW(text, L"[x] %s", clean);
             else
                 wcscpy(text, clean);
             if (wcscmp(text, p == text ? clean : text))
                 SetWindowTextW(hWnd, text);
-            SendMessageW(hWnd, WM_SETFONT,
-                         (WPARAM)(i == step ? GetPropW(hwndDlg, L"BoldFont") : NULL), TRUE);
         }
     }
     if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)

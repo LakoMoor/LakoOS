@@ -1,8 +1,8 @@
 /*
- * PROJECT:         ReactX Diagnosis Application
+ * PROJECT:         DirectX Diagnosis Application
  * LICENSE:         GPL - See COPYING in the top level directory
  * FILE:            base/applications/dxdiag/d3dtest.c
- * PURPOSE:         ReactX Direct3D 7, 8 and 9 tests
+ * PURPOSE:         DirectX Direct3D 7, 8 and 9 tests
  * PROGRAMMERS:     Gregor Gullwi <gbrunmar (dot) ros (at) gmail (dot) com>
  */
 

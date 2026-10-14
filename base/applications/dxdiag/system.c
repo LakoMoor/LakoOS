@@ -1,8 +1,8 @@
 /*
- * PROJECT:     ReactX Diagnosis Application
+ * PROJECT:     DirectX Diagnosis Application
  * LICENSE:     LGPL - See COPYING in the top level directory
  * FILE:        base/applications/dxdiag/system.c
- * PURPOSE:     ReactX diagnosis system page
+ * PURPOSE:     DirectX diagnosis system page
  * COPYRIGHT:   Copyright 2008 Johannes Anderwald
  *
  */
@@ -373,7 +373,7 @@ InitializeSystemPage(HWND hwndDlg)
         }
     }
     /* set directx version string */
-    wcscpy(szTime, L"ReactX ");
+    wcscpy(szTime, L"DirectX ");
     if (GetDirectXVersion(szTime + 7))
     {
         SendDlgItemMessage(hwndDlg, IDC_STATIC_VERSION, WM_SETTEXT, 0, (LPARAM)szTime);

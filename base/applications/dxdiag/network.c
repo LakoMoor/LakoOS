@@ -1,8 +1,8 @@
 /*
- * PROJECT:     ReactX Diagnosis Application
+ * PROJECT:     DirectX Diagnosis Application
  * LICENSE:     LGPL - See COPYING in the top level directory
  * FILE:        base/applications/dxdiag/network.c
- * PURPOSE:     ReactX diagnosis network page
+ * PURPOSE:     DirectX diagnosis network page
  * COPYRIGHT:   Copyright 2008 Johannes Anderwald
  *
  */

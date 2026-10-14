@@ -227,7 +227,7 @@ add_livecd_shortcut("Clipboard Viewer"
 add_livecd_shortcut("Keyboard Layout Switcher"
     "shell:system\\kbswitch.exe" ICON_INDEX 0
     DESTINATION "${dir_startmenu_systemtools}")
-add_livecd_shortcut("ReactX Diagnostic"
+add_livecd_shortcut("DirectX Diagnostic"
     "shell:system\\dxdiag.exe" ICON_INDEX 0
     DESTINATION "${dir_startmenu_systemtools}")
 add_livecd_shortcut("Registry Editor"
@@ -264,7 +264,7 @@ add_livecd_shortcut("Solitaire"
 add_livecd_shortcut("Spider Solitaire"
     "shell:system\\spider.exe" ICON_INDEX 0
     DESTINATION "${dir_startmenu_games}")
-add_livecd_shortcut("WineMine"
+add_livecd_shortcut("Minesweeper"
     "shell:system\\winmine.exe" ICON_INDEX 0
     DESTINATION "${dir_startmenu_games}")
 

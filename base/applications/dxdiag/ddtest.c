@@ -1,7 +1,7 @@
 /*
- * PROJECT:     ReactX Diagnosis Application
+ * PROJECT:     DirectX Diagnosis Application
  * LICENSE:     LGPL - See COPYING in the top level directory
- * PURPOSE:     ReactX DirectDraw tests
+ * PURPOSE:     DirectX DirectDraw tests
  * COPYRIGHT:   Copyright 2008 Kamil Horníček
  *
  */
