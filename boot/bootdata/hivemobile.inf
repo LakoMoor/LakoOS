@@ -1,0 +1,7 @@
+; PROJECT:     LakoOS mobile shell defaults
+; LICENSE:     GPL-2.0+ (https://spdx.org/licenses/GPL-2.0+)
+; FILE:        boot/bootdata/hivemobile.inf
+; PURPOSE:     Start in the mobile shell style
+
+[AddReg]
+HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced","ShellStyle",0x00010001,12

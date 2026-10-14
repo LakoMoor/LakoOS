@@ -344,6 +344,7 @@ struct TaskbarSettings
 #define SHELLSTYLE_CLASSIC 7
 #define SHELLSTYLE_WIN10 10
 #define SHELLSTYLE_WIN11 11
+#define SHELLSTYLE_MOBILE 12
 
 extern TaskbarSettings g_TaskbarSettings;
 
