@@ -1,0 +1,17 @@
+; PROJECT:     LakoOS SDM845 phone profile
+; LICENSE:     GPL-2.0+ (https://spdx.org/licenses/GPL-2.0+)
+; FILE:        boot/bootdata/hivesys_sdm845.inf
+; PURPOSE:     Defaults for Xiaomi POCO F1 (beryllium): 2246x1080 panel, about 400 ppi
+
+[Version]
+Signature = "$Windows NT$"
+
+[AddReg]
+
+; 250% scaling
+HKLM,"SYSTEM\CurrentControlSet\Hardware Profiles\0000\Software\Fonts","LogPixels",0x00010001,240
+HKLM,"SYSTEM\CurrentControlSet\Hardware Profiles\0001\Software\Fonts","LogPixels",0x00010001,240
+HKLM,"SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontDPI","LogPixels",0x00010001,240
+
+; Touch first shell: full screen tile Start
+HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced","ShellStyle",0x00010003,12
