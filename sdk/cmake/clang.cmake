@@ -128,7 +128,8 @@ if(NOT DBG)
     # Release builds compile out assertions, which leaves some variables
     # and helpers unused.
     add_compile_options(-Wno-error=unused-but-set-variable -Wno-error=unused-variable
-                        -Wno-error=unused-function -Wno-error=unused-but-set-parameter)
+                        -Wno-error=unused-function -Wno-error=unused-but-set-parameter
+                        -Wno-error=unused-value)
 endif()
 
 add_compile_options(-Wunused-comparison -Wunused-result)
