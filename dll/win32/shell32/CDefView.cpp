@@ -1616,9 +1616,20 @@ void CDefView::UpdateListColors()
         if (bDropShadow)
         {
             /* Set the icon background transparent */
+            DWORD dwLight = 1, cbLight = sizeof(dwLight);
+            SHGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                        L"AppsUseLightTheme", NULL, &dwLight, &cbLight);
             m_ListView.SetTextBkColor(CLR_NONE);
-            m_ListView.SetTextColor(RGB(255, 255, 255));
-            m_ListView.SetExtendedListViewStyle(LVS_EX_TRANSPARENTSHADOWTEXT, LVS_EX_TRANSPARENTSHADOWTEXT);
+            if (dwLight)
+            {
+                m_ListView.SetTextColor(RGB(0, 0, 0));
+                m_ListView.SetExtendedListViewStyle(0, LVS_EX_TRANSPARENTSHADOWTEXT);
+            }
+            else
+            {
+                m_ListView.SetTextColor(RGB(255, 255, 255));
+                m_ListView.SetExtendedListViewStyle(LVS_EX_TRANSPARENTSHADOWTEXT, LVS_EX_TRANSPARENTSHADOWTEXT);
+            }
         }
         else
         {
@@ -1630,6 +1641,15 @@ void CDefView::UpdateListColors()
             else
                 m_ListView.SetTextColor(RGB(255, 255, 255));
             m_ListView.SetExtendedListViewStyle(0, LVS_EX_TRANSPARENTSHADOWTEXT);
+
+            DWORD dwLight = 1, cbLight = sizeof(dwLight);
+            SHGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                        L"AppsUseLightTheme", NULL, &dwLight, &cbLight);
+            if (dwLight)
+            {
+                m_ListView.SetTextBkColor(CLR_NONE);
+                m_ListView.SetTextColor(RGB(0, 0, 0));
+            }
         }
     }
     else
