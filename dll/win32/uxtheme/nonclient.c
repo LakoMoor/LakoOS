@@ -15,6 +15,14 @@
 #define NC_PREVIEW_MSGBOX_OFFSET_Y 71
 
 /* Shared with DwmSetWindowAttribute in dwmapi.dll. */
+BOOLEAN WINAPI ShouldAppsUseDarkMode(void);
+
+static BOOL
+ThemeUseLightCaption(VOID)
+{
+    return !ShouldAppsUseDarkMode();
+}
+
 static const WCHAR immersive_dark_mode_propW[] = L"ReactOS.Dwm.ImmersiveDarkMode";
 
 #define CAPTION_GLOW_RADIUS 5
@@ -355,7 +363,9 @@ HRESULT WINAPI ThemeDrawCaptionText(PDRAW_CONTEXT pcontext, RECT* pRect, int iPa
     if (hFont)
         oldFont = SelectObject(pcontext->hDC, hFont);
 
-    if (pcontext->DarkMode)
+    if (pcontext->DarkMode && ThemeUseLightCaption())
+        textColor = pcontext->Active ? RGB(0, 0, 0) : RGB(117, 117, 117);
+    else if (pcontext->DarkMode)
         textColor = pcontext->Active ? RGB(255, 255, 255) : RGB(160, 160, 160);
     else
         textColor = GetThemeSysColor(pcontext->theme, pcontext->Active ? COLOR_CAPTIONTEXT : COLOR_INACTIVECAPTIONTEXT);
@@ -711,6 +721,8 @@ void ThemeCalculateCaptionButtonsPos(HWND hWnd, HTHEME htheme)
 static COLORREF
 ThemeDarkCaptionColor(PDRAW_CONTEXT pcontext)
 {
+    if (ThemeUseLightCaption())
+        return pcontext->Active ? RGB(243, 243, 243) : RGB(249, 249, 249);
     return pcontext->Active ? RGB(32, 32, 32) : RGB(43, 43, 43);
 }
 
@@ -778,22 +790,41 @@ ThemeDrawDarkCaptionButton(PDRAW_CONTEXT pcontext,
     HBRUSH oldBrush;
     INT centerX, centerY, radius;
 
+    BOOL light = ThemeUseLightCaption();
+    BOOL closeHot = FALSE;
+
     if (iStateId == BUTTON_HOT || iStateId == BUTTON_INACTIVE_HOT)
-        background = buttonId == CLOSEBUTTON ? RGB(196, 43, 28)
-                     : ThemeLiftColor(background, CAPTION_BUTTON_HOT_LIFT);
+    {
+        if (buttonId == CLOSEBUTTON)
+        {
+            background = RGB(196, 43, 28);
+            closeHot = TRUE;
+        }
+        else
+            background = light ? RGB(229, 229, 229) : ThemeLiftColor(background, CAPTION_BUTTON_HOT_LIFT);
+    }
     else if (iStateId == BUTTON_PRESSED || iStateId == BUTTON_INACTIVE_PRESSED)
-        background = buttonId == CLOSEBUTTON ? RGB(176, 39, 25)
-                     : ThemeLiftColor(background, CAPTION_BUTTON_PRESSED_LIFT);
+    {
+        if (buttonId == CLOSEBUTTON)
+        {
+            background = RGB(176, 39, 25);
+            closeHot = TRUE;
+        }
+        else
+            background = light ? RGB(218, 218, 218) : ThemeLiftColor(background, CAPTION_BUTTON_PRESSED_LIFT);
+    }
 
     ThemeFillSolidRect(pcontext->hDC, rect, background);
 
     if (iStateId == BUTTON_DISABLED || iStateId == BUTTON_INACTIVE_DISABLED)
-        foreground = RGB(105, 105, 105);
+        foreground = light ? RGB(160, 160, 160) : RGB(105, 105, 105);
+    else if (closeHot)
+        foreground = RGB(255, 255, 255);
     else if (!pcontext->Active && iStateId != BUTTON_INACTIVE_HOT &&
              iStateId != BUTTON_INACTIVE_PRESSED)
-        foreground = RGB(160, 160, 160);
+        foreground = light ? RGB(117, 117, 117) : RGB(160, 160, 160);
     else
-        foreground = RGB(255, 255, 255);
+        foreground = light ? RGB(0, 0, 0) : RGB(255, 255, 255);
 
     if (iStateId == BUTTON_DISABLED || iStateId == BUTTON_INACTIVE_DISABLED)
         shade = 2;
@@ -817,7 +848,8 @@ ThemeDrawDarkCaptionButton(PDRAW_CONTEXT pcontext,
     default:
         break;
     }
-    if (glyphId && ThemeDrawCaptionGlyph(pcontext->hDC, rect, glyphId, shade))
+    if (glyphId && foreground == RGB(255, 255, 255) &&
+        ThemeDrawCaptionGlyph(pcontext->hDC, rect, glyphId, shade))
         return;
 
     centerX = (rect->left + rect->right) / 2;
