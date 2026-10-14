@@ -146,6 +146,9 @@ public:
     RECT m_rcTabs, m_rcRibbon, m_rcTab;
     struct { LPCWSTR pszName; int nId; } m_aTabs[4];
     RECT m_aTabRects[4];
+    struct E11BTAB { LPITEMIDLIST pidl; WCHAR title[96]; } m_BTabs[12];
+    RECT m_rcBTab[12];
+    int m_nBTabs, m_iBTab;
     int m_nTabCount;
 
     CExplorerFrame() : m_cRef(1), m_hwndView(NULL), m_pidlCurrent(NULL), m_pidlThisPC(NULL),
@@ -159,6 +162,9 @@ public:
     {
         ZeroMemory(&m_Pal, sizeof(m_Pal));
         ZeroMemory(m_aTabRects, sizeof(m_aTabRects));
+        ZeroMemory(m_BTabs, sizeof(m_BTabs));
+        ZeroMemory(m_rcBTab, sizeof(m_rcBTab));
+        m_nBTabs = 1; m_iBTab = 0;
         ZeroMemory(&m_rcTab, sizeof(m_rcTab));
         ZeroMemory(m_aTabs, sizeof(m_aTabs));
         m_szTitle[0] = 0;
@@ -589,10 +595,54 @@ public:
         BuildTabs();
         Layout();
         BuildCrumbs();
+        {
+            E11BTAB &bt = m_BTabs[m_iBTab];
+            LPITEMIDLIST pidlNew = ILClone(m_pidlCurrent);
+            if (bt.pidl)
+                ILFree(bt.pidl);
+            bt.pidl = pidlNew;
+            StringCchCopyW(bt.title, _countof(bt.title), m_szTitle[0] ? m_szTitle : L"This PC");
+        }
         UpdateItemCount();
         SyncNavSelection();
         InvalidateRect(NULL, TRUE);
         return S_OK;
+    }
+
+    VOID SwitchBTab(int i)
+    {
+        if (i < 0 || i >= m_nBTabs || i == m_iBTab || !m_BTabs[i].pidl)
+            return;
+        m_iBTab = i;
+        BrowseTo(m_BTabs[i].pidl, FALSE);
+    }
+
+    VOID AddBTab()
+    {
+        if (m_nBTabs >= 12 || !m_pidlThisPC)
+            return;
+        m_BTabs[m_nBTabs].pidl = ILClone(m_pidlThisPC);
+        StringCchCopyW(m_BTabs[m_nBTabs].title, 96, L"This PC");
+        m_iBTab = m_nBTabs++;
+        BrowseTo(m_BTabs[m_iBTab].pidl, FALSE);
+    }
+
+    VOID CloseBTab()
+    {
+        if (m_nBTabs <= 1)
+        {
+            PostMessageW(WM_CLOSE, 0, 0);
+            return;
+        }
+        if (m_BTabs[m_iBTab].pidl)
+            ILFree(m_BTabs[m_iBTab].pidl);
+        for (int t = m_iBTab; t < m_nBTabs - 1; t++)
+            m_BTabs[t] = m_BTabs[t + 1];
+        ZeroMemory(&m_BTabs[m_nBTabs - 1], sizeof(E11BTAB));
+        m_nBTabs--;
+        if (m_iBTab >= m_nBTabs)
+            m_iBTab = m_nBTabs - 1;
+        BrowseTo(m_BTabs[m_iBTab].pidl, FALSE);
     }
 
     HRESULT NavigateBack()
@@ -703,11 +753,18 @@ public:
         SetRect(&m_rcTabs, 0, 0, rcClient.right, TabsH());
         SetRect(&m_rcRibbon, 0, TabsH() + NavRowH(), rcClient.right, TabsH() + NavRowH() + RibbonH());
 
-        SetRect(&m_rcTab, Sc(8), Sc(6), Sc(8) + Sc(230), TabsH());
+        {
+            int avail = rcClient.right - Sc(8) - Sc(40);
+            int w = min(Sc(230), avail / max(1, m_nBTabs) - Sc(2));
+            w = max(w, Sc(90));
+            for (int t = 0; t < m_nBTabs; t++)
+                SetRect(&m_rcBTab[t], Sc(8) + t * (w + Sc(2)), Sc(6), Sc(8) + t * (w + Sc(2)) + w, TabsH());
+            m_rcTab = m_rcBTab[m_iBTab];
+        }
         SetRect(&m_rcCollapse, m_rcTab.right - Sc(32), m_rcTab.top + Sc(8),
                 m_rcTab.right - Sc(8), m_rcTab.top + Sc(30));
-        SetRect(&m_rcQat1, m_rcTab.right + Sc(6), m_rcTab.top + Sc(8),
-                m_rcTab.right + Sc(30), m_rcTab.top + Sc(30));
+        SetRect(&m_rcQat1, m_rcBTab[m_nBTabs - 1].right + Sc(6), m_rcTab.top + Sc(8),
+                m_rcBTab[m_nBTabs - 1].right + Sc(30), m_rcTab.top + Sc(30));
         SetRectEmpty(&m_rcQat2);
         for (int t = 0; t < 4; t++)
             SetRectEmpty(&m_aTabRects[t]);
@@ -838,6 +895,17 @@ public:
 
             SelectObject(hdc, m_hFont);
             SetTextColor(hdc, m_Pal.Text);
+            for (int t = 0; t < m_nBTabs; t++)
+            {
+                if (t == m_iBTab)
+                    continue;
+                RECT rcI = { m_rcBTab[t].left + Sc(12), m_rcBTab[t].top + Sc(9),
+                             m_rcBTab[t].left + Sc(28), m_rcBTab[t].top + Sc(25) };
+                E11DrawIcon(hdc, &rcI, EI_FOLDER, &m_Pal);
+                RECT rcT = { m_rcBTab[t].left + Sc(36), m_rcBTab[t].top, m_rcBTab[t].right - Sc(8), m_rcBTab[t].bottom - Sc(10) };
+                DrawTextW(hdc, m_BTabs[t].title[0] ? m_BTabs[t].title : L"This PC", -1, &rcT,
+                          DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS | DT_NOPREFIX);
+            }
             RECT rcTabText = { m_rcTab.left + Sc(36), m_rcTab.top, m_rcCollapse.left - Sc(4), m_rcTab.bottom - Sc(10) };
             DrawTextW(hdc, m_szTitle[0] ? m_szTitle : L"This PC", -1, &rcTabText,
                       DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS | DT_NOPREFIX);
@@ -1848,16 +1916,21 @@ public:
 
         if (PtInRect(&m_rcCollapse, pt))
         {
-            PostMessageW(WM_CLOSE, 0, 0);
+            CloseBTab();
             return 0;
         }
         if (PtInRect(&m_rcQat1, pt))
         {
-            WCHAR szPath[MAX_PATH] = L"";
-            if (m_pidlCurrent && !SHGetPathFromIDListW(m_pidlCurrent, szPath))
-                szPath[0] = 0;
-            ShellExecuteW(NULL, NULL, L"explorer.exe", szPath[0] ? szPath : NULL, NULL, SW_SHOWNORMAL);
+            AddBTab();
             return 0;
+        }
+        for (int t = 0; t < m_nBTabs; t++)
+        {
+            if (t != m_iBTab && PtInRect(&m_rcBTab[t], pt))
+            {
+                SwitchBTab(t);
+                return 0;
+            }
         }
 
         for (SIZE_T b = 0; b < m_RibbonBtns.GetCount(); b++)
