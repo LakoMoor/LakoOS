@@ -115,6 +115,7 @@ fi
 
 cd "$SRC_DIR"
 log "Configuring LakoOS ($ARCH)"
+scripts/feeds update mesa || echo "build.sh: could not fetch the Mesa feed; OpenGL will be the 1.1 software renderer"
 ./configure.sh --no-feeds-update -a "$ARCH" $BUILD_TYPE
 
 case "$BUILD_TYPE" in
