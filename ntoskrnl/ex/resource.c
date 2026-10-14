@@ -78,7 +78,7 @@ ULONG ExpResourceTimeoutCount = 90 * 3600 / 2; // NT value: 648000 (30 days)
 
 KSPIN_LOCK ExpResourceSpinLock;
 LIST_ENTRY ExpSystemResourcesList;
-BOOLEAN ExResourceStrict = TRUE;
+BOOLEAN ExResourceStrict = FALSE;
 
 /* PRIVATE FUNCTIONS *********************************************************/
 
