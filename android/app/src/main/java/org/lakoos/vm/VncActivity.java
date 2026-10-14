@@ -22,15 +22,23 @@ public class VncActivity extends Activity {
         root.addView(view);
         LinearLayout bar = new LinearLayout(this);
         bar.setOrientation(LinearLayout.HORIZONTAL);
-        Button kb = new Button(this); kb.setText("Keyboard");
+        Button kb = new Button(this); kb.setText("Keyboard"); kb.setAllCaps(false);
+        kb.setTextColor(0xFFFFFFFF);
+        android.graphics.drawable.GradientDrawable g1 = new android.graphics.drawable.GradientDrawable();
+        g1.setColor(0xCC202020); g1.setCornerRadius(24 * getResources().getDisplayMetrics().density);
+        kb.setBackground(g1);
         kb.setOnClickListener(v -> {
             view.requestFocus();
             ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         });
-        Button st = new Button(this); st.setText("Stop");
+        Button st = new Button(this); st.setText("Stop"); st.setAllCaps(false);
+        st.setTextColor(0xFFFFFFFF);
+        android.graphics.drawable.GradientDrawable g2 = new android.graphics.drawable.GradientDrawable();
+        g2.setColor(0xCCC42B1C); g2.setCornerRadius(24 * getResources().getDisplayMetrics().density);
+        st.setBackground(g2);
         st.setOnClickListener(v -> { Qemu.stop(); stopService(new android.content.Intent(this, QemuService.class)); finish(); });
         bar.addView(kb); bar.addView(st);
-        root.addView(bar, new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.END));
+        root.addView(bar, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL));
         info = new TextView(this);
         info.setTextColor(0xFFFFFFFF);
         info.setText("Starting the virtual machine...");

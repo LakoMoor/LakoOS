@@ -13,7 +13,7 @@ import java.net.*;
 
 public class MainActivity extends Activity {
     static final String BASE = "https://github.com/LakoMoor/LakoOS/releases/download/v0.1.0/";
-    static final int BG = 0xFF0A0043, CARD = 0xFF16105A, ACCENT = 0xFF2F7BFF, MUTED = 0xFFB4B2D8;
+    static final int BG = 0xFFF3F3F3, CARD = 0xFFFFFFFF, ACCENT = 0xFF0067C0, MUTED = 0xFF5D5D5D, INK = 0xFF1A1A1A, LINE = 0xFFE0E0E0, SEG = 0xFFFFFFFF;
     TextView status, isoName;
     ProgressBar bar;
     Button start;
@@ -30,13 +30,14 @@ public class MainActivity extends Activity {
     GradientDrawable shape(int color, int radius) {
         GradientDrawable g = new GradientDrawable();
         g.setColor(color); g.setCornerRadius(dp(radius));
+        if (color == CARD || color == SEG) g.setStroke(Math.max(1, dp(1)), LINE);
         return g;
     }
 
     LinearLayout card(LinearLayout parent) {
         LinearLayout c = new LinearLayout(this);
         c.setOrientation(LinearLayout.VERTICAL);
-        c.setBackground(shape(CARD, 16));
+        c.setBackground(shape(CARD, 8));
         c.setPadding(dp(16), dp(14), dp(16), dp(16));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.topMargin = dp(12);
@@ -54,8 +55,8 @@ public class MainActivity extends Activity {
     Button button(String s, boolean primary) {
         Button b = new Button(this);
         b.setText(s); b.setAllCaps(false); b.setTextSize(15);
-        b.setTextColor(primary ? 0xFFFFFFFF : 0xFFE6E4FF);
-        b.setBackground(shape(primary ? ACCENT : 0xFF2A2478, 12));
+        b.setTextColor(primary ? 0xFFFFFFFF : INK);
+        b.setBackground(shape(primary ? ACCENT : SEG, 6));
         b.setStateListAnimator(null);
         return b;
     }
@@ -70,8 +71,8 @@ public class MainActivity extends Activity {
             btns[i] = b;
             b.setOnClickListener(v -> {
                 for (int k = 0; k < btns.length; k++) {
-                    btns[k].setBackground(shape(k == idx ? ACCENT : 0xFF2A2478, 12));
-                    btns[k].setTextColor(k == idx ? 0xFFFFFFFF : 0xFFE6E4FF);
+                    btns[k].setBackground(shape(k == idx ? ACCENT : SEG, 6));
+                    btns[k].setTextColor(k == idx ? 0xFFFFFFFF : INK);
                 }
                 on.accept(idx);
             });
@@ -83,6 +84,7 @@ public class MainActivity extends Activity {
         d = getResources().getDisplayMetrics().density;
         getWindow().setStatusBarColor(BG);
         getWindow().setNavigationBarColor(BG);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | (Build.VERSION.SDK_INT >= 26 ? View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR : 0));
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(BG);
@@ -103,14 +105,14 @@ public class MainActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(dp(14), 0, 0, 0);
-        titles.addView(text("LakoOS", 26, 0xFFFFFFFF, true));
-        titles.addView(text("Run LakoOS on this phone", 14, MUTED, false));
+        titles.addView(text("LakoOS", 26, INK, true));
+        titles.addView(text("Free NT operating system, running on your phone", 13, MUTED, false));
         head.addView(titles);
         root.addView(head);
 
         LinearLayout c1 = card(root);
-        c1.addView(text("System image", 13, MUTED, false));
-        isoName = text("No image selected", 17, 0xFFFFFFFF, true);
+        c1.addView(text("1  Choose a system image", 14, INK, true));
+        isoName = text("No image selected", 17, INK, true);
         isoName.setPadding(0, dp(4), 0, dp(10));
         c1.addView(isoName);
         LinearLayout r1 = new LinearLayout(this);
@@ -128,12 +130,15 @@ public class MainActivity extends Activity {
         c1.addView(bar, blp);
 
         LinearLayout c2 = card(root);
-        c2.addView(text("Architecture", 13, MUTED, false));
+        c2.addView(text("2  Set up the virtual machine", 14, INK, true));
+        TextView at = text("Architecture", 12, MUTED, false);
+        at.setPadding(0, dp(10), 0, 0);
+        c2.addView(at);
         LinearLayout r2 = new LinearLayout(this);
         r2.setPadding(0, dp(8), 0, 0);
         segment(r2, archBtn, new String[]{"ARM64", "x86-64"}, archIdx, i -> archIdx = i);
         c2.addView(r2);
-        TextView mt = text("Memory", 13, MUTED, false);
+        TextView mt = text("Memory", 12, MUTED, false);
         mt.setPadding(0, dp(14), 0, 0);
         c2.addView(mt);
         LinearLayout r3 = new LinearLayout(this);
@@ -142,7 +147,7 @@ public class MainActivity extends Activity {
         c2.addView(r3);
         disk = new CheckBox(this);
         disk.setText("Add a 16 GB virtual disk (to install)");
-        disk.setTextColor(0xFFFFFFFF);
+        disk.setTextColor(INK);
         disk.setPadding(0, dp(12), 0, 0);
         c2.addView(disk);
 
@@ -150,10 +155,10 @@ public class MainActivity extends Activity {
         status.setPadding(dp(4), dp(14), dp(4), dp(10));
         root.addView(status);
         start = button("Start LakoOS", true);
-        start.setTextSize(17);
+        start.setTextSize(16);
         start.setEnabled(false);
         start.setAlpha(0.5f);
-        root.addView(start, new LinearLayout.LayoutParams(-1, dp(56)));
+        root.addView(start, new LinearLayout.LayoutParams(-1, dp(52)));
 
         pick.setOnClickListener(v -> {
             Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
