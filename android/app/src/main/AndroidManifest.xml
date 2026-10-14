@@ -8,7 +8,9 @@
         <activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
         </activity>
-        <activity android:name=".VncActivity" android:configChanges="orientation|screenSize|keyboardHidden" android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".VncActivity" android:resizeableActivity="true" android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize|density|uiMode|keyboard|navigation" android:windowSoftInputMode="adjustResize"/>
+        <meta-data android:name="com.samsung.android.keepalive.density" android:value="true"/>
+        <meta-data android:name="com.samsung.android.dex.fullscreen" android:value="true"/>
         <service android:name=".QemuService" android:exported="false"/>
     </application>
 </manifest>
