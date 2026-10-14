@@ -23,7 +23,8 @@ Linux runtime layer; LakoOS is a native NT system. What can be reused is listed 
    matching in-tree DLL when LakoOS shows the same failure.
 4. On ARM64, x86 and x86-64 applications run through FEX; ARM64EC is supported for native mixes.
 
-Status: nothing in 2 and 3 is verified yet. No Vulkan ICD exists for LakoOS today.
+Status: step 1 and 2 are verified in a VM: Lavapipe is the Vulkan ICD (built with `ENABLE_MESA_LLVMPIPE=ON`)
+and DXVK 2.5.3 creates a D3D11 device at feature level 11.0 on it. See GAMES.md. Step 3 is the patch triage below.
 
 ## Triage of Proton's own patches (proton_10.0, last 400 commits)
 

@@ -1,0 +1,5 @@
+add_executable(d3dprobe d3dprobe.c)
+set_module_type(d3dprobe win32cui UNICODE)
+target_link_libraries(d3dprobe uuid)
+add_importlibs(d3dprobe user32 msvcrt kernel32)
+add_cd_file(TARGET d3dprobe DESTINATION reactos/system32 FOR all)

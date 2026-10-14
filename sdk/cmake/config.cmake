@@ -210,7 +210,7 @@ set(GENERATE_DEPENDENCY_GRAPH FALSE CACHE BOOL
 cmake_dependent_option(ENABLE_ROSTESTS "Whether to build the ReactOS test suite." OFF
                        "CMAKE_BUILD_TYPE STREQUAL Debug" OFF)
 
-option(ENABLE_MESA_LLVMPIPE "Add LLVMpipe to mesa_gallium.dll and package the Lavapipe Vulkan ICD and Khronos loader." OFF)
+option(ENABLE_MESA_LLVMPIPE "Add LLVMpipe to mesa_gallium.dll and package the Lavapipe Vulkan ICD and Khronos loader." ON)
 
 option(ENABLE_EXPERIMENTAL_EARLY_SPLASH
        "Whether Winlogon displays the experimental early PNG background until the user desktop is ready."

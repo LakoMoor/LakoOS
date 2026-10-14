@@ -25,14 +25,27 @@ and built by default as `mesa_gallium.dll` (softpipe, no LLVM). Result on the li
 Softpipe is a slow reference rasteriser. It makes D3D11 programs start; it is not fast enough
 for most games.
 
-## Next: LLVMpipe and Lavapipe
+## LLVMpipe, Lavapipe and DXVK (works)
 
-`cmake -DENABLE_MESA_LLVMPIPE=ON` builds Mesa with LLVMpipe (JIT, much faster) and the Lavapipe
-software Vulkan ICD plus the Vulkan loader. That is the base for DXVK and vkd3d-proton
-(see PROTON.md). It builds LLVM 22 from source, so it takes a long time and several GB.
+`cmake -DENABLE_MESA_LLVMPIPE=ON` builds Mesa with LLVMpipe (JIT) and the Lavapipe software Vulkan
+ICD plus the Vulkan loader. It builds LLVM 22 from source (about 25 minutes with 64 cores, a few GB).
+Results on the amd64 live image, QEMU without a GPU:
+
+| Check | Result |
+|---|---|
+| `GL_RENDERER` | llvmpipe |
+| `d3dprobe` (system `d3d11.dll`, WineD3D on OpenGL) | device at **feature level 11.0**; 200 clears of 512x512 in 15 ms |
+| `d3dfeat` D3D12 (vkd3d on Lavapipe) | device created, command lists, Device5 interfaces; some subresource and shared-resource checks fail |
+| `d3dprobe` with **DXVK 2.5.3** `d3d11.dll`/`dxgi.dll` next to it | device at **feature level 11.0** on `llvmpipe (LLVM 22.1.8)` through Vulkan |
+
+So the same graphics stack Proton uses (DXVK on Vulkan) runs on LakoOS. To try it with a game, copy
+DXVK's `d3d11.dll`, `d3d10core.dll` and `dxgi.dll` (`tools/fetch-dxvk.sh`) next to the game's `.exe`.
+
+This is a CPU renderer. It makes D3D9 to D3D12 programs run; frame rates on a real game on a PC
+without a GPU driver will be low. A native GPU driver is the remaining step for speed.
 
 ## x64 applications
 
 64-bit Windows programs run (Chromium, OpenTTD x64, Wintun driver). 32-bit programs run through
-WoW64. The remaining blockers for games are graphics speed, Steam's own network check, and
-anti-cheat or DRM drivers that are not supported.
+WoW64 (the 32-bit Mesa ICD is packaged too). The remaining blockers for games are GPU speed, Steam's
+own network check, and anti-cheat or DRM drivers, which are not supported.
