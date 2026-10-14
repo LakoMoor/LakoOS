@@ -1,0 +1,6 @@
+add_executable(lakoweb WIN32 lakoweb.c)
+set_module_type(lakoweb win32gui UNICODE)
+target_link_libraries(lakoweb zlib uuid)
+include_directories(${REACTOS_SOURCE_DIR}/sdk/include/reactos/libs/zlib)
+add_importlibs(lakoweb winhttp comctl32 shell32 shlwapi ole32 user32 msvcrt kernel32)
+add_cd_file(TARGET lakoweb DESTINATION reactos/system32 FOR all)

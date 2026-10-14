@@ -179,6 +179,9 @@ add_livecd_shortcut("Command Prompt"
     "shell:system\\cmd.exe" ICON_INDEX 0
     WORKDIR "${envvar_homedrive}${envvar_homepath}"
     DESTINATION "${dir_startmenu_accessories}" "${dir_quicklaunch}" "${dir_taskbarpin}" "${dir_taskbarpin_default}")
+add_livecd_shortcut("Get Lako Wave (browser)"
+    "shell:system\\lakoweb.exe" ICON_INDEX 0
+    DESTINATION "${dir_startmenu_programs}" "${dir_taskbarpin}" "${dir_taskbarpin_default}")
 add_livecd_shortcut("Applications Manager"
     "shell:system\\rapps.exe" ICON_INDEX 0
     DESTINATION "${dir_startmenu_programs}")
