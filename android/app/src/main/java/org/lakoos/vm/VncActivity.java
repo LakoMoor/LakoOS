@@ -58,7 +58,7 @@ public class VncActivity extends Activity {
 
         VncView(Context c) { super(c); setFocusable(true); setFocusableInTouchMode(true); }
 
-        void close() { alive = false; try { if (sock != null) sock.close(); } catch (IOException ignored) {} }
+        void close() { alive = false; sender.shutdownNow(); try { if (sock != null) sock.close(); } catch (IOException ignored) {} }
 
         void connect() {
             new Thread(() -> {
@@ -137,8 +137,15 @@ public class VncActivity extends Activity {
             }
         }
 
-        synchronized void send(byte[] b) {
-            try { if (out != null) { out.write(b); out.flush(); } } catch (IOException ignored) {}
+        final java.util.concurrent.ExecutorService sender = java.util.concurrent.Executors.newSingleThreadExecutor();
+
+        void send(final byte[] b) {
+            sender.execute(() -> {
+                try {
+                    DataOutputStream o = out;
+                    if (o != null) synchronized (o) { o.write(b); o.flush(); }
+                } catch (Exception ignored) {}
+            });
         }
 
         void request(boolean inc) {
