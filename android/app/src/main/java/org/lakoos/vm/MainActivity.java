@@ -18,7 +18,9 @@ public class MainActivity extends Activity {
     ProgressBar bar;
     Button start;
     String isoPath;
-    int archIdx = 0, ramIdx = 1;
+    int archIdx = 0, ramIdx = 1, resIdx = 1;
+    Button[] resBtn = new Button[3];
+    final int[][] RES = {{1024, 768}, {1280, 720}, {1920, 1080}};
     Button[] archBtn = new Button[2], ramBtn = new Button[4];
     final int[] RAM = {1024, 2048, 3072, 4096};
     CheckBox disk;
@@ -145,6 +147,13 @@ public class MainActivity extends Activity {
         r3.setPadding(0, dp(8), 0, 0);
         segment(r3, ramBtn, new String[]{"1 GB", "2 GB", "3 GB", "4 GB"}, ramIdx, i -> ramIdx = i);
         c2.addView(r3);
+        TextView rt = text("Resolution", 12, MUTED, false);
+        rt.setPadding(0, dp(14), 0, 0);
+        c2.addView(rt);
+        LinearLayout r4 = new LinearLayout(this);
+        r4.setPadding(0, dp(8), 0, 0);
+        segment(r4, resBtn, new String[]{"1024×768", "1280×720", "1920×1080"}, resIdx, i -> resIdx = i);
+        c2.addView(r4);
         disk = new CheckBox(this);
         disk.setText("Add a 16 GB virtual disk (to install)");
         disk.setTextColor(INK);
@@ -248,7 +257,7 @@ public class MainActivity extends Activity {
     void launch() {
         try {
             Qemu.start(this, archIdx == 0 ? "arm64" : "x86_64", isoPath, RAM[ramIdx],
-                    Math.max(2, Runtime.getRuntime().availableProcessors()), disk.isChecked());
+                    Math.max(2, Runtime.getRuntime().availableProcessors()), disk.isChecked(), RES[resIdx][0], RES[resIdx][1]);
             Intent s = new Intent(this, QemuService.class);
             if (Build.VERSION.SDK_INT >= 26) startForegroundService(s); else startService(s);
             startActivity(new Intent(this, VncActivity.class));

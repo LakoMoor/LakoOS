@@ -55,7 +55,7 @@ public final class Qemu {
 
     public static synchronized String logText() { return log.toString(); }
 
-    public static synchronized void start(Context c, String arch, String iso, int ramMb, int cpus, boolean useDisk) throws IOException {
+    public static synchronized void start(Context c, String arch, String iso, int ramMb, int cpus, boolean useDisk, int xres, int yres) throws IOException {
         if (running()) return;
         File h = home(c);
         File data = c.getExternalFilesDir(null) != null ? c.getExternalFilesDir(null) : c.getFilesDir();
@@ -70,14 +70,14 @@ public final class Qemu {
             a.addAll(Arrays.asList("-M", "virt", "-cpu", "max", "-accel", "tcg,thread=multi"));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,readonly=on,file=" + new File(sh, "edk2-aarch64-code.fd")));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,file=" + vars));
-            a.addAll(Arrays.asList("-device", "ramfb", "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
+            a.addAll(Arrays.asList("-device", "bochs-display,xres=" + xres + ",yres=" + yres, "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
             a.addAll(Arrays.asList("-drive", "file=" + iso + ",if=none,id=cd,media=cdrom,readonly=on",
                     "-device", "usb-storage,drive=cd,bootindex=0"));
         } else {
             a.addAll(Arrays.asList("-machine", "q35", "-cpu", "max", "-accel", "tcg,thread=multi"));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,readonly=on,file=" + new File(sh, "edk2-x86_64-code.fd")));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,file=" + vars));
-            a.addAll(Arrays.asList("-device", "VGA", "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
+            a.addAll(Arrays.asList("-device", "VGA,xres=" + xres + ",yres=" + yres, "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
             a.addAll(Arrays.asList("-drive", "file=" + iso + ",if=none,id=cd,media=cdrom,readonly=on",
                     "-device", "ide-cd,drive=cd,bus=ide.0,bootindex=0"));
         }
