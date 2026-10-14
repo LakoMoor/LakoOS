@@ -184,6 +184,7 @@ public:
     HBRUSH m_hbrField;
     int m_iDpi;
     BOOL m_bWin10;
+    BOOL m_bMobile;
     BOOL m_bLight;
     BOOL m_bInMenu;
     BOOL m_bTracking;
@@ -208,7 +209,7 @@ public:
     CStartMenu11Wnd() :
         m_Tray(NULL), m_hwndTray(NULL), m_hwndEdit(NULL),
         m_hFont(NULL), m_hFontBold(NULL), m_hFontSmall(NULL), m_hbrField(NULL),
-        m_iDpi(96), m_bWin10(FALSE), m_bLight(FALSE), m_bInMenu(FALSE), m_bTracking(FALSE),
+        m_iDpi(96), m_bWin10(FALSE), m_bMobile(FALSE), m_bLight(FALSE), m_bInMenu(FALSE), m_bTracking(FALSE),
         m_LastDismiss(0), m_nView(SM11V_HOME), m_nScroll(0), m_nContentH(0),
         m_iHot(-1), m_iPressed(-1)
     {
@@ -310,7 +311,7 @@ public:
 
     VOID SelectPalette()
     {
-        m_bLight = SM11IsLightTheme();
+        m_bLight = SM11IsLightTheme() && !m_bMobile;
         if (m_bLight)
         {
             m_Pal.Bg = RGB(243, 243, 243);
@@ -647,10 +648,41 @@ public:
         }
     }
 
+    VOID LayoutMobile()
+    {
+        int W = m_size.cx, H = m_size.cy;
+        int pad = Sc(16);
+        int gap = Sc(8);
+        int cols = (W > H) ? 4 : 2;
+        int tw = (W - 2 * pad - (cols - 1) * gap) / cols;
+        int th = tw;
+        int top = Sc(72);
+        int bottom = H - Sc(56);
+
+        SetRect(&m_rcList, 0, top, W, bottom);
+        AddCell(SM11K_HEADER, pad, Sc(20), W - pad, Sc(60), L"Start");
+        for (SIZE_T i = 0; i < m_Apps.GetCount(); i++)
+        {
+            int col = (int)(i % cols), row = (int)(i / cols);
+            int x = pad + col * (tw + gap);
+            int y = top + row * (th + gap) - m_nScroll;
+            AddCell(SM11K_TILE, x, y, x + tw, y + th, m_Apps[i]->szName, (int)i, FALSE, TRUE);
+        }
+        m_nContentH = (int)((m_Apps.GetCount() + cols - 1) / cols) * (th + gap);
+        {
+            int maxScroll = max(0, m_nContentH - (bottom - top));
+            if (m_nScroll > maxScroll)
+                m_nScroll = maxScroll;
+        }
+        AddCell(SM11K_POWER, W - pad - Sc(48), H - Sc(52), W - pad, H - Sc(8), L"Power");
+    }
+
     VOID Layout()
     {
         m_Cells.SetCount(0);
-        if (m_bWin10)
+        if (m_bMobile)
+            LayoutMobile();
+        else if (m_bWin10)
             LayoutWin10();
         else
             LayoutWin11();
@@ -858,12 +890,23 @@ public:
             case SM11K_TILE:
             {
                 COLORREF cr = bHot ? ShellLiftColor(m_Pal.Tile, 24) : m_Pal.Tile;
+                if (m_bMobile)
+                {
+                    static const COLORREF s_Accent[] = {
+                        RGB(0, 120, 215), RGB(0, 153, 188), RGB(16, 124, 16), RGB(202, 80, 16),
+                        RGB(142, 140, 216), RGB(136, 23, 152), RGB(218, 59, 1), RGB(0, 99, 177)
+                    };
+                    cr = s_Accent[(cell.app < 0 ? 0 : cell.app) % _countof(s_Accent)];
+                    if (bHot)
+                        cr = ShellLiftColor(cr, 24);
+                }
                 HBRUSH hbr = CreateSolidBrush(cr);
                 FillRect(hdc, &rc, hbr);
                 DeleteObject(hbr);
-                int isz = Sc(32);
+                int isz = Sc(m_bMobile ? 48 : 32);
                 if (pApp)
-                    DrawAppIcon(hdc, pApp, (rc.left + rc.right - isz) / 2, rc.top + Sc(14), isz);
+                    DrawAppIcon(hdc, pApp, (rc.left + rc.right - isz) / 2,
+                                m_bMobile ? (rc.top + rc.bottom - isz) / 2 - Sc(8) : rc.top + Sc(14), isz);
                 RECT rcT = { rc.left + Sc(8), rc.bottom - Sc(34), rc.right - Sc(6), rc.bottom - Sc(6) };
                 DrawText1(hdc, cell.szText, rcT, m_hFontSmall, RGB(255, 255, 255),
                           DT_LEFT | DT_BOTTOM | DT_SINGLELINE | DT_END_ELLIPSIS);
@@ -958,7 +1001,7 @@ public:
             FillRect(hdc, &rcRail, hbr);
             DeleteObject(hbr);
         }
-        else
+        else if (!m_bMobile)
         {
             RECT rcFooter = { 0, m_size.cy - Sc(72), m_size.cx, m_size.cy };
             hbr = CreateSolidBrush(m_Pal.Footer);
@@ -1100,6 +1143,7 @@ public:
         if (now - m_LastDismiss < 300)
             return S_FALSE;
 
+        m_bMobile = (g_TaskbarSettings.dwShellStyle == SHELLSTYLE_MOBILE);
         m_bWin10 = (g_TaskbarSettings.dwShellStyle == SHELLSTYLE_WIN10);
         SelectPalette();
         CreateFonts();
@@ -1116,8 +1160,16 @@ public:
         m_size.cx = w;
         m_size.cy = h;
 
-        int gap = m_bWin10 ? 0 : Sc(12);
+        int gap = (m_bWin10 || m_bMobile) ? 0 : Sc(12);
         int x, y;
+        if (m_bMobile)
+        {
+            w = mi.rcWork.right - mi.rcWork.left;
+            h = mi.rcWork.bottom - mi.rcWork.top;
+            m_size.cx = w;
+            m_size.cy = h;
+            uPos = ABE_BOTTOM;
+        }
         switch (uPos)
         {
             case ABE_TOP:
@@ -1133,8 +1185,8 @@ public:
                 y = mi.rcWork.bottom - h;
                 break;
             default:
-                x = m_bWin10 ? mi.rcWork.left : (mi.rcWork.left + mi.rcWork.right - w) / 2;
-                y = prcBtn->top - h - gap;
+                x = (m_bWin10 || m_bMobile) ? mi.rcWork.left : (mi.rcWork.left + mi.rcWork.right - w) / 2;
+                y = m_bMobile ? mi.rcWork.top : prcBtn->top - h - gap;
                 break;
         }
         if (x + w > mi.rcWork.right) x = mi.rcWork.right - w;
@@ -1152,7 +1204,7 @@ public:
 
         Layout();
 
-        if (!m_bWin10)
+        if (!m_bWin10 && !m_bMobile)
         {
             HRGN hRgn = CreateRoundRectRgn(0, 0, w + 1, h + 1, Sc(16), Sc(16));
             SetWindowRgn(hRgn, TRUE);

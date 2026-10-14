@@ -48,7 +48,7 @@ BOOL TaskbarSettings::LoadShellStyle()
     cbSize = sizeof(dwValue);
     dwRet = SHGetValueW(hkExplorer, L"Advanced", L"ShellStyle", NULL, &dwValue, &cbSize);
     dwShellStyle = SHELLSTYLE_WIN11;
-    if (dwRet == ERROR_SUCCESS && (dwValue == SHELLSTYLE_WIN10 || dwValue == SHELLSTYLE_CLASSIC))
+    if (dwRet == ERROR_SUCCESS && (dwValue == SHELLSTYLE_WIN10 || dwValue == SHELLSTYLE_CLASSIC || dwValue == SHELLSTYLE_MOBILE))
         dwShellStyle = dwValue;
 
     cbSize = sizeof(dwValue);
