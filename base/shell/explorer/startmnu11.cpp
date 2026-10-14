@@ -670,9 +670,9 @@ public:
         int cols = bPortrait ? 2 : 4;
         int tw = (W - 2 * pad - (cols - 1) * gap) / cols;
         int th = bPortrait ? tw * 3 / 4 : tw * 3 / 4;
-        int headerH = Sc(150);
+        int headerH = min(Sc(150), H / 3);
         int top = headerH;
-        int bottom = H - Sc(84);
+        int bottom = H - min(Sc(84), H / 6);
         BOOL bSearch = (m_nView == SM11V_SEARCH);
         SIZE_T count = bSearch ? m_Results.GetCount() : m_Apps.GetCount();
 
@@ -707,7 +707,10 @@ public:
             if (m_nScroll > maxScroll)
                 m_nScroll = maxScroll;
         }
-        AddCell(SM11K_SEARCH, pad, H - Sc(72), W - pad, H - Sc(16));
+        {
+            int searchH = min(Sc(56), H / 10);
+            AddCell(SM11K_SEARCH, pad, H - searchH - Sc(16), W - pad, H - Sc(16));
+        }
     }
 
     VOID Layout()
