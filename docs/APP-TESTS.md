@@ -13,7 +13,7 @@ Applications were placed on a FAT disk image and started from `cmd.exe`.
 ## Findings
 
 1. No GPU acceleration: OpenGL and D3D renderers are not available to applications. SDL2 apps need the software renderer forced.
-2. Shift is not applied to letters typed inside the Chromium window (cmd.exe and the SDL game are fine). Not yet isolated.
+2. Shift works in the Chromium window when it is idle (tested with a quick and a 1.5 s hold). Capitals were lost only while Chromium was busy loading a page. A key-state race under load is suspected; not isolated.
 3. With 4 GB of RAM the live image stops with `0x7E` in `usbport.sys` during boot (2 GB boots). Not yet investigated.
 4. `secur32_winetest schannel`: 224 tests, 27 failures. The provider reports TLS 1.0/1.1/1.2 client only; inbound credentials, renegotiation and DTLS are missing.
 5. `schannel_winetest`: 36 tests, 0 failures.
