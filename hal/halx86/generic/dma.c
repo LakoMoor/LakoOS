@@ -671,8 +671,14 @@ HalpDmaAllocateMasterAdapter(VOID)
                   SizeOfBitmap * sizeof(ROS_MAP_REGISTER_ENTRY));
     if (!HalpGrowMapBuffers(MasterAdapter, 0x10000))
     {
-        ExFreePool(MasterAdapter);
-        return NULL;
+        MasterAdapter->MasterDevice = TRUE;
+        MasterAdapter->Dma32BitAddresses = TRUE;
+        if (!HalpGrowMapBuffers(MasterAdapter, 0x10000))
+        {
+            ExFreePool(MasterAdapter->MapRegisterBase);
+            ExFreePool(MasterAdapter);
+            return NULL;
+        }
     }
 
     return MasterAdapter;
@@ -2736,6 +2742,13 @@ HalAllocateAdapterChannel(IN PADAPTER_OBJECT AdapterObject,
          *   routine does the job of allocating the map registers at
          *   PASSIVE_LEVEL and calling the ExecutionRoutine.
          */
+
+        if (!MasterAdapter)
+        {
+            AdapterObject->NumberOfMapRegisters = 0;
+            IoFreeAdapterChannel(AdapterObject);
+            return STATUS_INSUFFICIENT_RESOURCES;
+        }
 
         KeAcquireSpinLock(&MasterAdapter->SpinLock, &OldIrql);
 
