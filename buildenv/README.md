@@ -40,3 +40,9 @@ The first run needs about 15 GB of disk and from 20 minutes to a few hours depen
 ## Host tools
 
 git, CMake, Ninja, flex, bison, Python 3, NASM, xz and a native C/C++ compiler. They are installed with `apt`, `dnf`, `pacman`, `zypper`, `apk` or Homebrew when missing.
+
+## Verified
+
+The toolchain built by `buildenv/toolchain/build-toolchain.sh` was used to build the amd64
+release LiveCD from scratch (`./configure.sh --clang -a amd64 -r`, `ninja livecd`);
+the resulting ISO boots to the desktop in QEMU.
