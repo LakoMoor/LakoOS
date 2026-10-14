@@ -1030,9 +1030,50 @@ public:
         }
     }
 
+    BOOL ResolveLink(LPCWSTR pszLink, WCHAR *pszTarget, WCHAR *pszArgs, WCHAR *pszDir)
+    {
+        IShellLinkW *pLink = NULL;
+        IPersistFile *pFile = NULL;
+        BOOL bOk = FALSE;
+
+        if (FAILED(CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+                                    IID_IShellLinkW, (void **)&pLink)) || !pLink)
+            return FALSE;
+        if (SUCCEEDED(pLink->QueryInterface(IID_IPersistFile, (void **)&pFile)) && pFile)
+        {
+            if (SUCCEEDED(pFile->Load(pszLink, STGM_READ)))
+            {
+                pLink->Resolve(NULL, SLR_NO_UI | SLR_NOUPDATE | SLR_NOSEARCH);
+                if (SUCCEEDED(pLink->GetPath(pszTarget, MAX_PATH, NULL, 0)) && pszTarget[0])
+                {
+                    pszArgs[0] = 0;
+                    pszDir[0] = 0;
+                    pLink->GetArguments(pszArgs, MAX_PATH);
+                    pLink->GetWorkingDirectory(pszDir, MAX_PATH);
+                    bOk = TRUE;
+                }
+            }
+            pFile->Release();
+        }
+        pLink->Release();
+        return bOk;
+    }
+
     VOID LaunchPath(LPCWSTR pszPath)
     {
+        WCHAR szTarget[MAX_PATH], szArgs[MAX_PATH], szDir[MAX_PATH];
+        LPCWSTR pszExt = PathFindExtensionW(pszPath);
+        HINSTANCE hRes = NULL;
+
         Hide();
+        if (pszExt && !lstrcmpiW(pszExt, L".lnk") &&
+            ResolveLink(pszPath, szTarget, szArgs, szDir))
+        {
+            hRes = ShellExecuteW(NULL, L"open", szTarget,
+                                 szArgs[0] ? szArgs : NULL, szDir[0] ? szDir : NULL, SW_SHOWNORMAL);
+            if ((ULONG_PTR)hRes > 32)
+                return;
+        }
         ShellExecuteW(NULL, L"open", pszPath, NULL, NULL, SW_SHOWNORMAL);
     }
 
