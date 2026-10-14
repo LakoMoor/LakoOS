@@ -2,7 +2,7 @@ import os, re
 HERE = os.path.dirname(os.path.abspath(__file__))
 PAGES = [("index.html", "Home", "nav.home"), ("features.html", "Features", "nav.features"),
          ("download.html", "Download", "nav.download"), ("docs.html", "Docs", "nav.docs"),
-         ("compatibility.html", "Compatibility", "nav.compat"), ("about.html", "About", "nav.about")]
+         ("compatibility.html", "Compatibility", "nav.compat"), ("mobile.html", "Mobile", "nav.mobile"), ("about.html", "About", "nav.about")]
 
 def head(title, active, desc):
     nav = "".join('<a href="%s"%s data-i18n="%s">%s</a>' % (f, ' aria-current="page"' if f == active else "", k, n)
@@ -193,5 +193,14 @@ about += sec('''
 <h2 id="license">License</h2><p>GNU GPL 3.0. Inherited code keeps the license stated in its file headers, mostly GPL 2.0 or later. The full texts are in the repository.</p>
 <h2 id="trademarks">Trademarks</h2><p>Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</p>
 </div></div>''')
+mob = page_hero("Mobile", "A shell made for touch", "An experimental phone and tablet style: home screen, large tiles and a navigation bar. Same system, amd64 and arm64.")
+mob += sec('''
+<div class="two"><div><span class="eyebrow">Home screen</span><h2>Clock, tiles, search</h2>
+<p class="sub">Large clock and date, rounded colour tiles and a search bar within thumb reach. Scroll by dragging.</p>
+<ul class="chk"><li>Wide first tile, two columns in portrait, four in landscape.</li><li>Navigation bar: Back, Home and Recents.</li><li>Scales to 250 % for 400 ppi panels.</li><li>Switch on with <code>ShellStyle=12</code> or the <code>MOBILE_SHELL</code> build option.</li></ul></div>
+<div class="shot"><img src="assets/screens/mobile-start.png" alt="Mobile home screen"></div></div>''')
+mob += sec('''<h2>Xiaomi POCO F1</h2><p class="sub">A profile for the Snapdragon 845 phone exists (scaling and shell style). Booting on the phone needs a UEFI image from the edk2-sdm845 project. Storage, touch and graphics drivers are not written yet, so this is a build profile for now.</p>
+<p><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/blob/main/docs/devices/poco-f1.md">Device notes</a> <a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/tag/mobile-preview">Mobile preview images</a></p>''', alt=True)
+write("mobile.html", "Mobile — LakoOS", "The experimental LakoOS mobile shell for phones and tablets.", mob)
 write("about.html", "About — LakoOS", "About the LakoOS project, its lineage and license.", about)
 print("ok")

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mobile — LakoOS</title>
+<meta name="description" content="The experimental LakoOS mobile shell for phones and tablets.">
+<meta property="og:title" content="Mobile — LakoOS">
+<meta property="og:image" content="assets/screens/start-win11.png">
+<link rel="icon" type="image/svg+xml" href="assets/logo-mark.svg">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><img src="assets/logo-mark.svg" alt="">LakoOS</a>
+  <nav><a href="features.html" data-i18n="nav.features">Features</a><a href="download.html" data-i18n="nav.download">Download</a><a href="docs.html" data-i18n="nav.docs">Docs</a><a href="compatibility.html" data-i18n="nav.compat">Compatibility</a><a href="mobile.html" aria-current="page" data-i18n="nav.mobile">Mobile</a><a href="about.html" data-i18n="nav.about">About</a></nav>
+  <span class="sp"></span>
+  <button class="icon-btn lang" id="lang" aria-label="Language">RU</button>
+  <button class="icon-btn" id="theme" aria-label="Theme">&#9790;</button>
+  <a class="btn primary sm" href="download.html" data-i18n="nav.get">Get LakoOS</a>
+</div></header>
+<main>
+<section class="phero"><span class="blob b1"></span><span class="blob b2"></span>
+<div class="wrap"><span class="eyebrow">Mobile</span><h1 class="ph">A shell made for touch</h1><p class="lead" style="margin-left:0">An experimental phone and tablet style: home screen, large tiles and a navigation bar. Same system, amd64 and arm64.</p></div></section>
+<section><div class="wrap">
+<div class="two"><div><span class="eyebrow">Home screen</span><h2>Clock, tiles, search</h2>
+<p class="sub">Large clock and date, rounded colour tiles and a search bar within thumb reach. Scroll by dragging.</p>
+<ul class="chk"><li>Wide first tile, two columns in portrait, four in landscape.</li><li>Navigation bar: Back, Home and Recents.</li><li>Scales to 250 % for 400 ppi panels.</li><li>Switch on with <code>ShellStyle=12</code> or the <code>MOBILE_SHELL</code> build option.</li></ul></div>
+<div class="shot"><img src="assets/screens/mobile-start.png" alt="Mobile home screen"></div></div></div></section>
+<section class="alt"><div class="wrap"><h2>Xiaomi POCO F1</h2><p class="sub">A profile for the Snapdragon 845 phone exists (scaling and shell style). Booting on the phone needs a UEFI image from the edk2-sdm845 project. Storage, touch and graphics drivers are not written yet, so this is a build profile for now.</p>
+<p><a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/blob/main/docs/devices/poco-f1.md">Device notes</a> <a class="btn ghost" href="https://github.com/LakoMoor/LakoOS/releases/tag/mobile-preview">Mobile preview images</a></p></div></section>
+</main>
+<footer><div class="wrap">
+  <div class="cols">
+    <div><a class="brand" href="index.html" style="margin-bottom:10px"><img src="assets/logo-mark.svg" alt="">LakoOS</a>A free NT operating system with a familiar desktop.</div>
+    <div><h4>Product</h4><a href="features.html">Features</a><a href="compatibility.html">Compatibility</a><a href="download.html">Download</a></div>
+    <div><h4>Learn</h4><a href="docs.html">Documentation</a><a href="docs.html#build">Build from source</a><a href="docs.html#settings">Settings</a></div>
+    <div><h4>Project</h4><a href="https://github.com/LakoMoor/LakoOS">GitHub</a><a href="https://github.com/LakoMoor/LakoOS/issues">Issues</a><a href="about.html">About</a></div>
+  </div>
+  <div class="legal">LakoOS is free software under the GNU GPL. Windows is a trademark of Microsoft Corporation. LakoOS is not affiliated with, endorsed by or sponsored by Microsoft.</div>
+</div></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -202,6 +202,9 @@ public:
 
     int m_nView;
     int m_nScroll;
+    POINT m_ptDrag;
+    int m_nDragScroll;
+    BOOL m_bDragging;
     int m_nContentH;
     int m_iHot;
     int m_iPressed;
@@ -213,7 +216,7 @@ public:
         m_Tray(NULL), m_hwndTray(NULL), m_hwndEdit(NULL),
         m_hFont(NULL), m_hFontBold(NULL), m_hFontSmall(NULL), m_hFontBig(NULL), m_hFontMed(NULL), m_hbrField(NULL),
         m_iDpi(96), m_bWin10(FALSE), m_bMobile(FALSE), m_bLight(FALSE), m_bInMenu(FALSE), m_bTracking(FALSE),
-        m_LastDismiss(0), m_nView(SM11V_HOME), m_nScroll(0), m_nContentH(0),
+        m_LastDismiss(0), m_nView(SM11V_HOME), m_nScroll(0), m_nDragScroll(0), m_bDragging(FALSE), m_nContentH(0),
         m_iHot(-1), m_iPressed(-1)
     {
         ZeroMemory(&m_Pal, sizeof(m_Pal));
@@ -1386,6 +1389,33 @@ public:
 
     LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
+        if (((wParam & MK_LBUTTON) && m_iPressed >= 0) || m_bDragging)
+        {
+            POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+            int viewH = m_rcList.bottom - m_rcList.top;
+            int maxScroll = max(0, m_nContentH - viewH);
+            int dy = m_ptDrag.y - pt.y;
+
+            if (!m_bDragging && maxScroll > 0 && abs(dy) > Sc(8) &&
+                PtInRect(&m_rcList, m_ptDrag))
+            {
+                m_bDragging = TRUE;
+                m_iPressed = -1;
+                SetCapture();
+            }
+            if (m_bDragging)
+            {
+                int ns = max(0, min(m_nDragScroll + dy, maxScroll));
+                if (ns != m_nScroll)
+                {
+                    m_nScroll = ns;
+                    m_iHot = -1;
+                    Layout();
+                    InvalidateRect(NULL, FALSE);
+                }
+                return 0;
+            }
+        }
         int hot = HitTest(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         if (hot != m_iHot)
         {
@@ -1414,11 +1444,22 @@ public:
     LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
         m_iPressed = HitTest(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        m_ptDrag.x = GET_X_LPARAM(lParam);
+        m_ptDrag.y = GET_Y_LPARAM(lParam);
+        m_nDragScroll = m_nScroll;
+        m_bDragging = FALSE;
         return 0;
     }
 
     LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
+        if (m_bDragging)
+        {
+            m_bDragging = FALSE;
+            m_iPressed = -1;
+            ReleaseCapture();
+            return 0;
+        }
         int hit = HitTest(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         int pressed = m_iPressed;
         m_iPressed = -1;
