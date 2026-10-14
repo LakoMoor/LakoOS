@@ -1,0 +1,5 @@
+app/src/main/assets/qemu.zip
+build/
+app/build/
+.gradle/
+local.properties
