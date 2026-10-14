@@ -614,6 +614,23 @@ OnDrawItem(
 }
 
 
+#define SETUP_INDIGO RGB(10, 0, 67)
+
+static HBRUSH g_hbrSetupBack;
+
+static
+INT_PTR
+SetupBackground(HDC hdc, BOOL bText)
+{
+    if (!g_hbrSetupBack)
+        g_hbrSetupBack = CreateSolidBrush(SETUP_INDIGO);
+    SetBkColor(hdc, SETUP_INDIGO);
+    SetTextColor(hdc, RGB(255, 255, 255));
+    if (bText)
+        SetBkMode(hdc, TRANSPARENT);
+    return (INT_PTR)g_hbrSetupBack;
+}
+
 static
 INT_PTR
 CALLBACK
@@ -647,6 +664,10 @@ LocaleDlgProc(
                 PostMessageW(hwndDlg, WM_COMMAND, MAKEWPARAM(IDOK, BN_CLICKED), 0L);
             }
             return FALSE;
+
+        case WM_CTLCOLORDLG:
+        case WM_CTLCOLORSTATIC:
+            return SetupBackground((HDC)wParam, uMsg == WM_CTLCOLORSTATIC);
 
         case WM_DRAWITEM:
             OnDrawItem((LPDRAWITEMSTRUCT)lParam,
@@ -792,6 +813,10 @@ StartDlgProc(
             }
             return FALSE;
         }
+
+        case WM_CTLCOLORDLG:
+        case WM_CTLCOLORSTATIC:
+            return SetupBackground((HDC)wParam, uMsg == WM_CTLCOLORSTATIC);
 
         case WM_DRAWITEM:
             OnDrawItem((LPDRAWITEMSTRUCT)lParam,

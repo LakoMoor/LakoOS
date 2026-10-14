@@ -4075,6 +4075,154 @@ IsSetupAlreadyRunning(
     return TRUE;
 }
 
+/* Windows 10 style setup pages: white background, dark text */
+static HBRUSH g_hbrPage;
+
+static INT_PTR
+SetupPageColors(UINT uMsg, HDC hdc, HWND hwndCtl)
+{
+    if (!g_hbrPage)
+        g_hbrPage = CreateSolidBrush(RGB(255, 255, 255));
+    SetBkColor(hdc, RGB(255, 255, 255));
+    if (uMsg == WM_CTLCOLORSTATIC)
+    {
+        SetBkMode(hdc, TRANSPARENT);
+        SetTextColor(hdc, RGB(0, 0, 0));
+    }
+    return (INT_PTR)g_hbrPage;
+}
+
+static INT_PTR CALLBACK
+AccountDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = AccountDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return AccountDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+DeviceDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = DeviceDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return DeviceDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+DriveDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = DriveDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return DriveDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+FinishDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = FinishDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return FinishDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+ProcessDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = ProcessDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return ProcessDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+StartDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = StartDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return StartDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+SummaryDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = SummaryDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return SummaryDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+TimeZoneDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = TimeZoneDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return TimeZoneDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+TypeDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = TypeDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return TypeDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+static INT_PTR CALLBACK
+UpgradeRepairDlgProcThemed(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (uMsg == WM_CTLCOLORDLG || uMsg == WM_CTLCOLORSTATIC)
+    {
+        INT_PTR r = UpgradeRepairDlgProc(hwndDlg, uMsg, wParam, lParam);
+        if (r)
+            return r;
+        return SetupPageColors(uMsg, (HDC)wParam, (HWND)lParam);
+    }
+    return UpgradeRepairDlgProc(hwndDlg, uMsg, wParam, lParam);
+}
+
+
 int WINAPI
 _tWinMain(HINSTANCE hInst,
           HINSTANCE hPrevInstance,
@@ -4151,7 +4299,7 @@ _tWinMain(HINSTANCE hInst,
         psp.dwFlags = PSP_DEFAULT | PSP_HIDEHEADER;
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = StartDlgProc;
+        psp.pfnDlgProc = StartDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_STARTPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4162,7 +4310,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_TYPESUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = TypeDlgProc;
+        psp.pfnDlgProc = TypeDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_TYPEPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4173,7 +4321,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_UPDATESUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = UpgradeRepairDlgProc;
+        psp.pfnDlgProc = UpgradeRepairDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_UPDATEREPAIRPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4184,7 +4332,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_DEVICESUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = DeviceDlgProc;
+        psp.pfnDlgProc = DeviceDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_DEVICEPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4195,7 +4343,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_DRIVESUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = DriveDlgProc;
+        psp.pfnDlgProc = DriveDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_DRIVEPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4205,7 +4353,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_ACCOUNTSUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = AccountDlgProc;
+        psp.pfnDlgProc = AccountDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_ACCOUNTPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4215,7 +4363,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_TIMEZONESUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = TimeZoneDlgProc;
+        psp.pfnDlgProc = TimeZoneDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_TIMEZONEPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4226,7 +4374,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_SUMMARYSUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = SummaryDlgProc;
+        psp.pfnDlgProc = SummaryDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_SUMMARYPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
     }
@@ -4238,7 +4386,7 @@ _tWinMain(HINSTANCE hInst,
         psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_DRIVESUBTITLE);
         psp.hInstance = hInst;
         psp.lParam = (LPARAM)&SetupData;
-        psp.pfnDlgProc = DriveDlgProc;
+        psp.pfnDlgProc = DriveDlgProcThemed;
         psp.pszTemplate = MAKEINTRESOURCEW(IDD_DRIVEPAGE);
         ahpsp[nPages++] = CreatePropertySheetPage(&psp);
     }
@@ -4250,7 +4398,7 @@ _tWinMain(HINSTANCE hInst,
     psp.pszHeaderSubTitle = MAKEINTRESOURCEW(IDS_PROCESSSUBTITLE);
     psp.hInstance = hInst;
     psp.lParam = (LPARAM)&SetupData;
-    psp.pfnDlgProc = ProcessDlgProc;
+    psp.pfnDlgProc = ProcessDlgProcThemed;
     psp.pszTemplate = MAKEINTRESOURCEW(IDD_PROCESSPAGE);
     ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4259,7 +4407,7 @@ _tWinMain(HINSTANCE hInst,
     psp.dwFlags = PSP_DEFAULT | PSP_HIDEHEADER;
     psp.hInstance = hInst;
     psp.lParam = (LPARAM)&SetupData;
-    psp.pfnDlgProc = FinishDlgProc;
+    psp.pfnDlgProc = FinishDlgProcThemed;
     psp.pszTemplate = MAKEINTRESOURCEW(IDD_FINISHPAGE);
     ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
@@ -4268,7 +4416,7 @@ _tWinMain(HINSTANCE hInst,
     psp.dwFlags = PSP_DEFAULT | PSP_HIDEHEADER;
     psp.hInstance = hInst;
     psp.lParam = (LPARAM)&SetupData;
-    psp.pfnDlgProc = FinishDlgProc; // Same dialog procedure as the Finish page.
+    psp.pfnDlgProc = FinishDlgProcThemed; // Same dialog procedure as the Finish page.
     psp.pszTemplate = MAKEINTRESOURCEW(IDD_ABORTPAGE);
     ahpsp[nPages++] = CreatePropertySheetPage(&psp);
 
