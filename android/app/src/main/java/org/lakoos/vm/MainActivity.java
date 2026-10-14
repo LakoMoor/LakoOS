@@ -18,9 +18,9 @@ public class MainActivity extends Activity {
     ProgressBar bar;
     Button start;
     String isoPath;
-    int archIdx = 0, ramIdx = 1, resIdx = 1;
+    int archIdx = 0, ramIdx = 1, resIdx = 0;
     Button[] resBtn = new Button[3];
-    final int[][] RES = {{1024, 768}, {1280, 720}, {1920, 1080}};
+    final int[][] RES = {{800, 600}, {1280, 720}, {1920, 1080}};
     Button[] archBtn = new Button[2], ramBtn = new Button[4];
     final int[] RAM = {1024, 2048, 3072, 4096};
     CheckBox disk;

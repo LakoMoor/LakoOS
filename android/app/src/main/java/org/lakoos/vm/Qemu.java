@@ -72,7 +72,7 @@ public final class Qemu {
             a.addAll(Arrays.asList("-M", "virt", "-cpu", "max", "-accel", "tcg,thread=multi"));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,readonly=on,file=" + new File(sh, "edk2-aarch64-code.fd")));
             a.addAll(Arrays.asList("-drive", "if=pflash,format=raw,file=" + vars));
-            a.addAll(Arrays.asList("-device", "bochs-display,xres=" + xres + ",yres=" + yres + ",romfile=", "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
+            a.addAll(Arrays.asList("-device", (xres <= 800 ? "ramfb" : "virtio-gpu-pci,xres=" + xres + ",yres=" + yres + ",romfile="), "-device", "qemu-xhci", "-device", "usb-kbd", "-device", "usb-tablet"));
             a.addAll(Arrays.asList("-drive", "file=" + iso + ",if=none,id=cd,media=cdrom,readonly=on",
                     "-device", "usb-storage,drive=cd,bootindex=0"));
         } else {
