@@ -59,6 +59,8 @@ VOID    UiFillArea(ULONG Left, ULONG Top, ULONG Right, ULONG Bottom, CHAR FillCh
 VOID    UiDrawShadow(ULONG Left, ULONG Top, ULONG Right, ULONG Bottom);    // Draws a shadow on the bottom and right sides of the area specified
 VOID    UiDrawBox(ULONG Left, ULONG Top, ULONG Right, ULONG Bottom, UCHAR VertStyle, UCHAR HorzStyle, BOOLEAN Fill, BOOLEAN Shadow, UCHAR Attr);    // Draws a box around the area specified
 
+VOID UiDrawBootLogo(VOID);
+
 /* Draws text at coordinates specified */
 VOID
 UiDrawText(

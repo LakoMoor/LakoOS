@@ -594,6 +594,7 @@ RamDiskProgressInitialize(
     Context->ActivityPrefix = ActivityPrefix;
     Context->CompletionText = CompletionText;
 
+    UiDrawBootLogo();
     UiDrawProgressBarCenter(TitleText);
 
     RtlStringCbPrintfA(Context->ProgressMessage,

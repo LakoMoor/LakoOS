@@ -512,6 +512,32 @@ UiSetProgressBarText(
 }
 
 VOID
+UiDrawBootLogo(VOID)
+{
+    static const UCHAR Colors[3] = { COLOR_LIGHTMAGENTA, COLOR_LIGHTBLUE, COLOR_LIGHTCYAN };
+    static const CHAR Name[] = "LakoOS";
+    CHAR Row[8];
+    ULONG Left, Top, i, y;
+
+    if (UiScreenWidth < 40 || UiScreenHeight < 20)
+        return;
+
+    Left = (UiScreenWidth - 14) / 2;
+    Top = (UiScreenHeight - 14) / 2 - 2;
+    for (i = 0; i < 6; i++)
+        Row[i] = (CHAR)0xDB;
+    Row[6] = 0;
+
+    for (y = 0; y < 3; y++)
+    {
+        UiDrawText(Left, Top + y, Row, ATTR(Colors[0], COLOR_BLACK));
+        UiDrawText(Left, Top + 4 + y, Row, ATTR(Colors[1], COLOR_BLACK));
+        UiDrawText(Left + 8, Top + 4 + y, Row, ATTR(Colors[2], COLOR_BLACK));
+    }
+    UiDrawText((UiScreenWidth - 6) / 2, Top + 8, Name, ATTR(COLOR_WHITE, COLOR_BLACK));
+}
+
+VOID
 UiDrawProgressBarCenter(
     _In_ PCSTR ProgressText)
 {
