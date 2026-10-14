@@ -24,3 +24,23 @@ Linux runtime layer; LakoOS is a native NT system. What can be reused is listed 
 4. On ARM64, x86 and x86-64 applications run through FEX; ARM64EC is supported for native mixes.
 
 Status: nothing in 2 and 3 is verified yet. No Vulkan ICD exists for LakoOS today.
+
+## Triage of Proton's own patches (proton_10.0, last 400 commits)
+
+Most of Proton's value over upstream Wine is a long list of small compatibility fixes, many written by
+Paul Gofman and Remi Bernon. Taking a sample of the ntdll, kernelbase, win32u, mf and audio commits:
+
+| Proton change | In LakoOS |
+|---|---|
+| Synchronization barrier functions (ntdll, kernelbase) | present (kernelbase exports `EnterSynchronizationBarrier`) |
+| `GetIntegratedDisplaySize` stub | present |
+| `GetWindowDisplayAffinity` | present (user32) |
+| `NtUnlockFile` fills the IO status block | exported; behaviour not checked |
+| x64 epilogue unwind fixes (jmp 0xff, chained unwind, tail call) | not compared. `RtlVirtualUnwind` apitest does not compile on the current compiler, which is a reason to look |
+| `RtlCreateHeap` aligned commit size | not compared |
+| `ProcessImageFileNameWin32` in `GetModuleFileNameExW` | not compared |
+| Gamescope and per-game HACK commits | not applicable (Linux compositor / per-title workarounds) |
+| `PROTON_LIMIT_ADDRESS_SPACE` | not applicable |
+
+These come from reading commit titles, not from running games. The right next step is to use them as
+a checklist while testing real titles, as listed in GAMES.md.
