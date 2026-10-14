@@ -36,7 +36,8 @@ enum SM11KIND
     SM11K_POWER,
     SM11K_RAIL_MENU,
     SM11K_RAIL_DOCS,
-    SM11K_RAIL_SETTINGS
+    SM11K_RAIL_SETTINGS,
+    SM11K_CLOCK
 };
 
 enum SM11POWERCMD
@@ -181,6 +182,8 @@ public:
     HFONT m_hFont;
     HFONT m_hFontBold;
     HFONT m_hFontSmall;
+    HFONT m_hFontBig;
+    HFONT m_hFontMed;
     HBRUSH m_hbrField;
     int m_iDpi;
     BOOL m_bWin10;
@@ -208,7 +211,7 @@ public:
 
     CStartMenu11Wnd() :
         m_Tray(NULL), m_hwndTray(NULL), m_hwndEdit(NULL),
-        m_hFont(NULL), m_hFontBold(NULL), m_hFontSmall(NULL), m_hbrField(NULL),
+        m_hFont(NULL), m_hFontBold(NULL), m_hFontSmall(NULL), m_hFontBig(NULL), m_hFontMed(NULL), m_hbrField(NULL),
         m_iDpi(96), m_bWin10(FALSE), m_bMobile(FALSE), m_bLight(FALSE), m_bInMenu(FALSE), m_bTracking(FALSE),
         m_LastDismiss(0), m_nView(SM11V_HOME), m_nScroll(0), m_nContentH(0),
         m_iHot(-1), m_iPressed(-1)
@@ -358,6 +361,14 @@ public:
         lf.lfWeight = FW_NORMAL;
         m_hFontSmall = CreateFontIndirectW(&lf);
 
+        lf.lfHeight = -Sc(56);
+        lf.lfWeight = FW_LIGHT;
+        m_hFontBig = CreateFontIndirectW(&lf);
+
+        lf.lfHeight = -Sc(16);
+        lf.lfWeight = FW_NORMAL;
+        m_hFontMed = CreateFontIndirectW(&lf);
+
         if (m_hwndEdit)
             ::SendMessageW(m_hwndEdit, WM_SETFONT, (WPARAM)m_hFontBold, FALSE);
     }
@@ -367,6 +378,8 @@ public:
         if (m_hFont) { DeleteObject(m_hFont); m_hFont = NULL; }
         if (m_hFontBold) { DeleteObject(m_hFontBold); m_hFontBold = NULL; }
         if (m_hFontSmall) { DeleteObject(m_hFontSmall); m_hFontSmall = NULL; }
+        if (m_hFontBig) { DeleteObject(m_hFontBig); m_hFontBig = NULL; }
+        if (m_hFontMed) { DeleteObject(m_hFontMed); m_hFontMed = NULL; }
     }
 
     VOID RebuildData()
@@ -651,30 +664,50 @@ public:
     VOID LayoutMobile()
     {
         int W = m_size.cx, H = m_size.cy;
-        int pad = Sc(16);
-        int gap = Sc(8);
-        int cols = (W > H) ? 4 : 2;
+        int pad = Sc(20);
+        int gap = Sc(12);
+        BOOL bPortrait = H >= W;
+        int cols = bPortrait ? 2 : 4;
         int tw = (W - 2 * pad - (cols - 1) * gap) / cols;
-        int th = tw;
-        int top = Sc(72);
-        int bottom = H - Sc(56);
+        int th = bPortrait ? tw * 3 / 4 : tw * 3 / 4;
+        int headerH = Sc(150);
+        int top = headerH;
+        int bottom = H - Sc(84);
+        BOOL bSearch = (m_nView == SM11V_SEARCH);
+        SIZE_T count = bSearch ? m_Results.GetCount() : m_Apps.GetCount();
 
         SetRect(&m_rcList, 0, top, W, bottom);
-        AddCell(SM11K_HEADER, pad, Sc(20), W - pad, Sc(60), L"Start");
-        for (SIZE_T i = 0; i < m_Apps.GetCount(); i++)
+        AddCell(SM11K_CLOCK, pad, Sc(36), W - pad - Sc(56), headerH - Sc(8), L"");
+        AddCell(SM11K_POWER, W - pad - Sc(48), Sc(36), W - pad, Sc(84), L"Power");
+
+        int slot = 0;
+        for (SIZE_T i = 0; i < count; i++)
         {
-            int col = (int)(i % cols), row = (int)(i / cols);
+            int idx = bSearch ? m_Results[i] : (int)i;
+            BOOL bWide = (!bSearch && bPortrait && i == 0);
+            int col = slot % cols;
+            int row = slot / cols;
+            if (bWide && col != 0)
+            {
+                slot++;
+                col = 0;
+                row = slot / cols;
+            }
+            int span = bWide ? 2 : 1;
             int x = pad + col * (tw + gap);
             int y = top + row * (th + gap) - m_nScroll;
-            AddCell(SM11K_TILE, x, y, x + tw, y + th, m_Apps[i]->szName, (int)i, FALSE, TRUE);
+            AddCell(SM11K_TILE, x, y, x + tw * span + gap * (span - 1), y + th,
+                    m_Apps[idx]->szName, idx, FALSE, TRUE);
+            slot += span;
         }
-        m_nContentH = (int)((m_Apps.GetCount() + cols - 1) / cols) * (th + gap);
+        int rows = (slot + cols - 1) / cols;
+        m_nContentH = rows * (th + gap);
         {
             int maxScroll = max(0, m_nContentH - (bottom - top));
             if (m_nScroll > maxScroll)
                 m_nScroll = maxScroll;
         }
-        AddCell(SM11K_POWER, W - pad - Sc(48), H - Sc(52), W - pad, H - Sc(8), L"Power");
+        AddCell(SM11K_SEARCH, pad, H - Sc(72), W - pad, H - Sc(16));
     }
 
     VOID Layout()
@@ -887,6 +920,20 @@ public:
                 break;
             }
 
+            case SM11K_CLOCK:
+            {
+                WCHAR szTime[32], szDate[64];
+                SYSTEMTIME st;
+                GetLocalTime(&st);
+                GetTimeFormatW(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, szTime, _countof(szTime));
+                GetDateFormatW(LOCALE_USER_DEFAULT, 0, &st, L"dddd, d MMMM", szDate, _countof(szDate));
+                RECT rcTime = { rc.left, rc.top, rc.right, rc.top + Sc(64) };
+                RECT rcDate = { rc.left + Sc(2), rc.top + Sc(64), rc.right, rc.bottom };
+                DrawText1(hdc, szTime, rcTime, m_hFontBig, RGB(255, 255, 255), DT_SINGLELINE | DT_LEFT | DT_VCENTER);
+                DrawText1(hdc, szDate, rcDate, m_hFontMed, RGB(200, 210, 225), DT_SINGLELINE | DT_LEFT | DT_TOP);
+                break;
+            }
+
             case SM11K_TILE:
             {
                 COLORREF cr = bHot ? ShellLiftColor(m_Pal.Tile, 24) : m_Pal.Tile;
@@ -900,9 +947,16 @@ public:
                     if (bHot)
                         cr = ShellLiftColor(cr, 24);
                 }
-                HBRUSH hbr = CreateSolidBrush(cr);
-                FillRect(hdc, &rc, hbr);
-                DeleteObject(hbr);
+                if (m_bMobile)
+                {
+                    FillRound(hdc, &rc, cr, Sc(18));
+                }
+                else
+                {
+                    HBRUSH hbr = CreateSolidBrush(cr);
+                    FillRect(hdc, &rc, hbr);
+                    DeleteObject(hbr);
+                }
                 int isz = Sc(m_bMobile ? 48 : 32);
                 if (pApp)
                     DrawAppIcon(hdc, pApp, (rc.left + rc.right - isz) / 2,
@@ -993,6 +1047,18 @@ public:
         HBRUSH hbr = CreateSolidBrush(m_Pal.Bg);
         FillRect(hdc, &rcAll, hbr);
         DeleteObject(hbr);
+        if (m_bMobile)
+        {
+            const int bands = 48;
+            for (int i = 0; i < bands; i++)
+            {
+                RECT rcB = { 0, MulDiv(m_size.cy, i, bands), m_size.cx, MulDiv(m_size.cy, i + 1, bands) };
+                int r = 16 - MulDiv(12, i, bands), g = 22 - MulDiv(16, i, bands), b = 46 - MulDiv(34, i, bands);
+                HBRUSH hb = CreateSolidBrush(RGB(r, g, b));
+                FillRect(hdc, &rcB, hb);
+                DeleteObject(hb);
+            }
+        }
 
         if (m_bWin10)
         {
@@ -1036,7 +1102,7 @@ public:
         for (INT i = (INT)m_Cells.GetCount() - 1; i >= 0; i--)
         {
             SM11CELL &cell = m_Cells[i];
-            if (cell.kind == SM11K_HEADER || cell.kind == SM11K_LETTER || cell.kind == SM11K_SEARCH)
+            if (cell.kind == SM11K_HEADER || cell.kind == SM11K_LETTER || cell.kind == SM11K_SEARCH || cell.kind == SM11K_CLOCK)
                 continue;
             if (!PtInRect(&cell.rc, pt))
                 continue;
@@ -1073,9 +1139,50 @@ public:
         }
     }
 
+    BOOL ResolveLink(LPCWSTR pszLink, WCHAR *pszTarget, WCHAR *pszArgs, WCHAR *pszDir)
+    {
+        IShellLinkW *pLink = NULL;
+        IPersistFile *pFile = NULL;
+        BOOL bOk = FALSE;
+
+        if (FAILED(CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+                                    IID_IShellLinkW, (void **)&pLink)) || !pLink)
+            return FALSE;
+        if (SUCCEEDED(pLink->QueryInterface(IID_IPersistFile, (void **)&pFile)) && pFile)
+        {
+            if (SUCCEEDED(pFile->Load(pszLink, STGM_READ)))
+            {
+                pLink->Resolve(NULL, SLR_NO_UI | SLR_NOUPDATE | SLR_NOSEARCH);
+                if (SUCCEEDED(pLink->GetPath(pszTarget, MAX_PATH, NULL, 0)) && pszTarget[0])
+                {
+                    pszArgs[0] = 0;
+                    pszDir[0] = 0;
+                    pLink->GetArguments(pszArgs, MAX_PATH);
+                    pLink->GetWorkingDirectory(pszDir, MAX_PATH);
+                    bOk = TRUE;
+                }
+            }
+            pFile->Release();
+        }
+        pLink->Release();
+        return bOk;
+    }
+
     VOID LaunchPath(LPCWSTR pszPath)
     {
+        WCHAR szTarget[MAX_PATH], szArgs[MAX_PATH], szDir[MAX_PATH];
+        LPCWSTR pszExt = PathFindExtensionW(pszPath);
+        HINSTANCE hRes = NULL;
+
         Hide();
+        if (pszExt && !lstrcmpiW(pszExt, L".lnk") &&
+            ResolveLink(pszPath, szTarget, szArgs, szDir))
+        {
+            hRes = ShellExecuteW(NULL, L"open", szTarget,
+                                 szArgs[0] ? szArgs : NULL, szDir[0] ? szDir : NULL, SW_SHOWNORMAL);
+            if ((ULONG_PTR)hRes > 32)
+                return;
+        }
         ShellExecuteW(NULL, L"open", pszPath, NULL, NULL, SW_SHOWNORMAL);
     }
 
@@ -1164,8 +1271,19 @@ public:
         int x, y;
         if (m_bMobile)
         {
+            DWORD dwW = 0, dwH = 0, cb = sizeof(DWORD);
             w = mi.rcWork.right - mi.rcWork.left;
             h = mi.rcWork.bottom - mi.rcWork.top;
+            SHGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                        L"MobileWidth", NULL, &dwW, &cb);
+            cb = sizeof(DWORD);
+            SHGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                        L"MobileHeight", NULL, &dwH, &cb);
+            if (dwW >= 240 && dwH >= 320)
+            {
+                w = min(w, (int)dwW);
+                h = min(h, (int)dwH);
+            }
             m_size.cx = w;
             m_size.cy = h;
             uPos = ABE_BOTTOM;
@@ -1185,7 +1303,8 @@ public:
                 y = mi.rcWork.bottom - h;
                 break;
             default:
-                x = (m_bWin10 || m_bMobile) ? mi.rcWork.left : (mi.rcWork.left + mi.rcWork.right - w) / 2;
+                x = m_bMobile ? (mi.rcWork.left + mi.rcWork.right - w) / 2 :
+                    (m_bWin10 ? mi.rcWork.left : (mi.rcWork.left + mi.rcWork.right - w) / 2);
                 y = m_bMobile ? mi.rcWork.top : prcBtn->top - h - gap;
                 break;
         }
@@ -1214,6 +1333,8 @@ public:
             SetWindowRgn(NULL, TRUE);
         }
 
+        if (m_bMobile)
+            SetTimer(1, 15000, NULL);
         SetWindowPos(HWND_TOPMOST, x, y, w, h, SWP_SHOWWINDOW);
         ::SetForegroundWindow(m_hWnd);
         ::SetFocus(m_hwndEdit);
@@ -1223,6 +1344,8 @@ public:
 
     VOID Hide()
     {
+        if (IsWindow())
+            KillTimer(1);
         if (!IsWindow() || !IsWindowVisible())
             return;
         ShowWindow(SW_HIDE);
@@ -1323,6 +1446,13 @@ public:
         return 0;
     }
 
+    LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+    {
+        if (wParam == 1 && m_bMobile)
+            InvalidateRect(NULL, FALSE);
+        return 0;
+    }
+
     LRESULT OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
         if (LOWORD(wParam) == WA_INACTIVE && !m_bInMenu && IsMenuVisible())
@@ -1387,6 +1517,7 @@ public:
         MESSAGE_HANDLER(WM_LBUTTONUP, OnLButtonUp)
         MESSAGE_HANDLER(WM_MOUSEWHEEL, OnMouseWheel)
         MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
+        MESSAGE_HANDLER(WM_TIMER, OnTimer)
         MESSAGE_HANDLER(WM_COMMAND, OnCommand)
         MESSAGE_HANDLER(WM_CTLCOLOREDIT, OnCtlColorEdit)
         MESSAGE_HANDLER(SM11M_EDITKEY, OnEditKey)

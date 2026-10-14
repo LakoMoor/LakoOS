@@ -10,11 +10,12 @@ Then open Start. Back to desktop style: set `ShellStyle` to 11 (centered), 10 (l
 
 ## Done
 
-- Full-screen Start with a grid of large coloured tiles (2 columns portrait, 4 landscape), wheel scrolling, power button.
+- Home screen with a large clock and date, coloured rounded tiles (a wide first tile, 2 columns portrait, 4 landscape), search bar at the bottom, wheel scrolling and a power button.
+- Navigation bar in place of the taskbar: Back (Alt+Left), Home (Start) and Recents (Alt+Tab).
+- Test frame: set `MobileWidth` and `MobileHeight` (DWORD, under `Explorer\Advanced`) to show the phone layout, for example 480x690, on a landscape screen.
 
 ## Not done
 
 - Touch gestures and on-screen keyboard auto-show.
-- Bottom navigation bar (Back, Start, Search) instead of the taskbar.
 - Maximised-only app windows and an app switcher.
 - Orientation and scaling rules for small screens.

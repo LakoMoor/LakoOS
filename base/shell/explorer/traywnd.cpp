@@ -518,6 +518,121 @@ public:
     END_MSG_MAP()
 };
 
+#define MOBILE_NAV_BACK 0
+#define MOBILE_NAV_TASKS 1
+
+static LRESULT CALLBACK
+MobileNavButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    switch (uMsg)
+    {
+        case WM_MOUSEMOVE:
+            if (!GetPropW(hwnd, L"Hot"))
+            {
+                TRACKMOUSEEVENT tme = { sizeof(tme), TME_LEAVE, hwnd, 0 };
+                SetPropW(hwnd, L"Hot", (HANDLE)1);
+                TrackMouseEvent(&tme);
+                InvalidateRect(hwnd, NULL, FALSE);
+            }
+            return 0;
+        case WM_MOUSELEAVE:
+            RemovePropW(hwnd, L"Hot");
+            InvalidateRect(hwnd, NULL, FALSE);
+            return 0;
+        case WM_LBUTTONDOWN:
+            SetPropW(hwnd, L"Down", (HANDLE)1);
+            InvalidateRect(hwnd, NULL, FALSE);
+            return 0;
+        case WM_LBUTTONUP:
+        {
+            BOOL bDown = GetPropW(hwnd, L"Down") != NULL;
+            RemovePropW(hwnd, L"Down");
+            InvalidateRect(hwnd, NULL, FALSE);
+            if (bDown)
+            {
+                if (GetWindowLongPtrW(hwnd, GWLP_USERDATA) == MOBILE_NAV_BACK)
+                {
+                    keybd_event(VK_MENU, 0, 0, 0);
+                    keybd_event(VK_LEFT, 0, 0, 0);
+                    keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
+                    keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+                }
+                else
+                {
+                    keybd_event(VK_MENU, 0, 0, 0);
+                    keybd_event(VK_TAB, 0, 0, 0);
+                    keybd_event(VK_TAB, 0, KEYEVENTF_KEYUP, 0);
+                    keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+                }
+            }
+            return 0;
+        }
+        case WM_ERASEBKGND:
+            return 1;
+        case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
+            RECT rc;
+            COLORREF crBar = RGB(243, 243, 243);
+            GetClientRect(hwnd, &rc);
+            ShellGetTaskbarMaterial(&crBar);
+            HBRUSH hbr = CreateSolidBrush(GetPropW(hwnd, L"Down") ? ShellLiftColor(crBar, 22) :
+                                          (GetPropW(hwnd, L"Hot") ? ShellLiftColor(crBar, 10) : crBar));
+            FillRect(hdc, &rc, hbr);
+            DeleteObject(hbr);
+
+            COLORREF crGlyph = ShellIsLightColor(crBar) ? RGB(32, 32, 32) : RGB(240, 240, 240);
+            HPEN hPen = CreatePen(PS_SOLID, max(2, (rc.bottom - rc.top) / 20), crGlyph);
+            HGDIOBJ hOldPen = SelectObject(hdc, hPen);
+            HGDIOBJ hOldBrush = SelectObject(hdc, GetStockObject(NULL_BRUSH));
+            int cx = (rc.left + rc.right) / 2, cy = (rc.top + rc.bottom) / 2;
+            int r = (rc.bottom - rc.top) / 6;
+            if (GetWindowLongPtrW(hwnd, GWLP_USERDATA) == MOBILE_NAV_BACK)
+            {
+                MoveToEx(hdc, cx + r, cy - r, NULL);
+                LineTo(hdc, cx - r, cy);
+                LineTo(hdc, cx + r, cy + r);
+            }
+            else
+            {
+                RoundRect(hdc, cx - r, cy - r, cx + r + 1, cy + r + 1, r / 2, r / 2);
+            }
+            SelectObject(hdc, hOldBrush);
+            SelectObject(hdc, hOldPen);
+            DeleteObject(hPen);
+            EndPaint(hwnd, &ps);
+            return 0;
+        }
+    }
+    return DefWindowProcW(hwnd, uMsg, wParam, lParam);
+}
+
+static HWND g_hwndNavBack = NULL;
+static HWND g_hwndNavTasks = NULL;
+
+static HWND
+MobileNavCreate(HWND hwndParent, INT nKind)
+{
+    static BOOL s_bRegistered = FALSE;
+
+    if (!s_bRegistered)
+    {
+        WNDCLASSW wc = { 0 };
+        wc.lpfnWndProc = MobileNavButtonProc;
+        wc.hInstance = hExplorerInstance;
+        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wc.lpszClassName = L"LakoMobileNavButton";
+        RegisterClassW(&wc);
+        s_bRegistered = TRUE;
+    }
+    HWND hwnd = CreateWindowExW(0, L"LakoMobileNavButton", NULL, WS_CHILD | WS_VISIBLE,
+                                0, 0, 10, 10, hwndParent, NULL, hExplorerInstance, NULL);
+    if (hwnd)
+        SetWindowLongPtrW(hwnd, GWLP_USERDATA, nKind);
+    return hwnd;
+}
+
 class CTrayWindow :
     public CComCoClass<CTrayWindow>,
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -2088,8 +2203,43 @@ ChangePos:
             }
         }
 
+        BOOL bMobile = Horizontal && g_TaskbarSettings.dwShellStyle == SHELLSTYLE_MOBILE;
+        if (bMobile)
+        {
+            if (!g_hwndNavBack || !::IsWindow(g_hwndNavBack))
+                g_hwndNavBack = MobileNavCreate(m_hWnd, MOBILE_NAV_BACK);
+            if (!g_hwndNavTasks || !::IsWindow(g_hwndNavTasks))
+                g_hwndNavTasks = MobileNavCreate(m_hWnd, MOBILE_NAV_TASKS);
+            if (m_TrayNotify)
+                ::ShowWindow(m_TrayNotify, SW_HIDE);
+            if (m_Rebar)
+                ::ShowWindow(m_Rebar, SW_HIDE);
+        }
+        else
+        {
+            if (g_hwndNavBack && ::IsWindow(g_hwndNavBack))
+                ::ShowWindow(g_hwndNavBack, SW_HIDE);
+            if (g_hwndNavTasks && ::IsWindow(g_hwndNavTasks))
+                ::ShowWindow(g_hwndNavTasks, SW_HIDE);
+            if (m_TrayNotify && !::IsWindowVisible(m_TrayNotify))
+                ::ShowWindow(m_TrayNotify, SW_SHOWNA);
+            if (m_Rebar && !::IsWindowVisible(m_Rebar))
+                ::ShowWindow(m_Rebar, SW_SHOWNA);
+        }
+
         INT StartX = 0;
-        if (Horizontal && m_StartButton.IsModernTaskbar() && g_TaskbarSettings.bCenterTaskbar)
+        if (bMobile)
+        {
+            StartX = (rcClient.right - StartSize.cx) / 2;
+            INT cxBtn = StartSize.cx;
+            if (g_hwndNavBack)
+                ::SetWindowPos(g_hwndNavBack, NULL, StartX - cxBtn * 2, 0, cxBtn * 2, rcClient.bottom,
+                               SWP_NOZORDER | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+            if (g_hwndNavTasks)
+                ::SetWindowPos(g_hwndNavTasks, NULL, StartX + cxBtn, 0, cxBtn * 2, rcClient.bottom,
+                               SWP_NOZORDER | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+        }
+        else if (Horizontal && m_StartButton.IsModernTaskbar() && g_TaskbarSettings.bCenterTaskbar)
         {
             INT cxButtons = m_TaskSwitch ? (INT)::SendMessageW(m_TaskSwitch, TSWM_GETBUTTONSWIDTH, 0, 0) : 0;
             INT cxGroup = StartSize.cx + GetSystemMetrics(SM_CXSIZEFRAME) + cxButtons;
