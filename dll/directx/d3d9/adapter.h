@@ -1,6 +1,6 @@
 /*
  * COPYRIGHT:       See COPYING in the top level directory
- * PROJECT:         ReactOS ReactX
+ * PROJECT:         ReactOS DirectX
  * FILE:            dll/directx/d3d9/adapter.h
  * PURPOSE:         d3d9.dll adapter info functions
  * PROGRAMERS:      Gregor Brunmar <gregor (dot) brunmar (at) home (dot) se>

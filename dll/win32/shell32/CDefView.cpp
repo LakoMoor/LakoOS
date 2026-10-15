@@ -865,9 +865,13 @@ static bool IsHighContrastEnabled()
 
 bool CDefView::LoadExplorerContentMaterial()
 {
-    return DwmSettingsLoadSchemeMaterial(DwmSettingsReadColorScheme(),
-                                         &m_ExplorerMaterialBack,
-                                         &m_ExplorerMaterialOpacity);
+    const DWORD Scheme = DwmSettingsReadColorScheme();
+    const bool Loaded = DwmSettingsLoadSchemeMaterial(Scheme,
+                                                      &m_ExplorerMaterialBack,
+                                                      &m_ExplorerMaterialOpacity);
+    if (Loaded && Scheme == DWM_COLOR_SCHEME_LIGHT)
+        m_ExplorerMaterialOpacity = 255;
+    return Loaded;
 }
 
 void CDefView::ClearExplorerContentBackdrop(bool RestoreNonClient)
