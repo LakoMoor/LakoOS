@@ -1262,45 +1262,38 @@ static LRESULT CALLBACK SubclassButtonProc(HWND hWnd, WPARAM wp, LPARAM lp)
 
     if(dis->CtlType == ODT_BUTTON)
     {
-        HTHEME hTheme = NULL;
-        LPBTNINFO lpBtnInfo;
-
-        if (calc_IsAppThemed() && calc_IsThemeActive())
-            hTheme = calc_OpenThemeData(hWnd, L"Button");
-
-        if (hTheme)
         {
-            int iState = 0;
+            RECT fr = dis->rcItem;
+            BOOL sel = (dis->itemState & ODS_SELECTED) != 0;
+            BOOL hover = FALSE;
+            BOOL isDigit = (dis->CtlID >= IDC_BUTTON_0 && dis->CtlID <= IDC_BUTTON_9);
+            BOOL isEq = (dis->CtlID == IDC_BUTTON_EQU);
+            LPBTNINFO bi = (LPBTNINFO)GetWindowLongPtr(dis->hwndItem, GWLP_USERDATA);
+            COLORREF face;
+            HBRUSH hb, ho;
+            HPEN pn, po;
 
-            if ((dis->itemState & ODS_DISABLED))
-                iState |= PBS_DISABLED;
-            if ((dis->itemState & ODS_SELECTED))
-                iState |= PBS_PRESSED;
-
-            lpBtnInfo = (LPBTNINFO)GetWindowLongPtr(dis->hwndItem, GWLP_USERDATA);
-            if (lpBtnInfo != NULL)
-            {
-                if (lpBtnInfo->bHover)
-                    iState |= PBS_HOT;
-            }
-
-            if (calc_IsThemeBackgroundPartiallyTransparent(hTheme, BP_PUSHBUTTON, iState))
-            {
-                calc_DrawThemeParentBackground(dis->hwndItem, dis->hDC, &dis->rcItem);
-            }
-
-            // Draw the frame around the control
-            calc_DrawThemeBackground(hTheme, dis->hDC, BP_PUSHBUTTON, iState, &dis->rcItem, NULL);
-
-            calc_CloseThemeData(hTheme);
-        } else {
-            /* default state: unpushed */
-            DWORD dwStyle = 0;
-
-            if ((dis->itemState & ODS_SELECTED))
-                dwStyle = DFCS_PUSHED;
-
-            DrawFrameControl(dis->hDC, &dis->rcItem, DFC_BUTTON, DFCS_BUTTONPUSH | dwStyle);
+            if (bi != NULL)
+                hover = bi->bHover;
+            if (isEq)
+                face = sel ? RGB(0, 90, 158) : (hover ? RGB(26, 111, 187) : RGB(0, 103, 192));
+            else if (isDigit)
+                face = sel ? RGB(240, 240, 240) : (hover ? RGB(245, 245, 245) : RGB(255, 255, 255));
+            else
+                face = sel ? RGB(230, 230, 230) : (hover ? RGB(236, 236, 236) : RGB(243, 243, 243));
+            hb = CreateSolidBrush(RGB(243, 243, 243));
+            FillRect(dis->hDC, &fr, hb);
+            DeleteObject(hb);
+            InflateRect(&fr, -1, -1);
+            hb = CreateSolidBrush(face);
+            pn = CreatePen(PS_SOLID, 1, RGB(224, 224, 224));
+            ho = SelectObject(dis->hDC, hb);
+            po = SelectObject(dis->hDC, pn);
+            RoundRect(dis->hDC, fr.left, fr.top, fr.right, fr.bottom, 6, 6);
+            SelectObject(dis->hDC, po);
+            SelectObject(dis->hDC, ho);
+            DeleteObject(pn);
+            DeleteObject(hb);
         }
 
         /* button text to write */
@@ -1313,11 +1306,11 @@ static LRESULT CALLBACK SubclassButtonProc(HWND hWnd, WPARAM wp, LPARAM lp)
         if ((calc.layout == CALC_LAYOUT_STANDARD ||
              calc.layout == CALC_LAYOUT_CONVERSION) &&
             IDC_BUTTON_RX == dis->CtlID) {
-            SetTextColor(dis->hDC, CALC_CLR_BLUE);
+            SetTextColor(dis->hDC, RGB(26, 26, 26));
         } else
         for (dx=0; dx<SIZEOF(key2code); dx++) {
             if (key2code[dx].idc == dis->CtlID) {
-                SetTextColor(dis->hDC, key2code[dx].col);
+                SetTextColor(dis->hDC, dis->CtlID == IDC_BUTTON_EQU ? RGB(255, 255, 255) : RGB(26, 26, 26));
                 break;
             }
         }
