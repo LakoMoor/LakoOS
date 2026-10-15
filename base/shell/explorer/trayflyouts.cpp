@@ -428,8 +428,92 @@ TfyPrintOne(HWND hwnd, HDC hdc, const RECT *prcRoot, int nDepth)
         TfyPrintOne(ahChildren[i - 1], hdc, prcRoot, nDepth + 1);
 }
 
+static HBITMAP TfyCaptureLive(HWND hwnd, int maxW, int maxH, SIZE *pSize, BOOL *pbReal);
+
+static struct TFYSNAP { HWND hWnd; HBITMAP hbm; SIZE sz; } g_TfySnaps[16];
+
+static HBITMAP
+TfyScaleBitmap(HBITMAP hbmSrc, SIZE szSrc, int maxW, int maxH, SIZE *pSize)
+{
+    int tw, th;
+    HDC hdcScreen = ::GetDC(NULL);
+    HDC hdcA = CreateCompatibleDC(hdcScreen), hdcB = CreateCompatibleDC(hdcScreen);
+    HBITMAP hbm = NULL;
+
+    if (szSrc.cx * maxH > szSrc.cy * maxW)
+    {
+        tw = maxW; th = max(1, szSrc.cy * maxW / szSrc.cx);
+    }
+    else
+    {
+        th = maxH; tw = max(1, szSrc.cx * maxH / szSrc.cy);
+    }
+    hbm = CreateCompatibleBitmap(hdcScreen, tw, th);
+    if (hbm && hdcA && hdcB)
+    {
+        HGDIOBJ oa = SelectObject(hdcA, hbmSrc), ob = SelectObject(hdcB, hbm);
+        SetStretchBltMode(hdcB, HALFTONE);
+        StretchBlt(hdcB, 0, 0, tw, th, hdcA, 0, 0, szSrc.cx, szSrc.cy, SRCCOPY);
+        SelectObject(hdcA, oa);
+        SelectObject(hdcB, ob);
+        pSize->cx = tw; pSize->cy = th;
+    }
+    if (hdcA) DeleteDC(hdcA);
+    if (hdcB) DeleteDC(hdcB);
+    ::ReleaseDC(NULL, hdcScreen);
+    return hbm;
+}
+
+VOID
+TaskPreview_Snapshot(HWND hwnd)
+{
+    BOOL bReal = FALSE;
+    SIZE sz;
+    HBITMAP hbm;
+    int i, slot = -1;
+
+    if (!hwnd || hwnd != ::GetForegroundWindow() || ::IsIconic(hwnd))
+        return;
+    hbm = TfyCaptureLive(hwnd, 400, 300, &sz, &bReal);
+    if (!hbm)
+        return;
+    for (i = 0; i < 16; i++)
+    {
+        if (g_TfySnaps[i].hWnd == hwnd) { slot = i; break; }
+        if (slot < 0 && !g_TfySnaps[i].hWnd) slot = i;
+    }
+    if (slot < 0)
+        slot = 0;
+    if (g_TfySnaps[slot].hbm)
+        DeleteObject(g_TfySnaps[slot].hbm);
+    g_TfySnaps[slot].hWnd = hwnd;
+    g_TfySnaps[slot].hbm = hbm;
+    g_TfySnaps[slot].sz = sz;
+}
+
 static HBITMAP
 TfyCaptureThumb(HWND hwnd, int maxW, int maxH, SIZE *pSize)
+{
+    BOOL bReal = FALSE;
+    HBITMAP hbm;
+    int i;
+
+    if (hwnd != ::GetForegroundWindow())
+    {
+        for (i = 0; i < 16; i++)
+        {
+            if (g_TfySnaps[i].hWnd == hwnd && g_TfySnaps[i].hbm)
+                return TfyScaleBitmap(g_TfySnaps[i].hbm, g_TfySnaps[i].sz, maxW, maxH, pSize);
+        }
+    }
+    hbm = TfyCaptureLive(hwnd, maxW, maxH, pSize, &bReal);
+    if (hbm && bReal && hwnd == ::GetForegroundWindow())
+        TaskPreview_Snapshot(hwnd);
+    return hbm;
+}
+
+static HBITMAP
+TfyCaptureLive(HWND hwnd, int maxW, int maxH, SIZE *pSize, BOOL *pbReal)
 {
     RECT rcWnd;
     HDC hdcScreen, hdcSrc, hdcDst;
@@ -487,6 +571,8 @@ TfyCaptureThumb(HWND hwnd, int maxW, int maxH, SIZE *pSize)
                 bCaptured = FALSE;
         }
 
+        if (bCaptured)
+            *pbReal = TRUE;
         if (!bCaptured)
         {
             RECT rcFill = { 0, 0, w, h };

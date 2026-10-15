@@ -5,6 +5,7 @@ VOID TaskPreview_Show(IN HWND hwndOwner, IN const RECT *prcAnchor,
 VOID TaskPreview_ShowHover(IN HWND hwndOwner, IN const RECT *prcAnchor,
                            IN const HWND *pahWnd, IN UINT cWindows, IN INT_PTR nGroupId);
 VOID TaskPreview_Hide(VOID);
+VOID TaskPreview_Snapshot(HWND hwnd);
 BOOL TaskPreview_IsVisibleFor(IN INT_PTR nGroupId);
 BOOL TaskPreview_IsHover(VOID);
 

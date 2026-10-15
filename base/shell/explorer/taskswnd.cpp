@@ -37,6 +37,7 @@
 
 #define TIMER_ID_VALIDATE_RUDE_APP 5
 #define TIMER_ID_HOVER_PREVIEW 6
+#define TIMER_ID_SNAPSHOT 97
 #define HOVER_PREVIEW_DELAY 400
 #define TSWM_TASKBUTTONMBUTTON (WM_USER + 3)
 #define IDM_JUMP_LAUNCH 1
@@ -634,6 +635,7 @@ class CTaskSwitchWnd :
     INT m_cyTaskRow;
     INT m_HoverIndex;
     BOOL m_HoverPreviewPending;
+    HWND m_hwndSnap;
 
     HTHEME m_Theme;
     UINT m_ButtonsPerLine;
@@ -681,6 +683,7 @@ public:
         m_cyTaskRow(0),
         m_HoverIndex(-1),
         m_HoverPreviewPending(FALSE),
+        m_hwndSnap(NULL),
         m_Theme(NULL),
         m_ButtonsPerLine(0),
         m_ButtonCount(0),
@@ -3256,6 +3259,8 @@ public:
             ActivateTask((HWND)lParam);
             if (FindTaskItem((HWND)lParam))
                 StartMenu2_RecordUsage((HWND)lParam);
+            m_hwndSnap = (HWND)lParam;
+            SetTimer(TIMER_ID_SNAPSHOT, 700, NULL);
             break;
 
         case HSHELL_FULLSCREENENTER:
@@ -4611,6 +4616,11 @@ public:
                 DumpTasks();
                 break;
 #endif
+            case TIMER_ID_SNAPSHOT:
+                KillTimer(TIMER_ID_SNAPSHOT);
+                TaskPreview_Snapshot(m_hwndSnap);
+                break;
+
             case TIMER_ID_HOVER_PREVIEW:
             {
                 KillTimer(wParam);
