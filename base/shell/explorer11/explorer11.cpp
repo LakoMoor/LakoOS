@@ -860,7 +860,8 @@ public:
     LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
         PAINTSTRUCT ps;
-        HDC hdcWin = BeginPaint(&ps);
+        BOOL bPrint = (uMsg == WM_PRINTCLIENT);
+        HDC hdcWin = bPrint ? (HDC)wParam : BeginPaint(&ps);
         RECT rcClient;
         GetClientRect(&rcClient);
 
@@ -1120,7 +1121,23 @@ public:
         SelectObject(hdc, hbmMemOld);
         DeleteObject(hbmMem);
         DeleteDC(hdc);
-        EndPaint(&ps);
+        if (bPrint)
+        {
+            HWND hwndChild = m_hwndView;
+            if (hwndChild && ::IsWindowVisible(hwndChild))
+            {
+                RECT rcV;
+                ::GetWindowRect(hwndChild, &rcV);
+                POINT pt = { rcV.left, rcV.top };
+                ::ScreenToClient(m_hWnd, &pt);
+                int saved = SaveDC(hdcWin);
+                SetViewportOrgEx(hdcWin, pt.x, pt.y, NULL);
+                ::SendMessageW(hwndChild, WM_PRINT, (WPARAM)hdcWin, PRF_CLIENT | PRF_ERASEBKGND | PRF_CHILDREN);
+                RestoreDC(hdcWin, saved);
+            }
+        }
+        else
+            EndPaint(&ps);
         return 0;
     }
 
@@ -2118,6 +2135,7 @@ public:
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
         MESSAGE_HANDLER(WM_PAINT, OnPaint)
+        MESSAGE_HANDLER(WM_PRINTCLIENT, OnPaint)
         MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
         MESSAGE_HANDLER(WM_SIZE, OnSize)
         MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)

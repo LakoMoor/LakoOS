@@ -472,10 +472,25 @@ TfyCaptureThumb(HWND hwnd, int maxW, int maxH, SIZE *pSize)
         if (!bCaptured)
             bCaptured = ::PrintWindow(hwnd, hdcSrc, 0);
 
+        if (bCaptured)
+        {
+            int ix, iy, nSeen = 0;
+            COLORREF first = GetPixel(hdcSrc, (w - 1) / 9, (h - 1) / 9);
+            for (iy = 0; iy < 8 && !nSeen; iy++)
+                for (ix = 0; ix < 8; ix++)
+                    if (GetPixel(hdcSrc, (w - 1) * (ix + 1) / 9, (h - 1) * (iy + 1) / 9) != first)
+                    {
+                        nSeen = 1;
+                        break;
+                    }
+            if (!nSeen)
+                bCaptured = FALSE;
+        }
+
         if (!bCaptured)
         {
             RECT rcFill = { 0, 0, w, h };
-            HBRUSH hbrFill = CreateSolidBrush(RGB(48, 48, 48));
+            HBRUSH hbrFill = CreateSolidBrush(RGB(255, 255, 255));
             FillRect(hdcSrc, &rcFill, hbrFill);
             DeleteObject(hbrFill);
             TfyPrintOne(hwnd, hdcSrc, &rcWnd, 0);
