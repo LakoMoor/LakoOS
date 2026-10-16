@@ -152,3 +152,7 @@ If you use AI in your own contributions, you are welcome here too. Just tell us 
 Direct3D 9 to 12 and OpenGL 4.x programs run on a software renderer (Mesa LLVMpipe, Lavapipe Vulkan)
 with no GPU driver. DXVK works on top of it. See `docs/GAMES.md`. A native GPU driver is needed for
 playable frame rates.
+
+## License
+
+LakoOS is free software. It is based on [ReactOS](https://reactos.org) through the LiberNT fork. License texts and origin: [`license/`](license/README.md).
